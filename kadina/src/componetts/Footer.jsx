@@ -1,3 +1,3 @@
-export default function Footer() {
-    return null;
-}
+import Bottom from "./Bottom";
+
+export default Bottom;
