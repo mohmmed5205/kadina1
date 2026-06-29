@@ -1,80 +1,37 @@
-const features = [
-    {
-        id: 1,
-        title: "أطباء متخصصون",
-        description:
-            "فريق طبي بخبرة واسعة في الجلدية والتجميل يقدم أفضل الحلول العلاجية.",
-    },
-    {
-        id: 2,
-        title: "أحدث الأجهزة",
-        description:
-            "نعتمد على أجهزة وتقنيات حديثة معتمدة عالميًا لتحقيق أفضل النتائج.",
-    },
-    {
-        id: 3,
-        title: "رعاية متكاملة",
-        description:
-            "متابعة مستمرة قبل وبعد العلاج لضمان راحة العميل وتحقيق النتائج المطلوبة.",
-    },
-    {
-        id: 4,
-        title: "نتائج موثوقة",
-        description:
-            "نسعى للحصول على نتائج طبيعية وآمنة تناسب احتياجات كل عميل.",
-    },
-];
+export default function WhyUs({ t }) {
+  return (
+    <section id="why-us" className="bg-[#f8ead8] py-24">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <span className="inline-flex rounded-full border border-[#f8aa2d]/30 bg-white/60 px-5 py-2 text-sm font-bold text-[#cf7d11]">
+            {t.whyUs.eyebrow}
+          </span>
 
-export default function WhyUs() {
-    return (
-        <section id="why-us" className="bg-white py-24">
-            <div className="mx-auto max-w-7xl px-6">
+          <h2 className="mt-6 text-3xl font-black leading-tight text-[#2b1b08] md:text-5xl">
+            {t.whyUs.title}
+          </h2>
 
-                {/* Title */}
+          <p className="mt-5 text-lg leading-8 text-[#4c2c00]/70">
+            {t.whyUs.description}
+          </p>
+        </div>
 
-                <div className="mx-auto mb-16 max-w-3xl text-center">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {t.whyUs.items.map((item) => (
+            <article
+              key={item.title}
+              className="rounded-[2rem] border border-[#4c2c00]/10 bg-[#fff7eb]/80 p-7 shadow-sm transition hover:-translate-y-2 hover:border-[#f8aa2d] hover:bg-white hover:shadow-xl"
+            >
+              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f8aa2d] text-2xl text-[#4c2c00]">
+                ✦
+              </div>
 
-                    <span className="rounded-full bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-700">
-                        لماذا نحن؟
-                    </span>
-
-                    <h2 className="mt-6 text-4xl font-bold text-gray-900">
-                        لماذا يختارنا عملاؤنا؟
-                    </h2>
-
-                    <p className="mt-5 text-lg leading-8 text-gray-600">
-                        نحرص على تقديم تجربة علاجية متكاملة تجمع بين الخبرة الطبية،
-                        أحدث التقنيات، والاهتمام بأدق التفاصيل لضمان أفضل النتائج.
-                    </p>
-
-                </div>
-
-                {/* Cards */}
-
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-
-                    {features.map((item) => (
-                        <div
-                            key={item.id}
-                            className="rounded-3xl border border-gray-100 bg-gray-50 p-8 transition duration-300 hover:-translate-y-2 hover:border-amber-300 hover:shadow-xl"
-                        >
-                            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-3xl">
-                                ⭐
-                            </div>
-
-                            <h3 className="text-2xl font-bold text-gray-900">
-                                {item.title}
-                            </h3>
-
-                            <p className="mt-4 leading-7 text-gray-600">
-                                {item.description}
-                            </p>
-                        </div>
-                    ))}
-
-                </div>
-
-            </div>
-        </section>
-    );
+              <h3 className="text-xl font-black text-[#2b1b08]">{item.title}</h3>
+              <p className="mt-4 leading-8 text-[#4c2c00]/70">{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
