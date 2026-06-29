@@ -8,7 +8,7 @@ import Stats from "./componetts/Stats";
 import Gallery from "./componetts/Gallery";
 import BeforeAfter from "./componetts/BeforAfter";
 import Reviews from "./componetts/Reviews";
-import Contact from "./componetts/Contact";
+import Connect from "./componetts/Connect";
 import Footer from "./componetts/Footer";
 import { content } from "./data/content";
 
@@ -27,7 +27,7 @@ export default function App() {
       <Gallery t={t} />
       <BeforeAfter t={t} />
       <Reviews t={t} />
-      <Contact t={t} />
+      <Connect t={t} />
       <Footer t={t} />
     </main>
   );
