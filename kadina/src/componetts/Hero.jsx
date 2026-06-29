@@ -1,82 +1,73 @@
-export default function Hero() {
-    return (
-        <section
-            id="home"
-            className="relative flex min-h-screen items-center bg-gray-50 pt-20"
-        >
-            <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-2">
+export default function Hero({ t }) {
+  const whatsappUrl = `https://wa.me/${t.center.whatsapp}`;
 
-                {/* Left Content */}
-                <div className="text-center lg:text-right">
+  return (
+    <section id="home" className="relative min-h-screen overflow-hidden bg-[#fff7eb] pt-28">
+      <div className="absolute -right-24 top-40 h-72 w-72 rounded-full bg-[#f8aa2d]/15 blur-3xl" />
+      <div className="absolute -left-24 bottom-10 h-80 w-80 rounded-full bg-[#4c2c00]/10 blur-3xl" />
 
-                    <span className="rounded-full bg-amber-100 px-4 py-2 text-sm font-medium text-amber-700">
-                        مركز متخصص في الجلدية والتجميل
-                    </span>
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-5 py-16 lg:grid-cols-2 lg:px-8 lg:py-24">
+        <div className="text-center lg:text-start">
+          <span className="inline-flex rounded-full border border-[#f8aa2d]/30 bg-white/60 px-5 py-2 text-sm font-bold text-[#cf7d11] shadow-sm">
+            {t.hero.eyebrow}
+          </span>
 
-                    <h1 className="mt-6 text-4xl font-bold leading-tight text-gray-900 md:text-6xl">
-                        جمالك يبدأ من
-                        <span className="text-amber-700"> العناية الصحيحة </span>
-                    </h1>
+          <h1 className="mt-7 text-4xl font-black leading-tight text-[#2b1b08] md:text-6xl">
+            {t.hero.title}
+          </h1>
 
-                    <p className="mt-6 text-lg leading-8 text-gray-600">
-                        نقدم أحدث تقنيات الجلدية، العناية بالشعر، الحقن التجميلية،
-                        وعمليات التجميل بإشراف نخبة من الأطباء وباستخدام أحدث الأجهزة الطبية.
-                    </p>
+          <p className="mt-5 text-xl font-bold text-[#cf7d11] md:text-2xl">
+            {t.hero.highlight}
+          </p>
 
-                    <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-9 text-[#4c2c00]/75 lg:mx-0">
+            {t.hero.description}
+          </p>
 
-                        <a
-                            href="https://wa.me/966500000000"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="rounded-xl bg-amber-700 px-8 py-4 text-center font-semibold text-white transition hover:bg-amber-800"
-                        >
-                            تواصل عبر واتساب
-                        </a>
+          <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-[#f8aa2d] px-8 py-4 text-center font-bold text-[#4c2c00] shadow-xl transition hover:bg-[#cf7d11] hover:text-white"
+            >
+              {t.hero.primaryCta}
+            </a>
 
-                        <a
-                            href="#services"
-                            className="rounded-xl border border-gray-300 px-8 py-4 text-center font-semibold transition hover:border-amber-700 hover:text-amber-700"
-                        >
-                            استكشف الخدمات
-                        </a>
+            <a
+              href="#services"
+              className="rounded-full border border-[#4c2c00]/20 bg-white/60 px-8 py-4 text-center font-bold text-[#4c2c00] transition hover:border-[#f8aa2d] hover:bg-white"
+            >
+              {t.hero.secondaryCta}
+            </a>
+          </div>
 
-                    </div>
+          <div className="mt-12 grid grid-cols-3 gap-3 rounded-3xl border border-[#4c2c00]/10 bg-white/55 p-3 shadow-xl backdrop-blur">
+            {t.hero.metrics.map((item) => (
+              <div key={item.label} className="rounded-2xl bg-[#fff7eb] p-4 text-center">
+                <h3 className="text-2xl font-black text-[#cf7d11] md:text-3xl">{item.number}</h3>
+                <p className="mt-1 text-xs font-semibold text-[#4c2c00]/70 md:text-sm">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
-                    {/* Statistics */}
+        <div className="relative mx-auto w-full max-w-xl">
+          <div className="relative overflow-hidden rounded-[2.5rem] border border-white/70 bg-white/50 p-4 shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1100&auto=format&fit=crop"
+              alt={t.hero.imageAlt}
+              className="h-[460px] w-full rounded-[2rem] object-cover md:h-[620px]"
+            />
 
-                    <div className="mt-16 grid grid-cols-3 gap-6">
-
-                        <div>
-                            <h3 className="text-3xl font-bold text-amber-700">+15</h3>
-                            <p className="mt-2 text-gray-600">طبيب متخصص</p>
-                        </div>
-
-                        <div>
-                            <h3 className="text-3xl font-bold text-amber-700">+5000</h3>
-                            <p className="mt-2 text-gray-600">عميل سعيد</p>
-                        </div>
-
-                        <div>
-                            <h3 className="text-3xl font-bold text-amber-700">+10</h3>
-                            <p className="mt-2 text-gray-600">سنوات خبرة</p>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                {/* Right Image */}
-
-                <div className="flex justify-center">
-                    <img
-                        src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=900&auto=format&fit=crop"
-                        alt="Beauty Clinic"
-                        className="w-full max-w-lg rounded-3xl object-cover shadow-2xl"
-                    />
-                </div>
-
+            <div className="absolute bottom-8 left-8 right-8 rounded-3xl border border-white/70 bg-[#fff7eb]/90 p-5 shadow-xl backdrop-blur">
+              <p className="text-sm font-bold leading-7 text-[#4c2c00] md:text-base">
+                {t.hero.trust}
+              </p>
             </div>
-        </section>
-    );
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
