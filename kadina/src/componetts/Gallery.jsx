@@ -1,55 +1,36 @@
-const images = [
-    "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800",
-    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800",
-    "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=800",
-    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800",
-    "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800",
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800",
-];
+export default function Gallery({ t }) {
+  return (
+    <section id="gallery" className="bg-[#fff7eb] py-24">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <span className="inline-flex rounded-full border border-[#f8aa2d]/30 bg-white/60 px-5 py-2 text-sm font-bold text-[#cf7d11]">
+            {t.gallery.eyebrow}
+          </span>
 
-export default function Gallery() {
-    return (
-        <section id="gallery" className="bg-gray-50 py-24">
-            <div className="mx-auto max-w-7xl px-6">
+          <h2 className="mt-6 text-3xl font-black leading-tight text-[#2b1b08] md:text-5xl">
+            {t.gallery.title}
+          </h2>
 
-                {/* Title */}
+          <p className="mt-5 text-lg leading-8 text-[#4c2c00]/70">
+            {t.gallery.description}
+          </p>
+        </div>
 
-                <div className="mb-16 text-center">
-
-                    <span className="rounded-full bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-700">
-                        معرض الصور
-                    </span>
-
-                    <h2 className="mt-6 text-4xl font-bold text-gray-900">
-                        تعرف على مركزنا
-                    </h2>
-
-                    <p className="mx-auto mt-5 max-w-3xl text-lg text-gray-600">
-                        مجموعة من الصور التي تعكس جودة خدماتنا وبيئة المركز الحديثة.
-                    </p>
-
-                </div>
-
-                {/* Images */}
-
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
-                    {images.map((image, index) => (
-                        <div
-                            key={index}
-                            className="overflow-hidden rounded-3xl shadow-lg"
-                        >
-                            <img
-                                src={image}
-                                alt={`Gallery ${index + 1}`}
-                                className="h-80 w-full object-cover transition duration-500 hover:scale-110"
-                            />
-                        </div>
-                    ))}
-
-                </div>
-
-            </div>
-        </section>
-    );
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {t.gallery.images.map((image) => (
+            <figure
+              key={image.src}
+              className="group overflow-hidden rounded-[2rem] border border-[#4c2c00]/10 bg-white/60 p-3 shadow-sm"
+            >
+              <img
+                src={image.src}
+                alt={image.alt}
+                className="h-80 w-full rounded-[1.5rem] object-cover transition duration-500 group-hover:scale-105"
+              />
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
