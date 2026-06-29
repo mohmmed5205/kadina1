@@ -9,7 +9,7 @@ import Gallery from "./componetts/Gallery";
 import BeforeAfter from "./componetts/BeforAfter";
 import Reviews from "./componetts/Reviews";
 import Connect from "./componetts/Connect";
-import Footer from "./componetts/Footer";
+import Bottom from "./componetts/Bottom";
 import { content } from "./data/content";
 
 export default function App() {
@@ -28,7 +28,7 @@ export default function App() {
       <BeforeAfter t={t} />
       <Reviews t={t} />
       <Connect t={t} />
-      <Footer t={t} />
+      <Bottom t={t} />
     </main>
   );
 }
