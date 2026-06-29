@@ -1,51 +1,23 @@
-const stats = [
-    {
-        id: 1,
-        number: "+10",
-        title: "سنوات خبرة",
-    },
-    {
-        id: 2,
-        number: "+15",
-        title: "طبيب متخصص",
-    },
-    {
-        id: 3,
-        number: "+5000",
-        title: "عميل سعيد",
-    },
-    {
-        id: 4,
-        number: "98%",
-        title: "نسبة رضا العملاء",
-    },
-];
-
-export default function Stats() {
-    return (
-        <section className="bg-amber-700 py-20">
-            <div className="mx-auto max-w-7xl px-6">
-
-                <div className="grid gap-8 text-center md:grid-cols-2 lg:grid-cols-4">
-
-                    {stats.map((item) => (
-                        <div
-                            key={item.id}
-                            className="rounded-3xl bg-white/10 p-10 backdrop-blur-sm"
-                        >
-                            <h2 className="text-5xl font-bold text-white">
-                                {item.number}
-                            </h2>
-
-                            <p className="mt-4 text-lg text-amber-100">
-                                {item.title}
-                            </p>
-                        </div>
-                    ))}
-
-                </div>
-
+export default function Stats({ t }) {
+  return (
+    <section className="bg-[#4c2c00] py-20 text-white">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <div className="grid gap-5 text-center md:grid-cols-2 lg:grid-cols-4">
+          {t.stats.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-[2rem] border border-white/10 bg-white/10 p-8 backdrop-blur transition hover:bg-white/15"
+            >
+              <h2 className="text-4xl font-black text-[#f8aa2d] md:text-5xl">
+                {item.number}
+              </h2>
+              <p className="mt-3 text-base font-semibold text-[#fff7eb]">
+                {item.title}
+              </p>
             </div>
-        </section>
-    );
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
