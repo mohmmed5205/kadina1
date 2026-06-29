@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" role="img" aria-labelledby="title desc">
+  <title id="title">Kadina logo</title>
+  <desc id="desc">Kadina dermatology beauty laser brand logo</desc>
+  <defs>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffbd43" />
+      <stop offset="1" stop-color="#f39a22" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="220" fill="none" />
+  <g transform="translate(48 24)">
+    <rect x="430" y="0" width="150" height="120" rx="18" fill="url(#gold)" />
+    <path d="M536 16 C520 48 479 60 455 96 M455 96 C480 78 529 97 566 114 M455 96 C462 61 480 28 491 24" fill="none" stroke="#fff7eb" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="404" y="105" direction="rtl" text-anchor="end" fill="#4c2c00" font-size="86" font-weight="800" font-family="Tahoma, Arial, sans-serif">كادينا</text>
+    <text x="276" y="158" text-anchor="middle" fill="#4c2c00" font-size="36" letter-spacing="14" font-family="Georgia, serif">KADINA</text>
+    <text x="276" y="196" direction="rtl" text-anchor="middle" fill="#2b1b08" font-size="24" letter-spacing="6" font-family="Tahoma, Arial, sans-serif">جلدية | تجميل | ليزر</text>
+  </g>
+</svg>
