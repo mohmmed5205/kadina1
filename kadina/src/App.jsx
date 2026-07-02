@@ -10,6 +10,7 @@ import BeforeAfter from "./componetts/BeforAfter";
 import Reviews from "./componetts/Reviews";
 import Connect from "./componetts/Connect";
 import Bottom from "./componetts/Bottom";
+import Doctors from "./componetts/Doctors";
 import { content } from "./data/content";
 
 /* ── Global reveal observer ───────────────────────────────────
@@ -64,6 +65,7 @@ export default function App() {
       <Hero t={t} />
       <About t={t} />
       <Services t={t} />
+      <Doctors lang={lang} />
       <WhyUs t={t} />
       <Stats t={t} />
       <Gallery t={t} />
