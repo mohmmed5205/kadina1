@@ -74,7 +74,7 @@ export default function Devices({ lang = "ar" }) {
                 </div>
 
                 <div
-                    className="relative reveal"
+                    className="relative overflow-visible reveal"
                     onMouseEnter={() => setPaused(true)}
                     onMouseLeave={() => setPaused(false)}
                 >
@@ -136,8 +136,9 @@ export default function Devices({ lang = "ar" }) {
                             <button
                                 type="button"
                                 onClick={prevSlide}
-                                className="absolute top-1/2 -translate-y-1/2 rounded-full border border-[#4c2c00]/10 bg-white/90 px-4 py-3 text-xl font-black text-[#4c2c00] shadow-lg transition hover:bg-[#f8aa2d] hover:text-white ltr:-left-5 rtl:-right-5"
-                                aria-label="Previous devices slide"
+                                style={lang === "ar" ? { right: "-18px" } : { left: "-18px" }}
+                                className="absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#4c2c00]/10 bg-white text-2xl font-black leading-none text-[#4c2c00] shadow-lg transition hover:bg-[#f8aa2d] hover:text-white"
+                                aria-label="Previous slide"
                             >
                                 ‹
                             </button>
@@ -145,8 +146,9 @@ export default function Devices({ lang = "ar" }) {
                             <button
                                 type="button"
                                 onClick={nextSlide}
-                                className="absolute top-1/2 -translate-y-1/2 rounded-full border border-[#4c2c00]/10 bg-white/90 px-4 py-3 text-xl font-black text-[#4c2c00] shadow-lg transition hover:bg-[#f8aa2d] hover:text-white ltr:-right-5 rtl:-left-5"
-                                aria-label="Next devices slide"
+                                style={lang === "ar" ? { left: "-18px" } : { right: "-18px" }}
+                                className="absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#4c2c00]/10 bg-white text-2xl font-black leading-none text-[#4c2c00] shadow-lg transition hover:bg-[#f8aa2d] hover:text-white"
+                                aria-label="Next slide"
                             >
                                 ›
                             </button>
@@ -160,8 +162,8 @@ export default function Devices({ lang = "ar" }) {
                                 type="button"
                                 onClick={() => setIndex(dotIndex)}
                                 className={`h-2.5 rounded-full transition-all duration-300 ${dotIndex === index
-                                        ? "w-8 bg-[#f8aa2d]"
-                                        : "w-2.5 bg-[#4c2c00]/20 hover:bg-[#4c2c00]/40"
+                                    ? "w-8 bg-[#f8aa2d]"
+                                    : "w-2.5 bg-[#4c2c00]/20 hover:bg-[#4c2c00]/40"
                                     }`}
                                 aria-label={`Go to devices slide ${dotIndex + 1}`}
                             />
