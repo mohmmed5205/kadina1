@@ -47,21 +47,7 @@ export default function Hero({ t }) {
           </div>
 
           {/* Metrics */}
-          <div className="reveal-stagger mt-12 grid grid-cols-3 gap-3 rounded-3xl border border-[#4c2c00]/10 bg-white/55 p-3 shadow-xl backdrop-blur">
-            {t.hero.metrics.map((item) => (
-              <div
-                key={item.label}
-                className="rounded-2xl bg-[#fff7eb] p-4 text-center transition hover:bg-white"
-              >
-                <h3 className="text-2xl font-black text-[#cf7d11] md:text-3xl">
-                  {item.number}
-                </h3>
-                <p className="mt-1 text-xs font-semibold text-[#4c2c00]/65 md:text-sm">
-                  {item.label}
-                </p>
-              </div>
-            ))}
-          </div>
+
         </div>
 
         {/* Image column */}
