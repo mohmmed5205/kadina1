@@ -11,6 +11,7 @@ import Reviews from "./componetts/Reviews";
 import Connect from "./componetts/Connect";
 import Bottom from "./componetts/Bottom";
 import Doctors from "./componetts/Doctors";
+import Devices from "./componetts/Devices";
 import { content } from "./data/content";
 
 /* ── Global reveal observer ───────────────────────────────────
@@ -66,6 +67,7 @@ export default function App() {
       <About t={t} />
       <Services t={t} />
       <Doctors lang={lang} />
+      <Devices lang={lang} />
       <WhyUs t={t} />
       <Stats t={t} />
       <Gallery t={t} />
