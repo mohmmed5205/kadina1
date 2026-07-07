@@ -28,13 +28,13 @@ export const devices = {
                 name: "جهاز الهيدرافيشل",
                 description:
                     "جلسة تنظيف وترطيب عميق للبشرة تساعد على إزالة الدهون المتراكمة وتنقية المسام بلطف، وتمنح البشرة نضارة ونعومة من أول جلسة.",
-                image: "/devices/devaice-haidraFaishel.jpeg",
+                image: "/devices/devaice-haidraFaishel.png",
             },
             {
                 name: "جهاز الديرمافيشل",
                 description:
                     "يجمع بين تنظيف البشرة وتحفيزها لتحسين مظهر المسام والاحتقان وملمس البشرة، ويساعد على تعزيز الإشراقة وتجهيز البشرة للعناية.",
-                image: "/devices/devaice-dirmaFishel.jpeg",
+                image: "/devices/devaice-dirmaFishel.png",
             },
             {
                 name: "ريجينيرا أكتيفا",
@@ -58,7 +58,7 @@ export const devices = {
                 name: "جهاز الماتريكس برو",
                 description:
                     "تقنية تجمع بين الإبر الدقيقة والطاقة الترددية لتحفيز الكولاجين وشد البشرة، وتساعد على تحسين المسام وآثار الحبوب والخطوط الرفيعة وملمس الجلد.",
-                image: "/devices/devaice-matrex.jpeg",
+                image: "/devices/devaice-matrex.png",
             },
             {
                 name: "ماجلان للشعر",
@@ -70,7 +70,7 @@ export const devices = {
                 name: "جهاز الإكسليس إيليت",
                 description:
                     "يساعد على شد البشرة وتحفيز الكولاجين وتقليل الدهون الموضعية، لتحسين مظهر القوام بدون تدخل جراحي.",
-                image: "/devices/devaice-acseles.jpeg",
+                image: "/devices/devaice-acseles.png",
             },
 
             {
@@ -110,13 +110,13 @@ export const devices = {
                 name: "HydraFacial",
                 description:
                     "A deep cleansing and hydrating treatment that helps remove buildup, gently purify pores, and leave the skin looking fresher and smoother from the first session.",
-                image: "/devices/devaice-haidraFaishel.jpeg",
+                image: "/devices/devaice-haidraFaishel.png",
             },
             {
                 name: "DermaFacial",
                 description:
                     "Combines skin cleansing and stimulation to improve the appearance of pores, congestion, and skin texture while enhancing radiance.",
-                image: "/devices/devaice-dirmaFishel.jpeg",
+                image: "/devices/devaice-dirmaFishel.png",
             },
             {
                 name: "Regenera Activa",
@@ -140,7 +140,7 @@ export const devices = {
                 name: "Matrix Pro",
                 description:
                     "Combines microneedling with radiofrequency energy to stimulate collagen, tighten the skin, and improve pores, acne scars, fine lines, and overall texture.",
-                image: "/devices/devaice-matrex.jpeg",
+                image: "/devices/devaice-matrex.png",
             },
             {
                 name: "Magellan PRP",
@@ -152,7 +152,7 @@ export const devices = {
                 name: "Exilis Elite",
                 description:
                     "Helps tighten the skin, stimulate collagen, reduce localized fat, and improve body contour without surgery.",
-                image: "/devices/devaice-acseles.jpeg",
+                image: "/devices/devaice-acseles.png",
             },
 
             {

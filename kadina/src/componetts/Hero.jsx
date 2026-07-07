@@ -1,76 +1,97 @@
+import { motion } from "framer-motion";
+import { fadeUp, staggerContainer } from "./motionPresets";
+
 export default function Hero({ t }) {
   const whatsappUrl = `https://wa.me/${t.center.whatsapp}`;
 
   return (
     <section
       id="home"
-      className="relative min-h-screen overflow-hidden bg-[#fff7eb] pt-[var(--nav-h,5.5rem)]"
+      className="relative min-h-[92vh] overflow-hidden bg-cover bg-center bg-no-repeat pt-[var(--nav-h,5.5rem)]"
+      style={{ backgroundImage: "url('/homeBG.jpeg')" }}
     >
-      {/* Background blobs */}
-      <div className="pointer-events-none absolute -right-32 top-32 h-[28rem] w-[28rem] rounded-full bg-[#f8aa2d]/12 blur-3xl" />
-      <div className="pointer-events-none absolute -left-32 bottom-0 h-[32rem] w-[32rem] rounded-full bg-[#4c2c00]/08 blur-3xl" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f8aa2d]/06 blur-3xl" />
+      <div className="absolute inset-0 bg-[#2b1b08]/62" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#2b1b08]/42 via-[#2b1b08]/18 to-[#2b1b08]/72" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#fff7eb] to-transparent" />
 
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-5 py-16 lg:grid-cols-2 lg:px-8 lg:py-28">
-        {/* Text column */}
-        <div className="reveal text-center lg:text-start">
-          <span className="section-eyebrow">{t.hero.eyebrow}</span>
+      <div className="relative z-10 mx-auto flex min-h-[calc(92vh-var(--nav-h,5.5rem))] max-w-7xl items-center px-5 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="max-w-3xl text-center lg:text-start"
+        >
+          <motion.div
+            variants={fadeUp}
+            className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-white/28 bg-white/16 shadow-[0_18px_42px_rgba(43,27,8,0.24)] backdrop-blur-md lg:mx-0"
+          >
+            <img
+              src="/kadina-logo.png"
+              alt={t.center.name}
+              className="h-14 w-14 object-contain"
+            />
+          </motion.div>
 
-          <h1 className="mt-7 text-4xl font-black leading-tight text-[#2b1b08] sm:text-5xl md:text-6xl">
+          <motion.span
+            variants={fadeUp}
+            className="section-eyebrow border-white/30 bg-white/16 text-[#f8ead8] shadow-[0_10px_30px_rgba(43,27,8,0.18)]"
+          >
+            {t.hero.eyebrow}
+          </motion.span>
+
+          <motion.h1
+            variants={fadeUp}
+            className="mt-7 text-4xl font-black leading-tight text-white drop-shadow-[0_4px_18px_rgba(43,27,8,0.48)] sm:text-5xl md:text-6xl"
+          >
             {t.hero.title}
-          </h1>
+          </motion.h1>
 
-          <p className="mt-5 text-xl font-bold text-[#cf7d11] md:text-2xl">
+          <motion.p
+            variants={fadeUp}
+            className="mt-5 text-xl font-bold text-[#f8aa2d] drop-shadow-[0_3px_12px_rgba(43,27,8,0.45)] md:text-2xl"
+          >
             {t.hero.highlight}
-          </p>
+          </motion.p>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-9 text-[#4c2c00]/70 lg:mx-0">
+          <motion.p
+            variants={fadeUp}
+            className="mx-auto mt-6 max-w-2xl text-lg leading-9 text-[#fff7eb]/92 drop-shadow-[0_3px_14px_rgba(43,27,8,0.35)] lg:mx-0"
+          >
             {t.hero.description}
-          </p>
+          </motion.p>
 
-          <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
-            <a
+          <motion.div
+            variants={fadeUp}
+            className="mt-10 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start"
+          >
+            <motion.a
               href={whatsappUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-[#f8aa2d] px-8 py-4 text-center font-bold text-[#4c2c00] shadow-[0_12px_32px_rgba(248,170,45,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#cf7d11] hover:text-white hover:shadow-[0_16px_36px_rgba(207,125,17,0.45)]"
+              className="rounded-full bg-[#f8aa2d] px-8 py-4 text-center font-bold text-[#2b1b08] shadow-[0_16px_38px_rgba(207,125,17,0.36)] transition-colors duration-300 hover:bg-[#cf7d11] hover:text-white"
+              whileHover={{ y: -4 }}
+              whileTap={{ scale: 0.98 }}
             >
               {t.hero.primaryCta}
-            </a>
+            </motion.a>
 
-            <a
+            <motion.a
               href="#services"
-              className="rounded-full border border-[#4c2c00]/20 bg-white/60 px-8 py-4 text-center font-bold text-[#4c2c00] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#f8aa2d] hover:bg-white hover:shadow-lg"
+              className="rounded-full border border-[#f8aa2d]/55 bg-[#fff7eb]/14 px-8 py-4 text-center font-bold text-white shadow-[0_12px_32px_rgba(43,27,8,0.2)] backdrop-blur-md transition-colors duration-300 hover:border-[#f8aa2d] hover:bg-[#f8aa2d] hover:text-[#2b1b08]"
+              whileHover={{ y: -4 }}
+              whileTap={{ scale: 0.98 }}
             >
               {t.hero.secondaryCta}
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
 
-          {/* Metrics */}
-
-        </div>
-
-        {/* Image column */}
-        <div className="reveal relative mx-auto w-full max-w-xl" style={{ transitionDelay: "120ms" }}>
-          <div className="relative overflow-hidden rounded-[2.5rem] border border-white/70 bg-white/50 p-4 shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1100&auto=format&fit=crop"
-              alt={t.hero.imageAlt}
-              className="h-[460px] w-full rounded-[2rem] object-cover md:h-[600px]"
-              loading="eager"
-            />
-
-            <div className="absolute bottom-8 left-8 right-8 rounded-3xl border border-white/60 bg-[#fff7eb]/92 p-5 shadow-xl backdrop-blur-md">
-              <p className="text-sm font-bold leading-7 text-[#4c2c00] md:text-base">
-                {t.hero.trust}
-              </p>
-            </div>
-          </div>
-
-          {/* Decorative ring */}
-          <div className="pointer-events-none absolute -right-6 -top-6 h-32 w-32 rounded-full border-2 border-[#f8aa2d]/30" />
-          <div className="pointer-events-none absolute -bottom-6 -left-6 h-24 w-24 rounded-full border-2 border-[#f8aa2d]/20" />
-        </div>
+          <motion.p
+            variants={fadeUp}
+            className="mx-auto mt-8 max-w-xl rounded-full border border-white/25 bg-white/14 px-5 py-3 text-sm font-bold leading-7 text-[#fff7eb] shadow-[0_14px_34px_rgba(43,27,8,0.18)] backdrop-blur-md sm:text-base lg:mx-0"
+          >
+            {t.hero.trust}
+          </motion.p>
+        </motion.div>
       </div>
     </section>
   );

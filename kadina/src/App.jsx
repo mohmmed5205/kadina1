@@ -1,57 +1,29 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./componetts/Navbar";
 import Hero from "./componetts/Hero";
 import About from "./componetts/About";
 import Services from "./componetts/Services";
+import Offers from "./componetts/Offers";
 import WhyUs from "./componetts/WhyUs";
 import Stats from "./componetts/Stats";
 import Gallery from "./componetts/Gallery";
 import BeforeAfter from "./componetts/BeforAfter";
 import Reviews from "./componetts/Reviews";
 import Connect from "./componetts/Connect";
+import Location from "./componetts/Location";
 import Bottom from "./componetts/Bottom";
 import Doctors from "./componetts/Doctors";
 import Devices from "./componetts/Devices";
 import { content } from "./data/content";
 
-/* ── Global reveal observer ───────────────────────────────────
-   Adds .revealed to any element that has .reveal or .reveal-stagger
-   when it enters the viewport.
-   ─────────────────────────────────────────────────────────── */
-function useReveal() {
-  useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (prefersReduced) return; // CSS handles this via media query
-
-    const targets = document.querySelectorAll(".reveal, .reveal-stagger");
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("revealed");
-            observer.unobserve(entry.target); // Fire once
-          }
-        });
-      },
-      { rootMargin: "0px 0px -60px 0px", threshold: 0.08 }
-    );
-
-    targets.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  });
-  // Re-run on every render so new sections after lang change also get observed
-}
-
 export default function App() {
   const [lang, setLang] = useState("ar");
   const t = content[lang];
 
-  useReveal();
+  useEffect(() => {
+    document.documentElement.dir = t.dir;
+    document.documentElement.lang = lang;
+  }, [lang, t.dir]);
 
   return (
     <main
@@ -66,6 +38,7 @@ export default function App() {
       <Hero t={t} />
       <About t={t} />
       <Services t={t} />
+      <Offers lang={lang} t={t} />
       <Doctors lang={lang} />
       <Devices lang={lang} />
       <WhyUs t={t} />
@@ -74,6 +47,7 @@ export default function App() {
       <BeforeAfter t={t} />
       <Reviews t={t} />
       <Connect t={t} />
+      <Location t={t} />
       <Bottom t={t} />
     </main>
   );

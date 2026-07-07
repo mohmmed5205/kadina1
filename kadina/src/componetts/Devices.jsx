@@ -1,176 +1,105 @@
-import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { devices } from "../data/devices";
-
-function getDevicesPerSlide() {
-    if (typeof window === "undefined") return 3;
-    if (window.innerWidth >= 1024) return 3;
-    if (window.innerWidth >= 640) return 2;
-    return 1;
-}
-
-function chunkItems(items, size) {
-    const chunks = [];
-    for (let i = 0; i < items.length; i += size) {
-        chunks.push(items.slice(i, i + size));
-    }
-    return chunks;
-}
+import { fadeUp, viewportOnce } from "./motionPresets";
 
 export default function Devices({ lang = "ar" }) {
-    const data = devices[lang] || devices.ar;
-    const [index, setIndex] = useState(0);
-    const [perSlide, setPerSlide] = useState(getDevicesPerSlide());
-    const [paused, setPaused] = useState(false);
+  const data = devices[lang] || devices.ar;
+  const isRtl = lang === "ar";
 
-    useEffect(() => {
-        const handleResize = () => setPerSlide(getDevicesPerSlide());
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+  return (
+    <section id="devices" className="relative overflow-hidden bg-[#f8ead8] py-24 sm:py-28">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(255,247,235,0.64),rgba(248,234,216,0.42)_45%,rgba(76,44,0,0.06))]" />
 
-    const slides = useMemo(
-        () => chunkItems(data.items, perSlide),
-        [data.items, perSlide]
-    );
+      <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="mx-auto mb-12 max-w-3xl text-center"
+        >
+          <span className="section-eyebrow">{data.eyebrow}</span>
+          <h2 className="mt-6 text-3xl font-black leading-tight text-[#2b1b08] md:text-5xl">
+            {data.title}
+          </h2>
+          <p className="mt-5 text-lg leading-8 text-[#4c2c00]/70">
+            {data.description}
+          </p>
+        </motion.div>
 
-    useEffect(() => {
-        setIndex(0);
-    }, [lang, perSlide]);
-
-    useEffect(() => {
-        if (paused || slides.length <= 1) return;
-
-        const timer = setInterval(() => {
-            setIndex((current) => (current + 1) % slides.length);
-        }, 3000);
-
-        return () => clearInterval(timer);
-    }, [paused, slides.length]);
-
-    const nextSlide = () => {
-        setIndex((current) => (current + 1) % slides.length);
-    };
-
-    const prevSlide = () => {
-        setIndex((current) => (current - 1 + slides.length) % slides.length);
-    };
-
-    return (
-        <section id="devices" className="relative overflow-hidden bg-[#f8ead8] py-24">
-            <div className="absolute right-[-160px] top-16 h-80 w-80 rounded-full bg-[#f8aa2d]/20 blur-3xl" />
-            <div className="absolute bottom-0 left-[-160px] h-80 w-80 rounded-full bg-[#4c2c00]/10 blur-3xl" />
-
-            <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
-                <div className="mx-auto mb-12 max-w-3xl text-center reveal">
-                    <span className="section-eyebrow">{data.eyebrow}</span>
-
-                    <h2 className="mt-6 text-3xl font-black leading-tight text-[#2b1b08] md:text-5xl">
-                        {data.title}
-                    </h2>
-
-                    <p className="mt-5 text-lg leading-8 text-[#4c2c00]/70">
-                        {data.description}
-                    </p>
-                </div>
-
-                <div
-                    className="relative overflow-visible reveal"
-                    onMouseEnter={() => setPaused(true)}
-                    onMouseLeave={() => setPaused(false)}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
+          <Swiper
+            key={lang}
+            dir={isRtl ? "rtl" : "ltr"}
+            modules={[Autoplay, Navigation, Pagination]}
+            className="kadina-swiper devices-swiper"
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            speed={750}
+            loop={data.items.length > 3}
+            spaceBetween={18}
+            slidesPerView={1}
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+                spaceBetween: 22,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 24,
+              },
+            }}
+          >
+            {data.items.map((device) => (
+              <SwiperSlide key={device.name}>
+                <motion.article
+                  whileHover={{ y: -8 }}
+                  className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#f8aa2d]/18 bg-[#fffbf3] shadow-[0_14px_40px_rgba(76,44,0,0.08)] transition-colors duration-300 hover:border-[#f8aa2d]/42"
                 >
-                    <div className="overflow-hidden rounded-[2.5rem] border border-[#4c2c00]/10 bg-white/40 p-4 shadow-sm backdrop-blur">
-                        <div
-                            className="flex transition-transform duration-700 ease-out"
-                            style={{
-                                transform: `translateX(${lang === "ar" ? index * 100 : -index * 100}%)`,
-                            }}
-                        >
-                            {slides.map((slide, slideIndex) => (
-                                <div key={slideIndex} className="min-w-full px-1">
-                                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                                        {slide.map((device) => (
-                                            <article
-                                                key={device.name}
-                                                className="group overflow-hidden rounded-[2rem] border border-[#4c2c00]/10 bg-[#fffaf3] p-4 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-[#f8aa2d] hover:bg-white hover:shadow-xl"
-                                            >
-                                                <div className="relative overflow-hidden rounded-[1.6rem] bg-gradient-to-b from-[#fff7eb] to-[#f8ead8]">
-                                                    <img
-                                                        src={device.image}
-                                                        alt={device.name}
-                                                        loading="lazy"
-                                                        onError={(event) => {
-                                                            event.currentTarget.onerror = null;
-                                                            event.currentTarget.src = "/kadina-logo.svg";
-                                                        }}
-                                                        className="aspect-[4/3] w-full object-contain p-5 transition duration-500 group-hover:scale-105"
-                                                    />
+                  <div className="relative flex min-h-72 items-center justify-center overflow-hidden bg-gradient-to-b from-[#fff7eb] to-[#f8ead8] p-6">
+                    <img
+                      src={device.image}
+                      alt={device.name}
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.onerror = null;
+                        event.currentTarget.src = "/kadina-logo.png";
+                      }}
+                      className="h-64 w-full object-contain transition duration-500 group-hover:scale-[1.04]"
+                    />
+                  </div>
 
-                                                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#2b1b08]/35 to-transparent" />
-                                                </div>
-
-                                                <div className="px-3 py-6">
-                                                    <div className="mb-3 flex items-center justify-between gap-3">
-                                                        <h3 className="text-xl font-black leading-8 text-[#2b1b08]">
-                                                            {device.name}
-                                                        </h3>
-
-                                                        <span className="shrink-0 rounded-full bg-[#f8aa2d]/15 px-3 py-1 text-xs font-black text-[#cf7d11]">
-                                                            KADINA
-                                                        </span>
-                                                    </div>
-
-                                                    <p className="min-h-28 text-sm font-semibold leading-7 text-[#4c2c00]/75">
-                                                        {device.description}
-                                                    </p>
-                                                </div>
-                                            </article>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                  <div className="flex flex-1 flex-col px-6 py-6">
+                    <div className="mb-3 flex items-start justify-between gap-3">
+                      <h3 className="text-lg font-black leading-7 text-[#2b1b08]">
+                        {device.name}
+                      </h3>
+                      <span className="shrink-0 rounded-full border border-[#f8aa2d]/20 bg-[#f8aa2d]/12 px-3 py-1 text-xs font-black tracking-[0.12em] text-[#cf7d11]">
+                        KADINA
+                      </span>
                     </div>
-
-                    {slides.length > 1 && (
-                        <>
-                            <button
-                                type="button"
-                                onClick={prevSlide}
-                                style={lang === "ar" ? { right: "-18px" } : { left: "-18px" }}
-                                className="absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#4c2c00]/10 bg-white text-2xl font-black leading-none text-[#4c2c00] shadow-lg transition hover:bg-[#f8aa2d] hover:text-white"
-                                aria-label="Previous slide"
-                            >
-                                ‹
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={nextSlide}
-                                style={lang === "ar" ? { left: "-18px" } : { right: "-18px" }}
-                                className="absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#4c2c00]/10 bg-white text-2xl font-black leading-none text-[#4c2c00] shadow-lg transition hover:bg-[#f8aa2d] hover:text-white"
-                                aria-label="Next slide"
-                            >
-                                ›
-                            </button>
-                        </>
-                    )}
-
-                    <div className="mt-8 flex justify-center gap-2">
-                        {slides.map((_, dotIndex) => (
-                            <button
-                                key={dotIndex}
-                                type="button"
-                                onClick={() => setIndex(dotIndex)}
-                                className={`h-2.5 rounded-full transition-all duration-300 ${dotIndex === index
-                                    ? "w-8 bg-[#f8aa2d]"
-                                    : "w-2.5 bg-[#4c2c00]/20 hover:bg-[#4c2c00]/40"
-                                    }`}
-                                aria-label={`Go to devices slide ${dotIndex + 1}`}
-                            />
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
+                    <p className="flex-1 text-sm font-semibold leading-7 text-[#4c2c00]/70">
+                      {device.description}
+                    </p>
+                  </div>
+                </motion.article>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </motion.div>
+      </div>
+    </section>
+  );
 }

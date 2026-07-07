@@ -60,13 +60,13 @@ export const doctors = {
                 image: "/doctors/doctor-abdulazez.png",
             },
             {
-                name: "Dr. Abdulmohsen",
-                specialty: "Dermatology Specialist",
+                name: "Dr. Abdulmohsen Al-Lazzam",
+                specialty: "Plastic Surgery and Aesthetics Consultant",
                 image: "/doctors/doctor-abudalmohsen.png",
             },
             {
-                name: "Dr. Ali",
-                specialty: "Aesthetics and Laser Specialist",
+                name: "Dr. Ali Al-Qadhi",
+                specialty: "Facial and Oculoplastic Surgery Consultant",
                 image: "/doctors/doctor-ali.png",
             },
             {
