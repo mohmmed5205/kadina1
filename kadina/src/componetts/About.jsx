@@ -15,14 +15,14 @@ export default function About({ t }) {
     : "Kadina Medical Center is a specialized destination for aesthetics, laser treatments, skin care, and hair care, led by a selected team of Saudi doctors and supported by the latest medical devices and technologies.";
 
   return (
-    <section id="about" className="relative overflow-hidden bg-[#fff7eb] py-24 sm:py-28">
-      <div className="pointer-events-none absolute inset-0 opacity-70">
+    <section id="about" className="relative overflow-hidden bg-[#fff7eb] py-16 sm:py-20 lg:py-28">
+      <div className="pointer-events-none absolute inset-0 hidden opacity-70 sm:block">
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(248,170,45,0.10)_0%,transparent_34%,rgba(76,44,0,0.07)_100%)]" />
         <div className="absolute -top-32 right-[-12rem] h-[34rem] w-[34rem] rounded-full border border-[#f8aa2d]/14" />
         <div className="absolute bottom-[-14rem] left-[-10rem] h-[32rem] w-[32rem] rounded-full border border-[#4c2c00]/10" />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-5 lg:px-8">
+      <div className="relative mx-auto max-w-6xl px-4 lg:px-8">
         <motion.div
           variants={scaleIn}
           initial="hidden"
@@ -33,18 +33,19 @@ export default function About({ t }) {
           <div className="h-1.5 w-full bg-gradient-to-r from-transparent via-[#f8aa2d] to-transparent" />
 
           <div className="grid grid-cols-1 items-stretch lg:grid-cols-5">
-            <div className="relative flex flex-col items-center justify-center overflow-hidden bg-[#f8ead8] p-10 lg:col-span-2">
-              <div className="pointer-events-none absolute inset-y-8 left-8 right-8 rounded-[2rem] border border-white/55" />
+            <div className="relative flex flex-col items-center justify-center overflow-hidden bg-[#f8ead8] p-6 sm:p-8 lg:col-span-2 lg:p-10">
+              <div className="pointer-events-none absolute inset-y-8 left-8 right-8 hidden rounded-[2rem] border border-white/55 sm:block" />
               <motion.div
                 variants={fadeUp}
-                className="relative z-10 mb-6 flex h-32 w-32 items-center justify-center rounded-[1.75rem] border border-[#f8aa2d]/35 bg-white/75 shadow-[0_18px_45px_rgba(76,44,0,0.11)] backdrop-blur"
+                className="relative z-10 mb-4 flex items-center justify-center lg:mb-6"
               >
                 <img
-                  src="/kadina-logo.png"
+                  src="/logo.png"
                   alt={t.center.name}
-                  className="h-24 w-24 object-contain"
+                  className="h-16 w-auto object-contain sm:h-20 lg:h-24"
                   onError={(event) => {
-                    event.currentTarget.style.display = "none";
+                    event.currentTarget.onerror = null;
+                    event.currentTarget.src = "/kadina-logo.png";
                   }}
                 />
               </motion.div>
@@ -65,9 +66,9 @@ export default function About({ t }) {
               initial="hidden"
               whileInView="visible"
               viewport={viewportOnce}
-              className="relative flex flex-col justify-center p-8 lg:col-span-3 lg:p-12"
+              className="relative flex flex-col justify-center p-5 sm:p-8 lg:col-span-3 lg:p-12"
             >
-              <motion.div variants={fadeUp} className="mb-8 flex">
+              <motion.div variants={fadeUp} className="mb-5 flex lg:mb-8">
                 <span className="inline-flex items-center gap-2 rounded-full bg-[#4c2c00] px-5 py-2 text-sm font-black text-[#f8aa2d] shadow-[0_10px_26px_rgba(76,44,0,0.22)]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#f8aa2d]" aria-hidden="true" />
                   {isAr ? "من نحن؟" : "About Kadina"}
@@ -76,19 +77,19 @@ export default function About({ t }) {
 
               <motion.h2
                 variants={fadeUp}
-                className="text-3xl font-black leading-tight text-[#2b1b08] md:text-5xl"
+                className="text-2xl font-black leading-tight text-[#2b1b08] md:text-5xl"
               >
                 {t.about.title}
               </motion.h2>
 
               <motion.p
                 variants={fadeUp}
-                className="mt-6 text-lg leading-[2.05] text-[#4c2c00] md:text-xl md:leading-[2.15]"
+                className="mt-4 text-base leading-8 text-[#4c2c00] md:text-xl md:leading-[2.15] lg:mt-6"
               >
                 {description}
               </motion.p>
 
-              <motion.div variants={fadeUp} className="my-8 flex items-center gap-4">
+              <motion.div variants={fadeUp} className="my-5 flex items-center gap-4 lg:my-8">
                 <span className="h-px flex-1 bg-gradient-to-r from-[#f8aa2d]/35 to-transparent" />
                 <span className="h-2 w-14 rounded-full bg-[#f8aa2d]/60" />
                 <span className="h-px flex-1 bg-gradient-to-l from-[#f8aa2d]/35 to-transparent" />
@@ -96,7 +97,7 @@ export default function About({ t }) {
 
               <motion.div
                 variants={staggerContainer}
-                className="grid gap-5 border-y border-[#f8aa2d]/18 py-6 sm:grid-cols-2"
+                className="grid gap-4 border-y border-[#f8aa2d]/18 py-5 sm:grid-cols-2 lg:gap-5 lg:py-6"
               >
                 {[t.about.visionTitle, t.about.missionTitle].map((title, index) => (
                   <motion.div key={title} variants={cardItem}>
@@ -113,12 +114,12 @@ export default function About({ t }) {
                 ))}
               </motion.div>
 
-              <motion.div variants={staggerContainer} className="mt-6 grid gap-2">
+              <motion.div variants={staggerContainer} className="mt-5 grid gap-2 lg:mt-6">
                 {t.about.bullets.map((item, index) => (
                   <motion.div
                     key={item}
                     variants={cardItem}
-                    className="flex items-center gap-3 rounded-full border border-[#4c2c00]/8 bg-white/45 px-4 py-2.5 font-semibold text-[#4c2c00] transition hover:border-[#f8aa2d]/35 hover:bg-white/72"
+                    className="flex items-center gap-3 rounded-2xl border border-[#4c2c00]/8 bg-white/45 px-3 py-2.5 text-sm font-semibold text-[#4c2c00] transition hover:border-[#f8aa2d]/35 hover:bg-white/72 sm:rounded-full sm:px-4 sm:text-base"
                   >
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f8aa2d]/22 text-[0.65rem] font-black text-[#cf7d11]">
                       {String(index + 1).padStart(2, "0")}

@@ -71,34 +71,36 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
           : "border-white/20 bg-[#fff7eb]/72 backdrop-blur-xl"
       )}
     >
-      <div className="mx-auto flex h-[var(--nav-h,5.5rem)] max-w-7xl items-center justify-between px-5 lg:px-8">
+      <div className="mx-auto flex h-[var(--nav-h,4.25rem)] max-w-7xl items-center justify-between px-4 lg:px-8">
         <motion.a
           href="#home"
           aria-label={t.center.name}
-          className="flex shrink-0 items-center gap-3 rounded-full border border-white/45 bg-white/48 px-3 py-2 shadow-[0_12px_34px_rgba(43,27,8,0.08)] backdrop-blur-xl transition hover:border-[#f8aa2d]/45 hover:bg-white/70"
+          className="flex shrink-0 items-center gap-2"
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.98 }}
         >
           <img
-            src="/kadina-logo.png"
+            src="/kadina-logo3.png"
             alt={t.center.name}
-            className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+            className="h-20 w-auto object-contain lg:h-20"
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = "/kadina-logo.png";
+            }}
           />
-          <span className="hidden text-xs font-black uppercase tracking-[0.24em] text-[#4c2c00]/78 sm:block">
-            KADINA
-          </span>
+          
         </motion.a>
 
         <nav
           aria-label={navLabel}
-          className="hidden items-center gap-1 rounded-full border border-white/45 bg-white/46 px-2 py-2 shadow-[0_14px_34px_rgba(43,27,8,0.07)] backdrop-blur-xl lg:flex"
+          className="hidden items-center gap-1 rounded-full border border-white/45 bg-white/46 px-2 py-2 shadow-[0_14px_34px_rgba(43,27,8,0.07)] backdrop-blur-xl xl:flex"
         >
           {t.nav.map((link) => (
             <motion.a
               key={link.id}
               href={link.href}
               className={clsx(
-                "relative rounded-full px-3 py-2 text-sm font-bold transition-all duration-200 xl:px-4",
+                "relative rounded-full px-2.5 py-2 text-[0.82rem] font-bold transition-all duration-200 xl:px-4 xl:text-sm",
                 activeId === link.id
                   ? "bg-[#f8aa2d]/18 text-[#cf7d11] shadow-inner"
                   : "text-[#4c2c00]/72 hover:bg-[#fff7eb]/80 hover:text-[#cf7d11]"
@@ -111,7 +113,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           <motion.button
             type="button"
             onClick={handleLanguageToggle}
@@ -137,7 +139,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
 
         <button
           type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-[#4c2c00]/12 bg-white/68 text-[#4c2c00] shadow-sm backdrop-blur transition hover:border-[#f8aa2d]/40 hover:bg-[#f8aa2d]/18 lg:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#4c2c00]/12 bg-white/55 text-[#4c2c00] shadow-sm backdrop-blur transition hover:border-[#f8aa2d]/40 hover:bg-[#f8aa2d]/18 xl:hidden"
           onClick={() => setIsOpen((current) => !current)}
           aria-expanded={isOpen}
           aria-label={menuLabel}
@@ -172,7 +174,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.28, ease: smoothEase }}
-            className="overflow-hidden border-t border-[#4c2c00]/10 bg-[#fff7eb]/96 shadow-[0_22px_50px_rgba(43,27,8,0.12)] backdrop-blur-2xl lg:hidden"
+            className="overflow-hidden border-t border-[#4c2c00]/10 bg-[#fff7eb]/96 shadow-[0_22px_50px_rgba(43,27,8,0.12)] backdrop-blur-2xl xl:hidden"
           >
             <motion.div
               initial="hidden"
@@ -181,7 +183,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
                 hidden: {},
                 visible: { transition: { staggerChildren: 0.045 } },
               }}
-              className="mx-auto flex max-w-7xl flex-col gap-1 p-5"
+              className="mx-auto flex max-w-7xl flex-col gap-1 p-4"
             >
               {t.nav.map((link) => (
                 <motion.a
@@ -193,7 +195,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
                     visible: { opacity: 1, y: 0 },
                   }}
                   className={clsx(
-                    "flex items-center rounded-2xl border px-4 py-3 font-bold transition-all duration-200 hover:border-[#f8aa2d]/35 hover:bg-[#f8aa2d]/12 hover:text-[#cf7d11]",
+                    "flex items-center rounded-2xl border px-4 py-3 text-base font-bold transition-all duration-200 hover:border-[#f8aa2d]/35 hover:bg-[#f8aa2d]/12 hover:text-[#cf7d11]",
                     activeId === link.id
                       ? "border-[#f8aa2d]/30 bg-[#f8aa2d]/15 text-[#cf7d11]"
                       : "border-transparent text-[#4c2c00]"

@@ -1,15 +1,21 @@
 export const offers = {
   ar: {
+    exclusiveLabel: "عروض حصرية",
     eyebrow: "عروض الصيف",
-    title: "عروض كادينا الصيفية",
+    title: "عروض كادينا الحالية",
     description:
-      "باقات مختارة للعناية بالبشرة وإزالة الشعر بالليزر     .",
+      "اسحب لمشاهدة باقي العروض أو استخدم الأسهم.",
+    moreAvailable: "يوجد أكثر من عرض",
+    swipeHint: "اسحب لمشاهدة المزيد من العروض",
     badge: "عرض الصيف",
+    limitedBadge: "خصم محدود",
+    limitedTime: "لفترة محدودة",
     oldPriceLabel: "بدل",
     currency: "ر.س",
     phoneLabel: "للحجز والاستفسار",
     displayPhone: "0114555444",
     bookCta: "احجزي العرض عبر واتساب",
+    slideCta: "احجز العرض الآن",
     cards: [
       {
         id: "skin-cleaning",
@@ -135,16 +141,22 @@ export const offers = {
     ],
   },
   en: {
+    exclusiveLabel: "Exclusive Offers",
     eyebrow: "Summer Offers",
-    title: "Kadina Summer Offers",
+    title: "Current Kadina Offers",
     description:
-      "Selected skin care and laser hair removal packages with clear summer pricing.",
+      "Swipe to view more offers or use the arrows.",
+    moreAvailable: "More offers available",
+    swipeHint: "Swipe to see more offers",
     badge: "Summer Offer",
+    limitedBadge: "Limited Offer",
+    limitedTime: "Limited time",
     oldPriceLabel: "Before",
     currency: "SAR",
     phoneLabel: "Booking and inquiries",
     displayPhone: "0114555444",
     bookCta: "Book this offer on WhatsApp",
+    slideCta: "Book this offer",
     cards: [
       {
         id: "skin-cleaning",

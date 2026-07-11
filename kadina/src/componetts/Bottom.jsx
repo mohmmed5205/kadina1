@@ -14,21 +14,25 @@ export default function Bottom({ t }) {
         initial="hidden"
         whileInView="visible"
         viewport={viewportOnce}
-        className="relative mx-auto max-w-7xl px-5 py-12 lg:px-8"
+        className="relative mx-auto max-w-7xl px-4 py-10 lg:px-8 lg:py-12"
       >
         <div className="grid gap-8 lg:grid-cols-[1.1fr_1.8fr_1fr] lg:items-center">
           <motion.a
             variants={fadeUp}
             href="#home"
             aria-label={t.center.name}
-            className="mx-auto flex w-fit items-center justify-center rounded-[1.75rem] border border-[#f8aa2d]/20 bg-[#fff7eb]/94 px-5 py-4 shadow-[0_16px_42px_rgba(0,0,0,0.16)] lg:mx-0"
+            className="mx-auto flex w-fit items-center justify-center lg:mx-0"
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.98 }}
           >
             <img
-              src="/kadina-logo.png"
+              src="/logo.png"
               alt={t.center.name}
-              className="h-20 w-20 object-contain"
+              className="h-16 w-auto object-contain lg:h-20"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = "/kadina-logo.png";
+              }}
             />
           </motion.a>
 
@@ -36,7 +40,7 @@ export default function Bottom({ t }) {
             <p className="font-black tracking-wide text-[#f8aa2d]">
               {t.footer.note}
             </p>
-            <nav className="mt-5 flex flex-wrap justify-center gap-2" aria-label="Footer navigation">
+            <nav className="mt-5 flex flex-col justify-center gap-2 sm:flex-row sm:flex-wrap" aria-label="Footer navigation">
               {t.nav.slice(0, 7).map((link) => (
                 <a
                   key={link.id}

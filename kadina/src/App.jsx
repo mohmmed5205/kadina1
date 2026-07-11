@@ -3,12 +3,10 @@ import Navbar from "./componetts/Navbar";
 import Hero from "./componetts/Hero";
 import About from "./componetts/About";
 import Services from "./componetts/Services";
-import Offers from "./componetts/Offers";
+// import Offers from "./componetts/Offers";
 import WhyUs from "./componetts/WhyUs";
-import Stats from "./componetts/Stats";
-import Gallery from "./componetts/Gallery";
+// import Gallery from "./componetts/Gallery";
 import BeforeAfter from "./componetts/BeforAfter";
-import Reviews from "./componetts/Reviews";
 import Connect from "./componetts/Connect";
 import Location from "./componetts/Location";
 import Bottom from "./componetts/Bottom";
@@ -35,17 +33,15 @@ export default function App() {
         lang={lang}
         onLanguageToggle={() => setLang(lang === "ar" ? "en" : "ar")}
       />
-      <Hero t={t} />
+      <Hero t={t} lang={lang} />
       <About t={t} />
-      <Services t={t} />
-      <Offers lang={lang} t={t} />
+      <Services t={t} lang={lang} />
+      {/* <Offers lang={lang} t={t} /> */}
       <Doctors lang={lang} />
       <Devices lang={lang} />
       <WhyUs t={t} />
-      <Stats t={t} />
-      <Gallery t={t} />
+      {/* <Gallery t={t} /> */}
       <BeforeAfter t={t} />
-      <Reviews t={t} />
       <Connect t={t} />
       <Location t={t} />
       <Bottom t={t} />
