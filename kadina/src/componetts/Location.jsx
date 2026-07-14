@@ -82,6 +82,7 @@ export default function Location({ t }) {
                     event.currentTarget.src = "/kadina-logo.png";
                   }}
                 />
+                
               </motion.div>
 
               <p className="relative z-10 mb-2 text-sm font-black uppercase tracking-[0.26em] text-[#4c2c00]/60 lg:text-base lg:tracking-[0.3em]">

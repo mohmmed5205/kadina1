@@ -68,7 +68,7 @@ export default function Doctors({ lang = "ar" }) {
                   whileHover={{ y: -6 }}
                   className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-[#f8aa2d]/16 bg-[#fffbf3] shadow-[0_12px_30px_rgba(76,44,0,0.07)] transition-colors duration-300 hover:border-[#f8aa2d]/40 sm:rounded-[2rem]"
                 >
-                  <div className="relative overflow-hidden bg-gradient-to-b from-[#f8ead8] to-[#f0d9b5]">
+                  <div className="relative flex h-[17rem] items-end justify-center overflow-hidden bg-gradient-to-b from-[#fff7eb] to-[#f8ead8] sm:h-[19rem] lg:h-[22rem]">
                     <img
                       src={doctor.image}
                       alt={doctor.name}
@@ -79,7 +79,7 @@ export default function Doctors({ lang = "ar" }) {
                         event.currentTarget.classList.remove("object-cover", "object-top");
                         event.currentTarget.classList.add("object-contain", "p-10");
                       }}
-                      className="aspect-[5/4] w-full object-cover object-top transition duration-500 group-hover:scale-[1.04] sm:aspect-[4/5]"
+                      className="h-full w-full object-contain object-bottom transition duration-500 sm:object-cover sm:object-top"
                     />
                     <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#2b1b08]/50 to-transparent lg:h-24" />
                     <img

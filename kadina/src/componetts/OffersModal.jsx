@@ -59,23 +59,14 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
           aria-modal="true"
           aria-labelledby="offers-modal-title"
           dir={isRtl ? "rtl" : "ltr"}
-          className="fixed inset-0 z-[999] overflow-y-auto overflow-x-hidden bg-[#fff7eb] text-[#2b1b08]"
+          className="offers-modal fixed inset-0 z-[9999] overflow-hidden bg-[#fff7eb] text-[#2b1b08]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22, ease: smoothEase }}
         >
-          <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(145deg,rgba(255,247,235,0.98),rgba(255,230,199,0.86)_50%,rgba(249,0,98,0.09))]" />
-          <div className="pointer-events-none fixed inset-x-0 top-0 h-32 border-b border-[#f8aa2d]/18 bg-[linear-gradient(180deg,rgba(255,247,235,0.96),rgba(255,247,235,0))]" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.98 }}
-            transition={{ duration: 0.36, ease: smoothEase }}
-            className="relative min-h-screen p-4 sm:p-6 lg:p-8"
-          >
-            <header className="sticky top-0 z-20 -mx-4 border-b border-[#f8aa2d]/16 bg-[#fff7eb]/92 px-4 py-3 backdrop-blur-xl sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          <div className="flex h-full flex-col">
+            <header className="sticky top-0 z-40 shrink-0 border-b border-[#f8aa2d]/16 bg-[#fff7eb]/95 px-4 py-3 backdrop-blur-md">
               <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
                 <img
                   src="/logo.png"
@@ -86,6 +77,13 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
                     event.currentTarget.src = "/kadina-logo.png";
                   }}
                 />
+
+                <h2
+                  id="offers-modal-title"
+                  className="min-w-0 flex-1 truncate text-center text-lg font-black text-[#2b1b08] sm:text-2xl"
+                >
+                  {text.title}
+                </h2>
 
                 <button
                   ref={closeButtonRef}
@@ -99,21 +97,23 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
               </div>
             </header>
 
-            <div className="relative mx-auto max-w-7xl py-8 lg:py-12">
-              <section className="mx-auto max-w-3xl text-center">
-                <span className="section-eyebrow">{isRtl ? "العروض" : "Offers"}</span>
-                <h2
-                  id="offers-modal-title"
-                  className="mt-4 text-3xl font-black leading-tight text-[#2b1b08] md:text-5xl"
-                >
-                  {text.title}
-                </h2>
-                <p className="mx-auto mt-4 max-w-2xl text-base font-semibold leading-8 text-[#4c2c00]/72 md:text-lg">
-                  {text.description}
-                </p>
-              </section>
+            <main className="offers-modal-main min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain px-4 pb-8 pt-6 sm:px-6 lg:px-8 lg:pt-10">
+              <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(145deg,rgba(255,247,235,0.98),rgba(255,230,199,0.86)_50%,rgba(249,0,98,0.09))]" />
 
-              <section className="mt-7 lg:mt-10">
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 12 }}
+                transition={{ duration: 0.3, ease: smoothEase }}
+                className="relative mx-auto max-w-7xl"
+              >
+                <section className="mx-auto mb-6 max-w-3xl text-center lg:mb-8">
+                  <span className="section-eyebrow">{isRtl ? "العروض" : "Offers"}</span>
+                  <p className="mx-auto mt-4 max-w-2xl text-base font-semibold leading-8 text-[#4c2c00]/72 md:text-lg">
+                    {text.description}
+                  </p>
+                </section>
+
                 <OfferSlider
                   lang={lang}
                   t={t}
@@ -121,23 +121,23 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
                   modal
                   showAvailability={false}
                 />
-              </section>
 
-              <div className="border-t border-[#f8aa2d]/20 pt-7 text-center">
-                <motion.a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#2b1b08] px-7 py-4 text-base font-black text-[#f8aa2d] shadow-[0_18px_40px_rgba(43,27,8,0.2)] transition-colors duration-300 hover:bg-[#f8aa2d] hover:text-[#2b1b08] sm:w-auto"
-                  whileHover={{ y: -3 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <FaWhatsapp aria-hidden="true" />
-                  <span>{text.bookCta}</span>
-                </motion.a>
-              </div>
-            </div>
-          </motion.div>
+                <div className="border-t border-[#f8aa2d]/20 pt-7 text-center">
+                  <motion.a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#2b1b08] px-7 py-4 text-base font-black text-[#f8aa2d] shadow-[0_18px_40px_rgba(43,27,8,0.2)] transition-colors duration-300 hover:bg-[#f8aa2d] hover:text-[#2b1b08] sm:w-auto"
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <FaWhatsapp aria-hidden="true" />
+                    <span>{text.bookCta}</span>
+                  </motion.a>
+                </div>
+              </motion.div>
+            </main>
+          </div>
         </motion.div>
       ) : null}
     </AnimatePresence>

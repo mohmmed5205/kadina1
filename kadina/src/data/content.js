@@ -116,24 +116,45 @@ export const content = {
       ],
     },
     beforeAfter: {
-      eyebrow: "قبل وبعد",
-      title: "نتائج توضيحية بعناية مدروسة",
-      description: "نماذج توضيحية لطبيعة رحلة العناية، ويتم تحديد الخطة المناسبة بعد الاستشارة.",
-      before: "قبل",
-      after: "بعد",
-      cases: [
-        {
-          title: "نضارة البشرة",
-          before: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=900&auto=format&fit=crop",
-          after: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=900&auto=format&fit=crop",
-        },
-        {
-          title: "تجديد المظهر",
-          before: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=900&auto=format&fit=crop",
-          after: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=900&auto=format&fit=crop",
-        },
-      ],
+  eyebrow: "قبل وبعد",
+  title: "نتائج قبل وبعد",
+  description:
+    "نماذج حقيقية من نتائج كادينا، ويتم تحديد الخطة المناسبة بعد الاستشارة.",
+  before: "قبل",
+  after: "بعد",
+  cases: [
+    {
+      title: "نانو فات",
+      doctor: "د. محمد الهداب",
+      image: "/before-after/nano-fat-mohammed-alhaddab.jpg",
     },
+    {
+      title: "فيلر شفايف",
+      doctor: "د. حسام الغامدي",
+      image: "/before-after/lip-filler-hosam-alghamdi.jpg",
+    },
+    {
+      title: "شد الجفون العلوية",
+      doctor: "د. علي القاضي",
+      image: "/before-after/upper-eyelid-lift-ali-alqadhi.jpg",
+    },
+    {
+      title: "زراعة شعر",
+      doctor: "د. وليد الغامدي",
+      image: "/before-after/hair-transplant-waleed.jpg",
+    },
+    {
+      title: "رفع ندبات",
+      doctor: "د. حسام الغامدي",
+      image: "/before-after/scar-revision-hosam-alghamdi.jpg",
+    },
+    {
+      title: "فيلر الهالات السطحي",
+      doctor: "د. إيمان المخضب",
+      image: "/before-after/under-eye-filler-eman-almukhadab.jpg",
+    },
+  ],
+},
     reviews: {
       eyebrow: "آراء العملاء",
       title: "تجارب تثق بكادينا",
@@ -154,6 +175,27 @@ export const content = {
       locationLabel: "الموقع",
       hoursLabel: "ساعات العمل",
       hoursValue: "السبت - الخميس | 10 صباحًا - 10 مساءً",
+      socialLabel: "تابعينا على وسائل التواصل",
+      socialDiscription: "كونوا قريبين من احدث عروض كادينا و نصائح العنايه عبر حساباتنا على  التواصل الاجتماعي ",
+      socials:[
+        {
+          key: "snapchat",
+          label: "سناب شات",
+          url: "https://www.snapchat.com/add/kadina_center",
+
+        },
+        {
+          key: "instagram",
+          label: "إنستغرام",
+          url: "https://www.instagram.com/kadina_center",
+
+        },
+        {
+          key: "tiktok",
+          label: "تيك توك",
+          url: "https://www.tiktok.com/@kadina_center",
+        }
+      ]
     },
     location: {
       eyebrow: "موقعنا",
@@ -273,25 +315,46 @@ export const content = {
         { src: "https://images.unsplash.com/photo-1598300188904-6287d52746ad?q=80&w=900&auto=format&fit=crop", alt: "Care products" },
       ],
     },
-    beforeAfter: {
-      eyebrow: "Before & After",
-      title: "Illustrative results with thoughtful care",
-      description: "Examples that show the care journey. The right plan is selected after consultation.",
-      before: "Before",
-      after: "After",
-      cases: [
-        {
-          title: "Skin glow",
-          before: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=900&auto=format&fit=crop",
-          after: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=900&auto=format&fit=crop",
-        },
-        {
-          title: "Refreshed look",
-          before: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=900&auto=format&fit=crop",
-          after: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=900&auto=format&fit=crop",
-        },
-      ],
+  beforeAfter: {
+  eyebrow: "Before & After",
+  title: "Before & After Results",
+  description:
+    "Real examples of Kadina results. The right plan is selected after consultation.",
+  before: "Before",
+  after: "After",
+  cases: [
+    {
+      title: "Nano Fat",
+      doctor: "Dr. Mohammed Al-Haddab",
+      image: "/before-after/nano-fat-mohammed-alhaddab.jpg",
     },
+    {
+      title: "Lip Filler",
+      doctor: "Dr. Hosam Al-Ghamdi",
+      image: "/before-after/lip-filler-hosam-alghamdi.jpg",
+    },
+    {
+      title: "Upper Eyelid Lift",
+      doctor: "Dr. Ali Al-Qadhi",
+      image: "/before-after/upper-eyelid-lift-ali-alqadhi.jpg",
+    },
+    {
+      title: "Hair Transplant",
+      doctor: "Dr. Waleed Al-Ghamdi",
+      image: "/before-after/hair-transplant-waleed.jpg",
+    },
+    {
+      title: "Scar Revision",
+      doctor: "Dr. Hosam Al-Ghamdi",
+      image: "/before-after/scar-revision-hosam-alghamdi.jpg",
+    },
+    {
+      title: "Under-eye Filler",
+      doctor: "Dr. Eman Al-Mukhadab",
+      image: "/before-after/under-eye-filler-eman-almukhadab.jpg",
+    },
+  ],
+},
     reviews: {
       eyebrow: "Reviews",
       title: "Experiences that trust Kadina",
@@ -312,6 +375,27 @@ export const content = {
       locationLabel: "Location",
       hoursLabel: "Working hours",
       hoursValue: "Saturday - Thursday | 10 AM - 10 PM",
+      socialLabel: "Follow us on social media",
+      socialDiscription: "Stay close to Kadina’s latest offers, updates, and care tips.",
+      socials:[
+        {
+          key: "snapchat",
+          label: "Snapchat",
+          url: "https://www.snapchat.com/add/kadina_center",
+
+        },
+        {
+          key: "instagram",
+          label: "Instagram",
+          url: "https://www.instagram.com/kadina_center",
+
+        },
+        {
+          key: "tiktok",
+          label: "TikTok",
+          url: "https://www.tiktok.com/@kadina_center",
+        }
+      ]
     },
     location: {
       eyebrow: "Our Location",

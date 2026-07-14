@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
@@ -44,7 +45,7 @@ function OfferPoster({ offer, data, centerName, whatsappUrl, compact = false }) 
   const isDense = offer.items.length > 6;
 
   return (
-    <article className="relative h-full overflow-hidden rounded-[2rem] border border-[#f8aa2d]/24 bg-[#ffe6c9] shadow-[0_24px_70px_rgba(76,44,0,0.14)] sm:rounded-[2.5rem]">
+    <article className="relative h-full overflow-hidden rounded-[1.75rem] border border-[#f8aa2d]/24 bg-[#ffe6c9] shadow-[0_12px_30px_rgba(76,44,0,0.10)] sm:rounded-[2.5rem] lg:shadow-[0_24px_70px_rgba(76,44,0,0.14)]">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(255,247,235,0.58),transparent_46%,rgba(255,0,102,0.09))]" />
         <div className="absolute -right-12 -top-14 hidden h-44 w-44 rounded-full border-[18px] border-[#ffc400]/22 sm:block" />
@@ -91,7 +92,11 @@ function OfferPoster({ offer, data, centerName, whatsappUrl, compact = false }) 
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className={`mt-6 grid gap-3 lg:mt-9 lg:gap-4 ${isDense ? "lg:grid-cols-2" : ""}`}
+          className={`mt-6 grid gap-3 lg:mt-9 lg:gap-4 ${
+            isDense
+              ? "max-h-[21rem] overflow-y-auto overscroll-contain pe-1 lg:max-h-none lg:grid-cols-2 lg:overflow-visible lg:pe-0"
+              : ""
+          }`}
         >
           {offer.items.map((item) => (
             <OfferLine
@@ -137,10 +142,33 @@ export default function OfferSlider({
 }) {
   const data = offers[lang] || offers.ar;
   const isRtl = lang === "ar";
+  const sliderKey = modal ? `hero-offers-modal-${lang}` : `offers-${lang}`;
+  const swiperRef = useRef(null);
+  const [activeSlide, setActiveSlide] = useState({ key: sliderKey, index: 0 });
+  const activeIndex = activeSlide.key === sliderKey ? activeSlide.index : 0;
   const whatsappUrl = `https://wa.me/${t.center.whatsapp}`;
+  const totalOffers = data.cards.length;
+  const counterText =
+    lang === "ar"
+      ? `عرض ${activeIndex + 1} من ${totalOffers}`
+      : `Offer ${activeIndex + 1} of ${totalOffers}`;
+  const swipeText =
+    lang === "ar" ? "اسحب لمشاهدة المزيد من العروض" : "Swipe to see more offers";
+
+  const handleSlideChange = (swiper) => {
+    setActiveSlide({
+      key: sliderKey,
+      index: swiper.realIndex ?? swiper.activeIndex ?? 0,
+    });
+  };
+
+  const handleTabClick = (index) => {
+    setActiveSlide({ key: sliderKey, index });
+    swiperRef.current?.slideTo(index);
+  };
 
   return (
-    <div className="relative">
+    <div className={modal ? "offers-modal relative" : "relative"}>
       {showAvailability ? (
         <div className="mx-auto mb-4 flex max-w-7xl justify-center px-4">
           <span className="rounded-full border border-[#f90062]/18 bg-white/70 px-4 py-2 text-xs font-black text-[#f90062] shadow-sm">
@@ -149,37 +177,85 @@ export default function OfferSlider({
         </div>
       ) : null}
 
+      {modal ? (
+        <div className="mb-4 px-1">
+          <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm font-black text-[#4c2c00]/70">{swipeText}</p>
+            <p className="w-fit rounded-full border border-[#f8aa2d]/25 bg-[#fff7eb] px-3.5 py-1.5 text-xs font-black text-[#4c2c00]">
+              {counterText}
+            </p>
+          </div>
+
+          <div className="scrollbar-hide flex gap-2 overflow-x-auto px-1 pb-2">
+            {data.cards.map((offer, index) => {
+              const isActive = activeIndex === index;
+
+              return (
+                <button
+                  key={offer.id}
+                  type="button"
+                  onClick={() => handleTabClick(index)}
+                  className={`shrink-0 rounded-full px-4 py-2 text-sm font-black transition-colors duration-200 ${
+                    isActive
+                      ? "bg-[#f8aa2d] text-[#2b1b08]"
+                      : "border border-[#f8aa2d]/25 bg-[#fff7eb] text-[#4c2c00]"
+                  }`}
+                  aria-current={isActive ? "true" : undefined}
+                >
+                  {offer.tabTitle || offer.title}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+
       <Swiper
-        key={`${lang}-${modal ? "modal" : "section"}`}
+        key={sliderKey}
         dir={isRtl ? "rtl" : "ltr"}
         modules={[Autoplay, Navigation, Pagination]}
-        className={`offers-swiper ${modal ? "offers-swiper-modal" : ""}`}
+        className={`offers-swiper ${modal ? "offers-modal-swiper" : ""}`}
         centeredSlides={true}
         loop={false}
         rewind={true}
         slidesPerGroup={1}
-        navigation={true}
+        navigation={modal ? false : true}
         pagination={{ clickable: true }}
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         }}
-        speed={750}
-        spaceBetween={16}
-        slidesPerView={1.05}
+        speed={modal ? 600 : 750}
+        spaceBetween={modal ? 12 : 16}
+        slidesPerView={modal ? 1.03 : 1.05}
+        watchSlidesProgress={true}
+        observer={true}
+        observeParents={true}
+        resistanceRatio={modal ? 0.7 : 0.65}
+        threshold={8}
+        touchRatio={1}
+        simulateTouch={true}
+        allowTouchMove={true}
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
+        onSlideChange={handleSlideChange}
         breakpoints={{
           640: {
-            slidesPerView: 1.15,
-            spaceBetween: 20,
+            slidesPerView: modal ? 1.12 : 1.15,
+            spaceBetween: modal ? 18 : 20,
+            navigation: true,
           },
           1024: {
             slidesPerView: 1.35,
-            spaceBetween: 28,
+            spaceBetween: modal ? 26 : 28,
+            navigation: true,
           },
           1280: {
             slidesPerView: modal ? 1.45 : 1.55,
-            spaceBetween: 32,
+            spaceBetween: modal ? 30 : 32,
+            navigation: true,
           },
         }}
       >

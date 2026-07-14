@@ -270,6 +270,48 @@ footer[id] {
   box-shadow: 0 4px 12px rgba(249, 0, 98, 0.26);
 }
 
+.offers-modal {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.offers-modal-main {
+  min-height: 0;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.offers-modal-swiper {
+  width: 100%;
+  overflow: hidden;
+  padding: 0.25rem 0 3rem;
+}
+
+.offers-modal .swiper-slide {
+  height: auto;
+}
+
+.offers-modal .offers-swiper .swiper-slide,
+.offers-modal .offers-swiper .swiper-slide-prev,
+.offers-modal .offers-swiper .swiper-slide-next,
+.offers-modal .offers-swiper .swiper-slide-active {
+  opacity: 1;
+  transform: none;
+}
+
+.offers-modal * {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 @media (min-width: 1024px) {
   .offers-swiper {
     padding-bottom: 4rem;

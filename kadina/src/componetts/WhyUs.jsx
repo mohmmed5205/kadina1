@@ -35,7 +35,7 @@ export default function WhyUs({ t }) {
           viewport={viewportOnce}
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6"
         >
-          {t.whyUs.items.map((item, index) => (
+          {t.whyUs.items.map((item) => (
             <motion.article
               key={item.title}
               variants={cardItem}

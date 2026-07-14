@@ -26,9 +26,9 @@ export default function Bottom({ t }) {
             whileTap={{ scale: 0.98 }}
           >
             <img
-              src="/logo.png"
+              src="/kadina-logo.png"
               alt={t.center.name}
-              className="h-16 w-auto object-contain lg:h-20"
+              className="h-16 w-auto object-contain lg:h-30"
               onError={(event) => {
                 event.currentTarget.onerror = null;
                 event.currentTarget.src = "/kadina-logo.png";

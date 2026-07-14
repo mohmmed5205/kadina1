@@ -68,7 +68,7 @@ export default function Devices({ lang = "ar" }) {
                   whileHover={{ y: -6 }}
                   className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-[#f8aa2d]/18 bg-[#fffbf3] shadow-[0_12px_32px_rgba(76,44,0,0.07)] transition-colors duration-300 hover:border-[#f8aa2d]/42 sm:rounded-[2rem]"
                 >
-                  <div className="relative flex min-h-48 items-center justify-center overflow-hidden bg-gradient-to-b from-[#fff7eb] to-[#f8ead8] p-4 sm:min-h-60 lg:min-h-72 lg:p-6">
+                  <div className="flex h-[13rem] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#fff7eb] p-4 sm:h-[15rem] lg:h-[17rem]">
                     <img
                       src={device.image}
                       alt={device.name}
@@ -77,7 +77,7 @@ export default function Devices({ lang = "ar" }) {
                         event.currentTarget.onerror = null;
                         event.currentTarget.src = "/logo.png";
                       }}
-                      className="h-44 w-full object-contain transition duration-500 group-hover:scale-[1.04] sm:h-56 lg:h-64"
+                      className="max-h-full w-full scale-110 object-contain transition duration-500 sm:scale-100"
                     />
                   </div>
 
