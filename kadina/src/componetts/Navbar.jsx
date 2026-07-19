@@ -67,11 +67,11 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
       className={clsx(
         "fixed left-0 top-0 z-50 w-full border-b transition-all duration-300",
         scrolled
-          ? "border-[#4c2c00]/10 bg-[#fff7eb]/90 shadow-[0_18px_48px_rgba(43,27,8,0.13)] backdrop-blur-2xl"
-          : "border-white/20 bg-[#fff7eb]/72 backdrop-blur-xl"
+          ? "border-[#f8aa2d]/20 bg-[#fff7eb]/96 shadow-[0_18px_48px_rgba(0,0,0,0.2)] backdrop-blur-2xl"
+          : "border-[#f8aa2d]/15 bg-[#fff7eb]/88 backdrop-blur-xl"
       )}
     >
-      <div className="mx-auto flex h-[var(--nav-h,4.25rem)] max-w-7xl items-center justify-between px-4 lg:px-8">
+      <div className="mx-auto flex h-[var(--nav-h,4.25rem)] max-w-7xl items-center justify-between px-4 sm:px-5 lg:px-8">
         <motion.a
           href="#home"
           aria-label={t.center.name}
@@ -93,7 +93,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
 
         <nav
           aria-label={navLabel}
-          className="hidden items-center gap-1 rounded-full border border-white/45 bg-white/46 px-2 py-2 shadow-[0_14px_34px_rgba(43,27,8,0.07)] backdrop-blur-xl xl:flex"
+          className="hidden items-center gap-1 rounded-full border border-[#4c2c00]/10 bg-white/45 px-2 py-2 shadow-[0_14px_34px_rgba(0,0,0,0.12)] backdrop-blur-xl xl:flex"
         >
           {t.nav.map((link) => (
             <motion.a
@@ -103,7 +103,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
                 "relative rounded-full px-2.5 py-2 text-[0.82rem] font-bold transition-all duration-200 xl:px-4 xl:text-sm",
                 activeId === link.id
                   ? "bg-[#f8aa2d]/18 text-[#cf7d11] shadow-inner"
-                  : "text-[#4c2c00]/72 hover:bg-[#fff7eb]/80 hover:text-[#cf7d11]"
+                  : "text-[#4c2c00]/75 hover:bg-white/8 hover:text-[#f8aa2d]"
               )}
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
@@ -117,7 +117,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
           <motion.button
             type="button"
             onClick={handleLanguageToggle}
-            className="rounded-full border border-[#4c2c00]/12 bg-white/58 px-4 py-2.5 text-sm font-black text-[#4c2c00] shadow-sm backdrop-blur transition-all duration-200 hover:border-[#f8aa2d]/45 hover:bg-[#f8aa2d]/15 hover:text-[#cf7d11]"
+            className="rounded-full border border-[#4c2c00]/15 bg-white/55 px-4 py-2.5 text-sm font-black text-[#4c2c00] shadow-sm backdrop-blur transition-all duration-200 hover:border-[#f8aa2d]/45 hover:bg-[#f8aa2d]/15 hover:text-[#f8aa2d]"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -133,13 +133,13 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
             whileTap={{ scale: 0.98 }}
           >
             <FaWhatsapp className="text-base" aria-hidden="true" />
-            <span>{lang === "ar" ? "واتساب" : "WhatsApp"}</span>
+            <span>{lang === "ar" ? "تواصل معنا" : "Contact us"}</span>
           </motion.a>
         </div>
 
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#4c2c00]/12 bg-white/55 text-[#4c2c00] shadow-sm backdrop-blur transition hover:border-[#f8aa2d]/40 hover:bg-[#f8aa2d]/18 xl:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-[#4c2c00]/15 bg-white/55 text-[#4c2c00] shadow-sm backdrop-blur transition hover:border-[#f8aa2d]/40 hover:bg-[#f8aa2d]/18 xl:hidden"
           onClick={() => setIsOpen((current) => !current)}
           aria-expanded={isOpen}
           aria-label={menuLabel}
@@ -174,7 +174,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.28, ease: smoothEase }}
-            className="overflow-hidden border-t border-[#4c2c00]/10 bg-[#fff7eb]/96 shadow-[0_22px_50px_rgba(43,27,8,0.12)] backdrop-blur-2xl xl:hidden"
+            className="overflow-hidden border-t border-[#f8aa2d]/15 bg-[#fff7eb]/98 shadow-[0_22px_50px_rgba(0,0,0,0.22)] backdrop-blur-2xl xl:hidden"
           >
             <motion.div
               initial="hidden"
@@ -209,7 +209,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
                 <button
                   type="button"
                   onClick={handleLanguageToggle}
-                  className="rounded-2xl border border-[#4c2c00]/14 bg-white/55 px-4 py-3 text-center font-black text-[#4c2c00] transition hover:border-[#f8aa2d]/40 hover:bg-[#f8aa2d]/12"
+                  className="rounded-2xl border border-[#4c2c00]/15 bg-white/55 px-4 py-3 text-center font-black text-[#4c2c00] transition hover:border-[#f8aa2d]/40 hover:bg-[#f8aa2d]/12"
                 >
                   {t.langLabel}
                 </button>

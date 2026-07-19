@@ -9,10 +9,10 @@ export default function Devices({ lang = "ar" }) {
   const isRtl = lang === "ar";
 
   return (
-    <section id="devices" className="relative overflow-hidden bg-[#f8ead8] py-16 sm:py-20 lg:py-28">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(255,247,235,0.64),rgba(248,234,216,0.42)_45%,rgba(76,44,0,0.06))]" />
+    <section id="devices" className="relative overflow-hidden bg-[#f8ead8] py-14 sm:py-20 lg:py-28">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(248,170,45,0.09),transparent_48%)]" />
 
-      <div className="relative mx-auto max-w-7xl px-4 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -21,10 +21,10 @@ export default function Devices({ lang = "ar" }) {
           className="mx-auto mb-8 max-w-3xl text-center lg:mb-12"
         >
           <span className="section-eyebrow">{data.eyebrow}</span>
-          <h2 className="mt-4 text-2xl font-black leading-tight text-[#2b1b08] md:text-5xl lg:mt-6">
+          <h2 className="dark-section-title mt-4 text-2xl font-black leading-tight sm:text-3xl lg:mt-6 lg:text-5xl">
             {data.title}
           </h2>
-          <p className="mt-4 text-base leading-8 text-[#4c2c00]/70 md:text-lg">
+          <p className="dark-section-description mt-4 text-base leading-8 md:text-lg">
             {data.description}
           </p>
         </motion.div>
@@ -39,7 +39,7 @@ export default function Devices({ lang = "ar" }) {
             key={lang}
             dir={isRtl ? "rtl" : "ltr"}
             modules={[Autoplay, Navigation, Pagination]}
-            className="kadina-swiper devices-swiper"
+            className="kadina-swiper dark-section-swiper devices-swiper"
             navigation
             pagination={{ clickable: true }}
             autoplay={{
@@ -48,7 +48,8 @@ export default function Devices({ lang = "ar" }) {
               pauseOnMouseEnter: true,
             }}
             speed={750}
-            loop={data.items.length > 3}
+            loop={false}
+            rewind={true}
             spaceBetween={18}
             slidesPerView={1}
             breakpoints={{
@@ -68,7 +69,7 @@ export default function Devices({ lang = "ar" }) {
                   whileHover={{ y: -6 }}
                   className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-[#f8aa2d]/18 bg-[#fffbf3] shadow-[0_12px_32px_rgba(76,44,0,0.07)] transition-colors duration-300 hover:border-[#f8aa2d]/42 sm:rounded-[2rem]"
                 >
-                  <div className="flex h-[13rem] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#fff7eb] p-4 sm:h-[15rem] lg:h-[17rem]">
+                  <div className="flex h-[13rem] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#fff7eb] p-3 sm:h-[15rem] lg:h-[17rem]">
                     <img
                       src={device.image}
                       alt={device.name}
@@ -77,7 +78,7 @@ export default function Devices({ lang = "ar" }) {
                         event.currentTarget.onerror = null;
                         event.currentTarget.src = "/logo.png";
                       }}
-                      className="max-h-full w-full scale-110 object-contain transition duration-500 sm:scale-100"
+                      className="max-h-full w-full scale-110 object-contain transition duration-500 sm:scale-105 lg:scale-100"
                     />
                   </div>
 

@@ -35,7 +35,8 @@ export default function Contact({ t }) {
       icon: FaMapMarkerAlt,
       label: t.contact.locationLabel,
       value: t.center.address,
-      href: "#location",
+      href:t.contact.mapUrl||t.location?.mapUrl|| "#location",
+      external: true,
     },
     {
       icon: FaClock,
@@ -50,7 +51,7 @@ export default function Contact({ t }) {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-[#fff7eb] py-16 sm:py-20 lg:py-28"
+      className="relative overflow-hidden bg-[#f8ead8] py-14 sm:py-20 lg:py-28"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(248,170,45,0.16),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(76,44,0,0.08),transparent_40%)]" />
 
@@ -64,11 +65,11 @@ export default function Contact({ t }) {
         >
           <span className="section-eyebrow">{t.contact.eyebrow}</span>
 
-          <h2 className="mt-5 text-3xl font-black leading-tight text-[#2b1b08] md:text-5xl">
+          <h2 className="dark-section-title mt-5 text-2xl font-black leading-tight sm:text-3xl lg:text-5xl">
             {t.contact.title}
           </h2>
 
-          <p className="mt-4 text-base leading-8 text-[#4c2c00]/70 sm:text-lg">
+          <p className="dark-section-description mt-4 text-base leading-8 sm:text-lg">
             {t.contact.description}
           </p>
         </motion.div>
@@ -104,12 +105,17 @@ export default function Contact({ t }) {
             );
 
             if (item.href) {
-              return (
-                <a key={item.label} href={item.href}>
-                  {cardContent}
-                </a>
-              );
-            }
+  return (
+    <a
+      key={item.label}
+      href={item.href}
+      target={item.external ? "_blank" : undefined}
+      rel={item.external ? "noreferrer" : undefined}
+    >
+      {cardContent}
+    </a>
+  );
+}
 
             return <div key={item.label}>{cardContent}</div>;
           })}

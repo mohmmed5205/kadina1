@@ -10,7 +10,7 @@ const labels = {
   ar: {
     devicesTitle: "الأجهزة المستخدمة",
     doctorsTitle: "الأطباء المتخصصون",
-    bookCta: "حجز عبر واتساب",
+    bookCta: "للحجز والاستفسار",
     close: "إغلاق نافذة تفاصيل الخدمة",
     emptyDevices: "لا توجد أجهزة مرتبطة بهذه الخدمة حاليًا.",
     emptyDoctors: "لا يوجد أطباء مرتبطون بهذه الخدمة حاليًا.",
@@ -18,7 +18,7 @@ const labels = {
   en: {
     devicesTitle: "Devices Used",
     doctorsTitle: "Specialized Doctors",
-    bookCta: "Book on WhatsApp",
+    bookCta: "Contact us",
     close: "Close service details",
     emptyDevices: "No devices are linked to this service yet.",
     emptyDoctors: "No doctors are linked to this service yet.",
@@ -66,7 +66,7 @@ export default function ServiceModal({ open, onClose, serviceKey, lang = "ar", t
           aria-modal="true"
           aria-labelledby="service-modal-title"
           dir={isRtl ? "rtl" : "ltr"}
-          className="fixed inset-0 z-[999] overflow-y-auto overflow-x-hidden bg-[#fff7eb] text-[#2b1b08]"
+          className="fixed inset-0 z-[999] overflow-hidden bg-[#fff7eb] text-[#2b1b08]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -80,9 +80,9 @@ export default function ServiceModal({ open, onClose, serviceKey, lang = "ar", t
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.36, ease: smoothEase }}
-            className="relative min-h-screen p-4 sm:p-6 lg:p-8"
+            className="relative flex h-dvh min-h-0 flex-col overflow-hidden p-4 sm:p-6 lg:p-8"
           >
-            <header className="sticky top-0 z-20 -mx-4 border-b border-[#f8aa2d]/16 bg-[#fff7eb]/92 px-4 py-3 backdrop-blur-xl sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+            <header className="z-20 -mx-4 shrink-0 border-b border-[#f8aa2d]/16 bg-[#fff7eb]/92 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 sm:backdrop-blur-xl lg:-mx-8 lg:px-8">
               <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
                 <img
                   src="/logo.png"
@@ -99,14 +99,14 @@ export default function ServiceModal({ open, onClose, serviceKey, lang = "ar", t
                   type="button"
                   onClick={onClose}
                   aria-label={text.close}
-                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#4c2c00]/12 bg-white/80 text-[#2b1b08] shadow-[0_12px_26px_rgba(76,44,0,0.12)] transition-colors duration-200 hover:border-[#f8aa2d] hover:bg-[#f8aa2d]"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#4c2c00]/12 bg-white/80 text-[#2b1b08] shadow-sm transition-colors duration-200 hover:border-[#f8aa2d] hover:bg-[#f8aa2d] sm:shadow-[0_12px_26px_rgba(76,44,0,0.12)]"
                 >
                   <X size={22} strokeWidth={2.6} aria-hidden="true" />
                 </button>
               </div>
             </header>
 
-            <div className="relative mx-auto max-w-7xl py-8 lg:py-12">
+            <div className="relative mx-auto min-h-0 w-full max-w-7xl flex-1 overflow-y-auto overflow-x-hidden overscroll-contain py-8 lg:py-12">
               <section className="grid gap-6 border-b border-[#f8aa2d]/20 pb-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-10 lg:pb-12">
                 <div>
                   <span className="section-eyebrow">{t.services.eyebrow}</span>
@@ -125,7 +125,7 @@ export default function ServiceModal({ open, onClose, serviceKey, lang = "ar", t
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#f8aa2d] px-6 py-3.5 text-base font-black text-[#2b1b08] shadow-[0_16px_34px_rgba(207,125,17,0.28)] transition-colors duration-300 hover:bg-[#cf7d11] hover:text-white sm:w-fit lg:px-8"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-[#f8aa2d] px-6 py-3.5 text-base font-black text-[#2b1b08] shadow-sm transition-colors duration-300 hover:bg-[#cf7d11] hover:text-white sm:w-fit sm:shadow-[0_16px_34px_rgba(207,125,17,0.28)] lg:px-8"
                   whileHover={{ y: -3 }}
                   whileTap={{ scale: 0.98 }}
                 >

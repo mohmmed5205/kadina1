@@ -15,14 +15,14 @@ export default function About({ t }) {
     : "Kadina Medical Center is a specialized destination for aesthetics, laser treatments, skin care, and hair care, led by a selected team of Saudi doctors and supported by the latest medical devices and technologies.";
 
   return (
-    <section id="about" className="relative overflow-hidden bg-[#fff7eb] py-16 sm:py-20 lg:py-28">
+    <section id="about" className="relative overflow-hidden bg-[#f8ead8] py-14 sm:py-20 lg:py-28">
       <div className="pointer-events-none absolute inset-0 hidden opacity-70 sm:block">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(248,170,45,0.10)_0%,transparent_34%,rgba(76,44,0,0.07)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(73, 54, 24, 0.1)_0%,transparent_34%,rgba(76,44,0,0.07)_100%)]" />
         <div className="absolute -top-32 right-[-12rem] h-[34rem] w-[34rem] rounded-full border border-[#f8aa2d]/14" />
         <div className="absolute bottom-[-14rem] left-[-10rem] h-[32rem] w-[32rem] rounded-full border border-[#4c2c00]/10" />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-4 lg:px-8">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-5 lg:px-8">
         <motion.div
           variants={scaleIn}
           initial="hidden"

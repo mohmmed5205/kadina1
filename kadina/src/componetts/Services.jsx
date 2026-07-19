@@ -14,11 +14,11 @@ export default function Services({ t, lang = "ar" }) {
   return (
     <section
       id="services"
-      className="relative overflow-hidden bg-[#f8ead8] py-16 sm:py-20 lg:py-28"
+      className="relative overflow-hidden bg-[#f8ead8] py-14 sm:py-20 lg:py-28"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(255,247,235,0.8),transparent_45%,rgba(207,125,17,0.1))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(248,170,45,0.09),transparent_45%,rgba(207,125,17,0.06))]" />
 
-      <div className="relative mx-auto max-w-7xl px-4 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -28,11 +28,11 @@ export default function Services({ t, lang = "ar" }) {
         >
           <span className="section-eyebrow">{t.services.eyebrow}</span>
 
-          <h2 className="mt-4 text-2xl font-black leading-tight text-[#2b1b08] md:text-5xl lg:mt-6">
+          <h2 className="dark-section-title mt-4 text-2xl font-black leading-tight sm:text-3xl lg:mt-6 lg:text-5xl">
             {t.services.title}
           </h2>
 
-          <p className="mt-4 text-base leading-8 text-[#4c2c00]/70 md:text-lg">
+          <p className="dark-section-description mt-4 text-base leading-8 md:text-lg">
             {t.services.description}
           </p>
         </motion.div>

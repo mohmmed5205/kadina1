@@ -7,7 +7,7 @@ import {
 
 export default function Stats({ t }) {
   return (
-    <section className="relative overflow-hidden bg-[#2b1b08] py-20">
+    <section className="relative overflow-hidden bg-[#f8ead8] py-20">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(248,170,45,0.12),transparent_40%,rgba(255,247,235,0.06))]" />
 
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
@@ -29,10 +29,10 @@ export default function Stats({ t }) {
               <h2 className="text-4xl font-black text-[#f8aa2d] transition-transform duration-300 group-hover:scale-105 md:text-5xl">
                 {item.number}
               </h2>
-              <p className="mt-3 text-base font-semibold text-[#fff7eb]/82">
+              <p className="mt-3 text-base font-semibold text-[#4c2c00]/82">
                 {item.title}
               </p>
-              <p className="mt-4 text-[0.65rem] font-black tracking-[0.2em] text-[#fff7eb]/38">
+              <p className="mt-4 text-[0.65rem] font-black tracking-[0.2em] text-[#4c2c00]/55">
                 {String(index + 1).padStart(2, "0")}
               </p>
             </motion.div>

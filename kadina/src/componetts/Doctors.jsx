@@ -9,10 +9,10 @@ export default function Doctors({ lang = "ar" }) {
   const isRtl = lang === "ar";
 
   return (
-    <section id="doctors" className="relative overflow-hidden bg-[#fff7eb] py-16 sm:py-20 lg:py-28">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,247,235,0.95),rgba(248,234,216,0.40)_48%,rgba(255,247,235,0.95))]" />
+    <section id="doctors" className="relative overflow-hidden bg-[#f8ead8] py-14 sm:py-20 lg:py-28">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(248,170,45,0.10),transparent_45%)]" />
 
-      <div className="relative mx-auto max-w-7xl px-4 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -21,10 +21,10 @@ export default function Doctors({ lang = "ar" }) {
           className="mx-auto mb-8 max-w-3xl text-center lg:mb-12"
         >
           <span className="section-eyebrow">{data.eyebrow}</span>
-          <h2 className="mt-4 text-2xl font-black leading-tight text-[#2b1b08] md:text-5xl lg:mt-6">
+          <h2 className="dark-section-title mt-4 text-2xl font-black leading-tight sm:text-3xl lg:mt-6 lg:text-5xl">
             {data.title}
           </h2>
-          <p className="mt-4 text-base leading-8 text-[#4c2c00]/70 md:text-lg">
+          <p className="dark-section-description mt-4 text-base leading-8 md:text-lg">
             {data.description}
           </p>
         </motion.div>
@@ -39,7 +39,7 @@ export default function Doctors({ lang = "ar" }) {
             key={lang}
             dir={isRtl ? "rtl" : "ltr"}
             modules={[Autoplay, Navigation, Pagination]}
-            className="kadina-swiper doctors-swiper"
+            className="kadina-swiper dark-section-swiper doctors-swiper"
             navigation
             pagination={{ clickable: true }}
             autoplay={{
@@ -48,7 +48,8 @@ export default function Doctors({ lang = "ar" }) {
               pauseOnMouseEnter: true,
             }}
             speed={750}
-            loop={data.items.length > 4}
+            loop={false}
+            rewind={true}
             spaceBetween={18}
             slidesPerView={1}
             breakpoints={{
@@ -68,7 +69,7 @@ export default function Doctors({ lang = "ar" }) {
                   whileHover={{ y: -6 }}
                   className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-[#f8aa2d]/16 bg-[#fffbf3] shadow-[0_12px_30px_rgba(76,44,0,0.07)] transition-colors duration-300 hover:border-[#f8aa2d]/40 sm:rounded-[2rem]"
                 >
-                  <div className="relative flex h-[17rem] items-end justify-center overflow-hidden bg-gradient-to-b from-[#fff7eb] to-[#f8ead8] sm:h-[19rem] lg:h-[22rem]">
+                  <div className="relative flex h-[18rem] items-start justify-center overflow-hidden rounded-[1.5rem] bg-[#f8ead8] sm:h-[20rem] lg:h-[22rem]">
                     <img
                       src={doctor.image}
                       alt={doctor.name}
@@ -79,7 +80,7 @@ export default function Doctors({ lang = "ar" }) {
                         event.currentTarget.classList.remove("object-cover", "object-top");
                         event.currentTarget.classList.add("object-contain", "p-10");
                       }}
-                      className="h-full w-full object-contain object-bottom transition duration-500 sm:object-cover sm:object-top"
+                      className="h-full w-full object-contain object-top transition duration-500 sm:object-cover sm:object-top"
                     />
                     <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#2b1b08]/50 to-transparent lg:h-24" />
                     <img

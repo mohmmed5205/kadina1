@@ -9,9 +9,9 @@ import {
 export default function Gallery({ t }) {
   return (
     <section id="gallery" className="relative overflow-hidden bg-[#f8ead8] py-16 sm:py-20 lg:py-28">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(255,247,235,0.68),transparent_46%,rgba(207,125,17,0.08))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(248,170,45,0.07),transparent_46%,rgba(207,125,17,0.08))]" />
 
-      <div className="relative mx-auto max-w-7xl px-4 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <motion.div
           variants={fadeUp}
           initial="hidden"

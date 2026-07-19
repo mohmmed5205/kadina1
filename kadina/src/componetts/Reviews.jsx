@@ -27,8 +27,8 @@ export default function Reviews({ t }) {
   const data = t.reviews;
 
   return (
-    <section id="reviews" className="relative overflow-hidden bg-[#fff7eb] py-24 sm:py-28">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,247,235,1),rgba(248,234,216,0.32)_52%,rgba(255,247,235,1))]" />
+    <section id="reviews" className="relative overflow-hidden bg-[#f8ead8] py-24 sm:py-28">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(248,170,45,0.06),transparent_52%,rgba(248,170,45,0.04))]" />
 
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <motion.div

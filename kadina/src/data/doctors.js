@@ -1,7 +1,7 @@
 export const doctors = {
     ar: {
         eyebrow: "أطباؤنا",
-        title: "نخبة من أطباء كادينا",
+        title: "نخبة من الأطباء السعوديين المتخصصين في مجال التجميل",
         description:
             "فريق طبي متخصص يجمع بين الخبرة، الدقة، واللمسة الجمالية الراقية.",
         items: [
@@ -45,12 +45,17 @@ export const doctors = {
                 specialty: "استشاري زراعه شعر و جلديه و جراحه الجلد و اليزر",
                 image: "/doctors/doctor-waled.png",
             },
+            {
+                name: "د. منيرة الصالح",
+                specialty: "استشارية جلدية وتجميل",
+                image: "/kadina-logo.png",
+            },
         ],
     },
 
     en: {
         eyebrow: "Our Doctors",
-        title: "Kadina Medical Experts",
+        title: "A select group of Saudi doctors specializing in the field of aesthetic medicine.",
         description:
             "A specialized medical team combining experience, precision, and refined aesthetic care.",
         items: [
@@ -97,6 +102,11 @@ export const doctors = {
                 specialty:
                     "Hair Transplant, Dermatology, Skin Surgery, and Laser Consultant",
                 image: "/doctors/doctor-waled.png",
+            },
+            {
+                name: "Dr. Munira Al-Saleh",
+                specialty: "Dermatology and Aesthetics Consultant",
+                image: "/kadina-logo.png",
             },
         ],
     },

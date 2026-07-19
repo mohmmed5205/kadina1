@@ -8,12 +8,12 @@ function DeviceCard({ item }) {
       whileHover={{ y: -5 }}
       className="group flex h-full flex-col rounded-[1.7rem] border border-[#f8aa2d]/20 bg-[#fffbf3] p-4 shadow-[0_14px_34px_rgba(76,44,0,0.08)] lg:p-5"
     >
-      <div className="flex h-36 items-center justify-center rounded-[1.35rem] bg-gradient-to-b from-[#fff7eb] to-[#f8ead8] p-3 lg:h-44">
+      <div className="flex h-[13rem] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#fff7eb] p-3 sm:h-[15rem] lg:h-[17rem]">
         <img
           src={item.image}
           alt={item.name}
           loading="lazy"
-          className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.03]"
+          className="max-h-full w-full scale-110 object-contain transition duration-500 sm:scale-105 lg:scale-100"
           onError={(event) => {
             event.currentTarget.onerror = null;
             event.currentTarget.src = "/logo.png";
@@ -39,12 +39,12 @@ function DoctorCard({ item }) {
       whileHover={{ y: -5 }}
       className="group flex h-full flex-col overflow-hidden rounded-[1.7rem] border border-[#f8aa2d]/20 bg-[#fffbf3] shadow-[0_14px_34px_rgba(76,44,0,0.08)]"
     >
-      <div className="overflow-hidden bg-gradient-to-b from-[#f8ead8] to-[#f0d9b5]">
+      <div className="relative flex h-[18rem] items-start justify-center overflow-hidden rounded-[1.5rem] bg-[#f8ead8] sm:h-[20rem] lg:h-[22rem]">
         <img
           src={item.image}
           alt={item.name}
           loading="lazy"
-          className="h-64 w-full object-cover object-top transition duration-500 group-hover:scale-[1.03] lg:h-72"
+          className="h-full w-full object-contain object-top transition duration-500 sm:object-cover sm:object-top"
           onError={(event) => {
             event.currentTarget.onerror = null;
             event.currentTarget.src = "/logo.png";
@@ -83,7 +83,7 @@ export default function ServiceCarousel({
   const singleCardWidth = type === "doctor" ? "max-w-sm" : "max-w-md";
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-[#f8aa2d]/20 bg-[#fff7eb]/80 p-4 shadow-[0_16px_38px_rgba(76,44,0,0.07)] sm:p-5 lg:p-7">
+    <section className="overflow-hidden rounded-[1.5rem] border border-[#f8aa2d]/20 bg-[#fff7eb]/80 p-4 shadow-sm sm:rounded-[2rem] sm:p-5 sm:shadow-[0_16px_38px_rgba(76,44,0,0.07)] lg:p-7">
       <div className="mb-5 flex items-center justify-between gap-4 lg:mb-6">
         <h3 className="text-2xl font-black leading-tight text-[#2b1b08] md:text-3xl">
           {title}
@@ -99,7 +99,7 @@ export default function ServiceCarousel({
           key={carouselKey || `${lang}-${type}-${title}`}
           modules={[Autoplay, Pagination, Navigation]}
           dir={isRtl ? "rtl" : "ltr"}
-          centeredSlides={true}
+          centeredSlides={false}
           loop={false}
           rewind={true}
           slidesPerGroup={1}
@@ -114,7 +114,7 @@ export default function ServiceCarousel({
           }}
           navigation={true}
           spaceBetween={16}
-          slidesPerView={1.08}
+          slidesPerView={1}
           breakpoints={{
             640: {
               slidesPerView: 1.35,

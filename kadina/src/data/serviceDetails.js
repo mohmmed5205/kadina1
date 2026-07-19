@@ -4,15 +4,15 @@ import { doctors } from "./doctors";
 const deviceIndexesByService = {
   dermatology: [3, 4, 6, 7, 8, 11],
   laser: [0, 1, 2, 6, 7],
-  aesthetics: [3, 4, 8, 10, 11, 6],
+  aesthetics: [8, 10, 11],
   hair: [5, 9],
 };
 
 const doctorIndexesByService = {
-  dermatology: [3, 4, 5, 6, 7],
-  laser: [3, 4, 5, 7],
-  aesthetics: [0, 1, 2, 3, 5, 6],
-  hair: [3, 5, 7],
+  dermatology: [7, 3, 4, 5, 6],
+  laser: [7, 3, 4, 5],
+  aesthetics: [3, 0, 1, 2, 5, 6],
+  hair: [7, 3, 5],
 };
 
 const serviceCopy = {
@@ -68,7 +68,10 @@ function buildServiceDetails(lang) {
       {
         ...copy,
         devices: pickItems(deviceItems, deviceIndexesByService[key]),
-        doctors: pickItems(doctorItems, doctorIndexesByService[key]),
+        doctors: [
+          ...pickItems(doctorItems, doctorIndexesByService[key]),
+          ...(key === "aesthetics" ? pickItems(doctorItems, [8]) : []),
+        ],
       },
     ]),
   );

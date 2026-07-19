@@ -8,7 +8,7 @@ import WhyUs from "./componetts/WhyUs";
 // import Gallery from "./componetts/Gallery";
 import BeforeAfter from "./componetts/BeforAfter";
 import Connect from "./componetts/Connect";
-import Location from "./componetts/Location";
+// import Location from "./componetts/Location";
 import Bottom from "./componetts/Bottom";
 import Doctors from "./componetts/Doctors";
 import Devices from "./componetts/Devices";
@@ -26,7 +26,7 @@ export default function App() {
   return (
     <main
       dir={t.dir}
-      className="min-h-screen overflow-x-hidden bg-[#fff7eb] text-[#4c2c00]"
+      className="min-h-screen overflow-x-hidden bg-[#f8ead8] text-[#4c2c00]"
     >
       <Navbar
         t={t}
@@ -43,7 +43,7 @@ export default function App() {
       {/* <Gallery t={t} /> */}
       <BeforeAfter t={t} />
       <Connect t={t} />
-      <Location t={t} />
+      {/* <Location t={t} /> */}
       <Bottom t={t} />
     </main>
   );

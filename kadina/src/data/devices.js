@@ -79,6 +79,12 @@ export const devices = {
                     "يساعد على تحسين الندبات وعلامات التمدد وتوحيد لون البشرة، كما يدعم إنتاج الكولاجين والإيلاستين لتحسين مرونة الجلد وشد البشرة.",
                 image: "/devices/devaice-Bione.png",
             },
+            {
+                name: "الهايفو",
+                    description:
+                 "جهاز متقدم لشد ورفع الوجه بدون جراحة، يساعد على تحفيز الكولاجين الطبيعي وتحسين مظهر الخطوط وملامح الوجه والكونتور.",
+                    image: "/devices/device-Ultraformer.png",
+                        },
         ],
     },
 
@@ -160,6 +166,12 @@ export const devices = {
                 description:
                     "Helps improve scars, stretch marks, and uneven skin tone while supporting collagen and elastin production for better skin elasticity and firmness.",
                 image: "/devices/devaice-Bione.png",
+            },
+            {
+            name: "Ultraformer III",
+            description:
+                "An advanced non-surgical lifting device that helps stimulate natural collagen, improve fine lines, and enhance facial contour.",
+            image: "/devices/device-Ultraformer.png",
             },
         ],
     },

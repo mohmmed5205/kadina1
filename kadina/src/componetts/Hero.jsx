@@ -16,7 +16,7 @@ export default function Hero({ t, lang = "ar" }) {
       >
         <div className="absolute inset-0 bg-[#2b1b08]/48" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#2b1b08]/30 via-[#2b1b08]/12 to-[#2b1b08]/62" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#fff7eb] to-transparent lg:h-40" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#f8ead8] to-transparent lg:h-40" />
 
       <div className="relative z-10 mx-auto flex min-h-[calc(80vh-var(--nav-h,4.25rem))] max-w-7xl items-center px-4 py-10 sm:px-6 lg:min-h-[calc(92vh-var(--nav-h,5rem))] lg:px-8 lg:py-24">
         <motion.div
@@ -29,7 +29,7 @@ export default function Hero({ t, lang = "ar" }) {
             variants={fadeUp}
             src="/kadina-logo3.png"
             alt={t.center.name}
-            className="mx-auto mb-4 h-20 w-auto object-contain drop-shadow-[0_8px_18px_rgba(43,27,8,0.35)] lg:mx-0 lg:h-26"
+            className="mx-auto mb-5 h-24 w-auto object-contain drop-shadow-[0_6px_16px_rgba(0,0,0,0.35)] sm:h-28 lg:mx-0 lg:h-32"
             onError={(event) => {
               event.currentTarget.onerror = null;
               event.currentTarget.src = "/kadina-logo.png";

@@ -37,16 +37,16 @@ export default function Offers({ lang = "ar", t }) {
     <section
       id="offers"
       dir={isRtl ? "rtl" : "ltr"}
-      className="relative overflow-hidden bg-[#fff0d8] py-16 text-[#2b1b08] sm:py-20 lg:py-28"
+      className="relative overflow-hidden bg-[#f8ead8] py-16 text-[#2b1b08] sm:py-20 lg:py-28"
     >
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(255,247,235,0.94),rgba(255,230,199,0.72)_48%,rgba(255,0,102,0.08))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(248,170,45,0.08),transparent_48%,rgba(255,0,102,0.08))]" />
         <SummerSun />
         <div className="absolute -left-24 top-16 hidden h-52 w-52 rounded-full border-[18px] border-[#ff0066]/10 sm:block" />
         <div className="absolute bottom-0 left-0 h-36 w-full bg-[radial-gradient(ellipse_at_bottom,rgba(255,196,0,0.22),transparent_62%)]" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <motion.div
           variants={fadeUp}
           initial="hidden"

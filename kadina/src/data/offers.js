@@ -14,7 +14,7 @@ export const offers = {
     currency: "ر.س",
     phoneLabel: "للحجز والاستفسار",
     displayPhone: "0114555444",
-    bookCta: "احجزي العرض عبر واتساب",
+    bookCta: "للحجز والاستفسار",
     slideCta: "احجز العرض الآن",
     cards: [
       {
@@ -155,7 +155,7 @@ export const offers = {
     currency: "SAR",
     phoneLabel: "Booking and inquiries",
     displayPhone: "0114555444",
-    bookCta: "Book this offer on WhatsApp",
+    bookCta: "Contact us",
     slideCta: "Book this offer",
     cards: [
       {
