@@ -40,9 +40,9 @@ export default function About({ t }) {
                 className="relative z-10 mb-4 flex items-center justify-center lg:mb-6"
               >
                 <img
-                  src="/logo.png"
-                  alt={t.center.name}
-                  className="h-16 w-auto object-contain sm:h-20 lg:h-24"
+                  src="/kadina-logo.png"
+                  // alt="Kadina Medical Center Logo"
+                  className="h-24 w-auto object-contain sm:h-30 lg:h-60"
                   onError={(event) => {
                     event.currentTarget.onerror = null;
                     event.currentTarget.src = "/kadina-logo.png";
@@ -56,9 +56,9 @@ export default function About({ t }) {
                 <span className="h-px w-10 bg-[#f8aa2d]/60" />
               </div>
 
-              <p className="relative z-10 mt-6 text-center text-xs font-black uppercase tracking-[0.3em] text-[#4c2c00]/55">
+              {/* <p className="relative z-10 mt-6 text-center text-xs font-black uppercase tracking-[0.3em] text-[#4c2c00]/55">
                 {isAr ? "مركز كادينا الطبي" : "Kadina Medical Center"}
-              </p>
+              </p> */}
             </div>
 
             <motion.div
