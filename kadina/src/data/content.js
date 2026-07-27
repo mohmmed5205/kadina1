@@ -23,22 +23,40 @@ export const content = {
       { id: "location", title: "الموقع", href: "#location" },
     ],
     hero: {
-      eyebrow: "كادينا للعناية المتقدمة",
-      title: "تجربة جمال فاخرة تبدأ من العناية الصحيحة",
-      highlight: "جلدية، تجميل، ليزر",
-      description:
-        "مركز كادينا الطبي وجهة متخصصة في خدمات التجميل، والليزر، والعناية بالبشرة والشعر، تحت إشراف نخبة من الأطباء السعوديين وباستخدام أحدث الأجهزة والتقنيات الطبية.",
-      primaryCta: "للحجز والاستفسار",
-      secondaryCta: "استكشف الخدمات",
-      offersCta: "مشاهدة العروض",
-      trust: "استشارة، عناية، ونتائج طبيعية في مكان واحد",
-      imageAlt: "عيادة تجميل فاخرة",
-      metrics: [
-        { number: "+10", label: "سنوات خبرة" },
-        { number: "+15", label: "مختص" },
-        { number: "98%", label: "رضا العملاء" },
-      ],
+  eyebrow: "مركز كادينا الطبي — الرياض — منذ 2013",
+
+  title: "جلدية • تجميل • ليزر  ",
+
+  highlight: "نخبة الاستشاريين • أحدث الأجهزة العالمية",
+
+  description:
+    "مركز كادينا الطبي في الرياض يقدم خدمات الجلدية والليزر والتجميل وجراحة التجميل والعناية بالشعر، باستخدام أحدث الأجهزة الطبية وتحت إشراف نخبة من الاستشاريين.",
+
+  primaryCta: "احجز استشارتك",
+
+  secondaryCta: "استكشف الخدمات",
+
+  offersCta: "العروض الحالية",
+
+  trust: "13+ جهاز عالمي • 9 استشاريين • منذ 2013",
+
+  imageAlt: "مركز كادينا الطبي للجلدية والتجميل والليزر في الرياض",
+
+  metrics: [
+    {
+      number: "+15",
+      label: "عامًا من الخبرة",
     },
+    {
+      number: "+9",
+      label: "استشاريين",
+    },
+    {
+      number: "+13",
+      label: "جهازًا عالميًا",
+    },
+  ],
+},
     about: {
       eyebrow: "من نحن",
       title: "هوية هادئة ونتائج واثقة",
@@ -126,32 +144,32 @@ export const content = {
     {
       title: "نانو فات",
       doctor: "د. محمد الهداب",
-      image: "/before-after/nano-fat-mohammed-alhaddab.jpg",
+      image: "/before-after/nano-fat-mohammed-alhaddab.webp",
     },
     {
       title: "فيلر شفايف",
       doctor: "د. حسام الغامدي",
-      image: "/before-after/lip-filler-hosam-alghamdi.jpg",
+      image: "/before-after/lip-filler-hosam-alghamdi.webp",
     },
     {
       title: "شد الجفون العلوية",
       doctor: "د. علي القاضي",
-      image: "/before-after/upper-eyelid-lift-ali-alqadhi.jpg",
+      image: "/before-after/upper-eyelid-lift-ali-alqadhi.webp",
     },
     {
       title: "زراعة شعر",
       doctor: "د. وليد الغامدي",
-      image: "/before-after/hair-transplant-waleed.jpg",
+      image: "/before-after/hair-transplant-waleed.webp",
     },
     {
       title: "رفع ندبات",
       doctor: "د. حسام الغامدي",
-      image: "/before-after/scar-revision-hosam-alghamdi.jpg",
+      image: "/before-after/scar-revision-hosam-alghamdi.webp",
     },
     {
       title: "فيلر الهالات السطحي",
       doctor: "د. إيمان المخضب",
-      image: "/before-after/under-eye-filler-eman-almukhadab.jpg",
+      image: "/before-after/under-eye-filler-eman-almukhadab.webp",
     },
   ],
 },
@@ -327,32 +345,32 @@ export const content = {
     {
       title: "Nano Fat",
       doctor: "Dr. Mohammed Al-Haddab",
-      image: "/before-after/nano-fat-mohammed-alhaddab.jpg",
+      image: "/before-after/nano-fat-mohammed-alhaddab.webp",
     },
     {
       title: "Lip Filler",
       doctor: "Dr. Hosam Al-Ghamdi",
-      image: "/before-after/lip-filler-hosam-alghamdi.jpg",
+      image: "/before-after/lip-filler-hosam-alghamdi.webp",
     },
     {
       title: "Upper Eyelid Lift",
       doctor: "Dr. Ali Al-Qadhi",
-      image: "/before-after/upper-eyelid-lift-ali-alqadhi.jpg",
+      image: "/before-after/upper-eyelid-lift-ali-alqadhi.webp",
     },
     {
       title: "Hair Transplant",
       doctor: "Dr. Waleed Al-Ghamdi",
-      image: "/before-after/hair-transplant-waleed.jpg",
+      image: "/before-after/hair-transplant-waleed.webp",
     },
     {
       title: "Scar Revision",
       doctor: "Dr. Hosam Al-Ghamdi",
-      image: "/before-after/scar-revision-hosam-alghamdi.jpg",
+      image: "/before-after/scar-revision-hosam-alghamdi.webp",
     },
     {
       title: "Under-eye Filler",
       doctor: "Dr. Eman Al-Mukhadab",
-      image: "/before-after/under-eye-filler-eman-almukhadab.jpg",
+      image: "/before-after/under-eye-filler-eman-almukhadab.webp",
     },
   ],
 },

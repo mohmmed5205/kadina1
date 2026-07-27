@@ -62,11 +62,11 @@ export default function Services({ t, lang = "ar" }) {
                   </span>
 
                   <img
-                    src="/logo.png"
+                    src="/logo.webp"
                     alt="Kadina"
                     onError={(event) => {
                       event.currentTarget.onerror = null;
-                      event.currentTarget.src = "/kadina-logo.png";
+                      event.currentTarget.src = "/kadina-logo.webp";
                     }}
                     className="h-6 w-auto object-contain lg:h-7"
                   />

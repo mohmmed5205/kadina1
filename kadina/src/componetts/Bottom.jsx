@@ -26,12 +26,12 @@ export default function Bottom({ t }) {
             whileTap={{ scale: 0.98 }}
           >
             <img
-              src="/kadina-logo.png"
+              src="/kadina-logo.webp"
               alt={t.center.name}
               className="h-16 w-auto object-contain lg:h-30"
               onError={(event) => {
                 event.currentTarget.onerror = null;
-                event.currentTarget.src = "/kadina-logo.png";
+                event.currentTarget.src = "/kadina-logo.webp";
               }}
             />
           </motion.a>

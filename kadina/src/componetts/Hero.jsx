@@ -12,7 +12,7 @@ export default function Hero({ t, lang = "ar" }) {
       <section
         id="home"
         className="relative min-h-[84vh] overflow-hidden bg-cover bg-center bg-no-repeat pt-[var(--nav-h,4.25rem)] lg:min-h-[92vh]"
-        style={{ backgroundImage: "url('/homeBG.jpeg')" }}
+        style={{ backgroundImage: "url('/homeBG.webp')" }}
       >
         <div className="absolute inset-0 bg-[#2b1b08]/28" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#2b1b08]/14 via-[#2b1b08]/8 to-[#2b1b08]/46" />
@@ -27,7 +27,7 @@ export default function Hero({ t, lang = "ar" }) {
           >
             <motion.img
               variants={fadeUp}
-              src="/kadina-logo3.png"
+              src="/kadina-logo3.webp"
               alt={t.center.name}
               className="mx-auto mb-5 hidden h-28 w-auto object-contain sm:h-32 lg:mx-0 lg:block lg:h-40"
               style={{
@@ -36,10 +36,19 @@ export default function Hero({ t, lang = "ar" }) {
               }}
               onError={(event) => {
                 event.currentTarget.onerror = null;
-                event.currentTarget.src = "/kadina-logo.png";
+                event.currentTarget.src = "/kadina-logo.webp";
               }}
             />
 
+            {/* Eyebrow */}
+            <motion.div
+              variants={fadeUp}
+              className="inline-flex items-center rounded-full border border-[#f8aa2d]/40 bg-[#2b1b08]/40 px-4 py-2 text-sm font-semibold text-[#fff7eb] backdrop-blur-md"
+            >
+              {t.hero.eyebrow}
+            </motion.div>
+
+            {/* Title */}
             <motion.h1
               variants={fadeUp}
               className="mt-5 text-3xl font-black leading-tight text-white drop-shadow-[0_4px_18px_rgba(43,27,8,0.48)] sm:text-4xl md:text-6xl lg:mt-7"
@@ -47,6 +56,7 @@ export default function Hero({ t, lang = "ar" }) {
               {t.hero.title}
             </motion.h1>
 
+            {/* Highlight */}
             <motion.p
               variants={fadeUp}
               className="mt-4 text-lg font-bold text-[#f8aa2d] drop-shadow-[0_3px_12px_rgba(43,27,8,0.45)] md:text-2xl"
@@ -54,6 +64,7 @@ export default function Hero({ t, lang = "ar" }) {
               {t.hero.highlight}
             </motion.p>
 
+            {/* Description */}
             <motion.p
               variants={fadeUp}
               className="mx-auto mt-4 max-w-2xl text-base leading-8 text-[#fff7eb]/92 drop-shadow-[0_3px_14px_rgba(43,27,8,0.35)] md:text-lg lg:mx-0 lg:mt-6"
@@ -61,9 +72,20 @@ export default function Hero({ t, lang = "ar" }) {
               {t.hero.description}
             </motion.p>
 
+            {/* Trust */}
             <motion.div
               variants={fadeUp}
-              className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap lg:mt-10 lg:justify-start"
+              className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm font-semibold text-[#fff7eb] lg:justify-start"
+            >
+              <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur-md">
+                {t.hero.trust}
+              </span>
+            </motion.div>
+
+            {/* Buttons */}
+            <motion.div
+              variants={fadeUp}
+              className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap lg:mt-10 lg:justify-start"
             >
               <motion.a
                 href={whatsappUrl}

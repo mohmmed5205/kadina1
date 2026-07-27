@@ -76,7 +76,7 @@ export default function Doctors({ lang = "ar" }) {
                       loading="lazy"
                       onError={(event) => {
                         event.currentTarget.onerror = null;
-                        event.currentTarget.src = "/logo.png";
+                        event.currentTarget.src = "/logo.webp";
                         event.currentTarget.classList.remove("object-cover", "object-top");
                         event.currentTarget.classList.add("object-contain", "p-10");
                       }}
@@ -84,7 +84,7 @@ export default function Doctors({ lang = "ar" }) {
                     />
                     <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#2b1b08]/50 to-transparent lg:h-24" />
                     <img
-                      src="/logo.png"
+                      src="/logo.webp"
                       alt="Kadina"
                       className="absolute bottom-3 start-3 h-6 w-auto object-contain drop-shadow-md lg:bottom-4 lg:start-4 lg:h-8"
                     />

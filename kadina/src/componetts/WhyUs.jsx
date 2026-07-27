@@ -44,12 +44,12 @@ export default function WhyUs({ t }) {
             >
               <div className="mb-5 flex items-center gap-3 lg:mb-7">
                <img
-            src="/kadina-logo3.png"
+            src="/kadina-logo3.webp"
             alt={t.center.name}
             className="h-20 w-auto object-contain lg:h-20"
             onError={(event) => {
               event.currentTarget.onerror = null;
-              event.currentTarget.src = "/logo.png";
+              event.currentTarget.src = "/logo.webp";
             }}
           />
               

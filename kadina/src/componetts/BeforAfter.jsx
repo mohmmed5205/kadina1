@@ -76,7 +76,7 @@ export default function BeforeAfter({ t }) {
                       loading="lazy"
                       onError={(event) => {
                         event.currentTarget.onerror = null;
-                        event.currentTarget.src = "/kadina-logo.png";
+                        event.currentTarget.src = "/kadina-logo.webp";
                         event.currentTarget.classList.add("p-12");
                       }}
                     />

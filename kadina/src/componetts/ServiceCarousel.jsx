@@ -16,7 +16,7 @@ function DeviceCard({ item }) {
           className="max-h-full w-full scale-110 object-contain transition duration-500 sm:scale-105 lg:scale-100"
           onError={(event) => {
             event.currentTarget.onerror = null;
-            event.currentTarget.src = "/logo.png";
+            event.currentTarget.src = "/logo.webp";
           }}
         />
       </div>
@@ -47,7 +47,7 @@ function DoctorCard({ item }) {
           className="h-full w-full object-contain object-top transition duration-500 sm:object-cover sm:object-top"
           onError={(event) => {
             event.currentTarget.onerror = null;
-            event.currentTarget.src = "/logo.png";
+            event.currentTarget.src = "/logo.webp";
             event.currentTarget.classList.remove("object-cover", "object-top");
             event.currentTarget.classList.add("object-contain", "p-10");
           }}

@@ -85,12 +85,12 @@ export default function ServiceModal({ open, onClose, serviceKey, lang = "ar", t
             <header className="z-20 -mx-4 shrink-0 border-b border-[#f8aa2d]/16 bg-[#fff7eb]/92 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 sm:backdrop-blur-xl lg:-mx-8 lg:px-8">
               <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
                 <img
-                  src="/logo.png"
+                  src="/logo.webp"
                   alt={t.center.name}
                   className="h-9 w-auto shrink-0 object-contain sm:h-11"
                   onError={(event) => {
                     event.currentTarget.onerror = null;
-                    event.currentTarget.src = "/kadina-logo.png";
+                    event.currentTarget.src = "/kadina-logo.webp";
                   }}
                 />
 

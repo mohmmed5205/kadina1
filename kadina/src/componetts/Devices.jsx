@@ -76,7 +76,7 @@ export default function Devices({ lang = "ar" }) {
                       loading="lazy"
                       onError={(event) => {
                         event.currentTarget.onerror = null;
-                        event.currentTarget.src = "/logo.png";
+                        event.currentTarget.src = "/logo.webp";
                       }}
                       className="max-h-full w-full scale-110 object-contain transition duration-500 sm:scale-105 lg:scale-100"
                     />
@@ -88,12 +88,12 @@ export default function Devices({ lang = "ar" }) {
                         {device.name}
                       </h3>
                       <img
-                        src="/logo.png"
+                        src="/logo.webp"
                         alt="Kadina"
                         className="h-6 w-auto shrink-0 object-contain lg:h-7"
                         onError={(event) => {
                           event.currentTarget.onerror = null;
-                          event.currentTarget.src = "/kadina-logo.png";
+                          event.currentTarget.src = "/kadina-logo.webp";
                         }}
                       />
                     </div>

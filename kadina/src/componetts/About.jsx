@@ -40,12 +40,12 @@ export default function About({ t }) {
                 className="relative z-10 mb-4 flex items-center justify-center lg:mb-6"
               >
                 <img
-                  src="/kadina-logo.png"
+                  src="/kadina-logo.webp"
                   // alt="Kadina Medical Center Logo"
                   className="h-24 w-auto object-contain sm:h-30 lg:h-60"
                   onError={(event) => {
                     event.currentTarget.onerror = null;
-                    event.currentTarget.src = "/kadina-logo.png";
+                    event.currentTarget.src = "/kadina-logo.webp";
                   }}
                 />
               </motion.div>
