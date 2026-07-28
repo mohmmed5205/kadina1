@@ -1,11 +1,15 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { fadeUp, viewportOnce } from "./motionPresets";
 
 export default function BeforeAfter({ t }) {
   const data = t.beforeAfter;
   const lang = t.dir === "rtl" ? "ar" : "en";
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <section
@@ -45,12 +49,16 @@ export default function BeforeAfter({ t }) {
             loop={false}
             rewind
             slidesPerGroup={1}
-            speed={650}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
+            speed={shouldReduceMotion ? 0 : 650}
+            autoplay={
+              shouldReduceMotion
+                ? false
+                : {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                  }
+            }
             pagination={{ clickable: true }}
             navigation
             spaceBetween={14}
@@ -73,7 +81,10 @@ export default function BeforeAfter({ t }) {
                       src={item.image}
                       alt={`${item.title}${item.doctor ? ` - ${item.doctor}` : ""}`}
                       className="h-full w-full object-contain"
+                      decoding="async"
+                      height="1440"
                       loading="lazy"
+                      width="1080"
                       onError={(event) => {
                         event.currentTarget.onerror = null;
                         event.currentTarget.src = "/kadina-logo.webp";

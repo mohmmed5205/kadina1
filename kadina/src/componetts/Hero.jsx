@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { motion } from "framer-motion";
-import OffersModal from "./OffersModal";
+import { Link } from "react-router-dom";
 import { fadeUp, staggerContainer } from "./motionPresets";
+import { createWhatsappUrl } from "../utils/whatsapp";
+
+const OffersModal = lazy(() => import("./OffersModal"));
+const MotionLink = motion.create(Link);
 
 export default function Hero({ t, lang = "ar" }) {
   const [isOffersOpen, setIsOffersOpen] = useState(false);
-  const whatsappUrl = `https://wa.me/${t.center.whatsapp}`;
+  const whatsappUrl = createWhatsappUrl(t.hero.primaryCta);
 
   return (
     <>
@@ -28,7 +32,10 @@ export default function Hero({ t, lang = "ar" }) {
             <motion.img
               variants={fadeUp}
               src="/kadina-logo3.webp"
-              alt={t.center.name}
+              alt=""
+              decoding="async"
+              height="284"
+              width="284"
               className="mx-auto mb-5 hidden h-28 w-auto object-contain sm:h-32 lg:mx-0 lg:block lg:h-40"
               style={{
                 filter:
@@ -89,8 +96,9 @@ export default function Hero({ t, lang = "ar" }) {
             >
               <motion.a
                 href={whatsappUrl}
+                aria-label={`${t.hero.primaryCta} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="w-full max-w-xs rounded-full bg-[#f8aa2d] px-6 py-3.5 text-center font-bold text-[#2b1b08] shadow-[0_16px_38px_rgba(207,125,17,0.36)] transition-colors duration-300 hover:bg-[#cf7d11] hover:text-white sm:w-auto lg:px-8 lg:py-4"
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.98 }}
@@ -98,14 +106,14 @@ export default function Hero({ t, lang = "ar" }) {
                 {t.hero.primaryCta}
               </motion.a>
 
-              <motion.a
-                href="#services"
+              <MotionLink
+                to="/#services"
                 className="w-full max-w-xs rounded-full border border-[#f8aa2d]/55 bg-[#fff7eb]/14 px-6 py-3.5 text-center font-bold text-white shadow-[0_12px_32px_rgba(43,27,8,0.2)] backdrop-blur-md transition-colors duration-300 hover:border-[#f8aa2d] hover:bg-[#f8aa2d] hover:text-[#2b1b08] sm:w-auto lg:px-8 lg:py-4"
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.98 }}
               >
                 {t.hero.secondaryCta}
-              </motion.a>
+              </MotionLink>
 
               <motion.button
                 type="button"
@@ -121,12 +129,16 @@ export default function Hero({ t, lang = "ar" }) {
         </div>
       </section>
 
-      <OffersModal
-        open={isOffersOpen}
-        onClose={() => setIsOffersOpen(false)}
-        lang={lang}
-        t={t}
-      />
+      {isOffersOpen && (
+        <Suspense fallback={null}>
+          <OffersModal
+            open
+            onClose={() => setIsOffersOpen(false)}
+            lang={lang}
+            t={t}
+          />
+        </Suspense>
+      )}
     </>
   );
 }

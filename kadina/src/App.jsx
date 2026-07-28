@@ -1,50 +1,79 @@
-import { useEffect, useState } from "react";
-import Navbar from "./componetts/Navbar";
-import Hero from "./componetts/Hero";
-import About from "./componetts/About";
-import Services from "./componetts/Services";
-// import Offers from "./componetts/Offers";
-import WhyUs from "./componetts/WhyUs";
-// import Gallery from "./componetts/Gallery";
-import BeforeAfter from "./componetts/BeforAfter";
-import Connect from "./componetts/Connect";
-// import Location from "./componetts/Location";
-import Bottom from "./componetts/Bottom";
-import Doctors from "./componetts/Doctors";
-import Devices from "./componetts/Devices";
-import { content } from "./data/content";
+import { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+import HomePage from "./pages/HomePage";
+
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const ServicesPage = lazy(() => import("./pages/ServicesPage"));
+const TechnologyPage = lazy(() => import("./pages/TechnologyPage"));
+const SolutionsPage = lazy(() => import("./pages/SolutionsPage"));
+const DoctorsPage = lazy(() => import("./pages/DoctorsPage"));
+const BookingPage = lazy(() => import("./pages/BookingPage"));
+const FaqPage = lazy(() => import("./pages/FaqPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
+const ServicePageTemplate = lazy(() => import("./pages/ServicePageTemplate"));
+const DeviceDetailPage = lazy(() => import("./pages/DeviceDetailPage"));
+const SolutionDetailPage = lazy(() => import("./pages/SolutionDetailPage"));
+const DoctorDetailPage = lazy(() => import("./pages/DoctorDetailPage"));
+const ArticlePage = lazy(() => import("./pages/ArticlePage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+
+const pageFallback = (
+  <div className="min-h-screen" role="status" aria-live="polite" />
+);
 
 export default function App() {
-  const [lang, setLang] = useState("ar");
-  const t = content[lang];
-
-  useEffect(() => {
-    document.documentElement.dir = t.dir;
-    document.documentElement.lang = lang;
-  }, [lang, t.dir]);
-
   return (
-    <main
-      dir={t.dir}
-      className="min-h-screen overflow-x-hidden bg-[#f8ead8] text-[#4c2c00]"
-    >
-      <Navbar
-        t={t}
-        lang={lang}
-        onLanguageToggle={() => setLang(lang === "ar" ? "en" : "ar")}
-      />
-      <Hero t={t} lang={lang} />
-      <About t={t} />
-      <Services t={t} lang={lang} />
-      {/* <Offers lang={lang} t={t} /> */}
-      <Doctors lang={lang} />
-      <Devices lang={lang} />
-      <WhyUs t={t} />
-      {/* <Gallery t={t} /> */}
-      <BeforeAfter t={t} />
-      <Connect t={t} />
-      {/* <Location t={t} /> */}
-      <Bottom t={t} />
-    </main>
+    <Suspense fallback={pageFallback}>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="services" element={<ServicesPage />} />
+          <Route
+            path="services/dermatology"
+            element={<ServicePageTemplate slug="dermatology" />}
+          />
+          <Route
+            path="services/laser"
+            element={<ServicePageTemplate slug="laser" />}
+          />
+          <Route
+            path="services/plastic-surgery"
+            element={<ServicePageTemplate slug="plastic-surgery" />}
+          />
+          <Route
+            path="services/hair"
+            element={<ServicePageTemplate slug="hair" />}
+          />
+          <Route
+            path="services/injectables"
+            element={<ServicePageTemplate slug="injectables" />}
+          />
+          <Route path="technology" element={<TechnologyPage />} />
+          <Route
+            path="technology/:deviceSlug"
+            element={<DeviceDetailPage />}
+          />
+          <Route path="solutions" element={<SolutionsPage />} />
+          <Route
+            path="solutions/:solutionSlug"
+            element={<SolutionDetailPage />}
+          />
+          <Route path="doctors" element={<DoctorsPage />} />
+          <Route
+            path="doctors/:doctorSlug"
+            element={<DoctorDetailPage />}
+          />
+          <Route path="booking" element={<BookingPage />} />
+          <Route path="faq" element={<FaqPage />} />
+          <Route path="contact" element={<ContactPage />} />
+          <Route path="blog" element={<BlogPage />} />
+          <Route path="blog/:articleSlug" element={<ArticlePage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }

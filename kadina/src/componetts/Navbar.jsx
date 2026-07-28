@@ -2,13 +2,24 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 import { FaWhatsapp } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
+import { getPrimaryNavigation } from "../data/navigation";
 import { smoothEase } from "./motionPresets";
+import { createWhatsappUrl } from "../utils/whatsapp";
 
 export default function Navbar({ t, lang, onLanguageToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeId, setActiveId] = useState("home");
-  const whatsappUrl = `https://wa.me/${t.center.whatsapp}`;
+  const location = useLocation();
+  const whatsappUrl = createWhatsappUrl(t.contact.whatsappCta);
+  const navigationItems = getPrimaryNavigation(lang);
+  const isCurrentLink = (to) => {
+    if (to === "/") {
+      return location.pathname === "/" && !location.hash;
+    }
+
+    return location.pathname === "/" && location.hash === to.slice(1);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 18);
@@ -16,28 +27,6 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    const observers = [];
-    const sectionIds = t.nav.map((link) => link.id);
-
-    sectionIds.forEach((id) => {
-      const section = document.getElementById(id);
-      if (!section) return;
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActiveId(id);
-        },
-        { rootMargin: "-110px 0px -58% 0px", threshold: 0 }
-      );
-
-      observer.observe(section);
-      observers.push(observer);
-    });
-
-    return () => observers.forEach((observer) => observer.disconnect());
-  }, [t.nav]);
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -72,44 +61,53 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
       )}
     >
       <div className="mx-auto flex h-[var(--nav-h,4.25rem)] max-w-7xl items-center justify-between px-4 sm:px-5 lg:px-8">
-        <motion.a
-          href="#home"
-          aria-label={t.center.name}
-          className="flex shrink-0 items-center gap-2"
+        <motion.div
+          className="shrink-0"
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.98 }}
         >
-          <img
-            src="/kadina-logo3.webp"
-            alt={t.center.name}
-            className="h-20 w-auto object-contain lg:h-20"
-            onError={(event) => {
-              event.currentTarget.onerror = null;
-              event.currentTarget.src = "/kadina-logo.webp";
-            }}
-          />
-          
-        </motion.a>
+          <Link
+            aria-label={t.center.name}
+            className="flex items-center gap-2"
+            to="/"
+          >
+            <img
+              src="/kadina-logo3.webp"
+              alt={t.center.name}
+              decoding="async"
+              height="284"
+              width="284"
+              className="h-20 w-auto object-contain lg:h-20"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = "/kadina-logo.webp";
+              }}
+            />
+          </Link>
+        </motion.div>
 
         <nav
           aria-label={navLabel}
           className="hidden items-center gap-1 rounded-full border border-[#4c2c00]/10 bg-white/45 px-2 py-2 shadow-[0_14px_34px_rgba(0,0,0,0.12)] backdrop-blur-xl xl:flex"
         >
-          {t.nav.map((link) => (
-            <motion.a
-              key={link.id}
-              href={link.href}
-              className={clsx(
-                "relative rounded-full px-2.5 py-2 text-[0.82rem] font-bold transition-all duration-200 xl:px-4 xl:text-sm",
-                activeId === link.id
-                  ? "bg-[#f8aa2d]/18 text-[#cf7d11] shadow-inner"
-                  : "text-[#4c2c00]/75 hover:bg-white/8 hover:text-[#f8aa2d]"
-              )}
+          {navigationItems.map((link) => (
+            <motion.div
+              key={link.to}
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
             >
-              {link.title}
-            </motion.a>
+              <Link
+                className={clsx(
+                  "relative block rounded-full px-2 py-2 text-[0.72rem] font-bold transition-all duration-200 2xl:px-3 2xl:text-[0.82rem]",
+                  isCurrentLink(link.to)
+                    ? "bg-[#f8aa2d]/18 text-[#cf7d11] shadow-inner"
+                    : "text-[#4c2c00]/75 hover:bg-white/8 hover:text-[#f8aa2d]",
+                )}
+                to={link.to}
+              >
+                {link.title}
+              </Link>
+            </motion.div>
           ))}
         </nav>
 
@@ -126,8 +124,9 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
 
           <motion.a
             href={whatsappUrl}
+            aria-label={`${lang === "ar" ? "تواصل معنا" : "Contact us"} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-[#f8aa2d] px-5 py-2.5 text-sm font-black text-[#2b1b08] shadow-[0_12px_30px_rgba(207,125,17,0.32)] transition-all duration-200 hover:bg-[#cf7d11] hover:text-white"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
@@ -185,24 +184,27 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
               }}
               className="mx-auto flex max-w-7xl flex-col gap-1 p-4"
             >
-              {t.nav.map((link) => (
-                <motion.a
-                  key={link.id}
-                  href={link.href}
+              {navigationItems.map((link) => (
+                <motion.div
+                  key={link.to}
                   onClick={() => setIsOpen(false)}
                   variants={{
                     hidden: { opacity: 0, y: -8 },
                     visible: { opacity: 1, y: 0 },
                   }}
-                  className={clsx(
-                    "flex items-center rounded-2xl border px-4 py-3 text-base font-bold transition-all duration-200 hover:border-[#f8aa2d]/35 hover:bg-[#f8aa2d]/12 hover:text-[#cf7d11]",
-                    activeId === link.id
-                      ? "border-[#f8aa2d]/30 bg-[#f8aa2d]/15 text-[#cf7d11]"
-                      : "border-transparent text-[#4c2c00]"
-                  )}
                 >
-                  {link.title}
-                </motion.a>
+                  <Link
+                    className={clsx(
+                      "flex items-center rounded-2xl border px-4 py-3 text-base font-bold transition-all duration-200 hover:border-[#f8aa2d]/35 hover:bg-[#f8aa2d]/12 hover:text-[#cf7d11]",
+                      isCurrentLink(link.to)
+                        ? "border-[#f8aa2d]/30 bg-[#f8aa2d]/15 text-[#cf7d11]"
+                        : "border-transparent text-[#4c2c00]",
+                    )}
+                    to={link.to}
+                  >
+                    {link.title}
+                  </Link>
+                </motion.div>
               ))}
 
               <div className="mt-3 grid gap-3 border-t border-[#4c2c00]/10 pt-4 sm:grid-cols-2">
@@ -216,8 +218,9 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
 
                 <a
                   href={whatsappUrl}
+                  aria-label={`${t.contact.whatsappCta} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   onClick={() => setIsOpen(false)}
                   className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#f8aa2d] px-4 py-3 text-center font-black text-[#2b1b08] shadow-[0_12px_28px_rgba(207,125,17,0.28)] transition hover:bg-[#cf7d11] hover:text-white"
                 >

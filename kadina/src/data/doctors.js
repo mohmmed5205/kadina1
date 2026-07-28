@@ -111,3 +111,196 @@ export const doctors = {
         ],
     },
 };
+
+export const doctorDetails = [
+    {
+        slug: "mohammed-alhaddab",
+        name: "د. محمد الهداب",
+        title: "استشاري",
+        specialty:
+            "استشاري في أمراض الجلدية وجراحة الجلد والليزر والحقن التجميلي",
+        shortBio: null,
+        yearsOfExperience: 20,
+        services: [
+            { title: "الجلدية", to: "/services/dermatology" },
+            { title: "الليزر", to: "/services/laser" },
+            { title: "الحقن التجميلية", to: "/services/injectables" },
+        ],
+        devices: [],
+        solutions: [],
+        image: "/doctors/doctor-mohmmed.webp",
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. محمد الهداب.",
+    },
+    {
+        slug: "hosam-alghamdi",
+        name: "د. حسام الغامدي",
+        title: "استشاري",
+        specialty: "استشاري الأمراض الجلدية وجراحة الجلد والليزر",
+        shortBio: null,
+        yearsOfExperience: 15,
+        services: [
+            { title: "الجلدية", to: "/services/dermatology" },
+            { title: "الليزر", to: "/services/laser" },
+        ],
+        devices: [],
+        solutions: [],
+        image: "/doctors/doctor-hosam.webp",
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. حسام الغامدي.",
+    },
+    {
+        slug: "naif-alshahrani",
+        name: "د. نايف الشهراني",
+        title: "استشاري",
+        specialty: "استشاري جلدية وحقن تجميلي وجراحة جلدية",
+        shortBio: null,
+        yearsOfExperience: 10,
+        services: [
+            { title: "الحقن التجميلية", to: "/services/injectables" },
+            { title: "الجلدية", to: "/services/dermatology" },
+        ],
+        devices: [],
+        solutions: [],
+        image: "/doctors/doctor-naife.webp",
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. نايف الشهراني.",
+    },
+    {
+        slug: "ali-alqadi",
+        name: "د. علي القاضي",
+        title: "استشاري",
+        specialty: "استشاري جراحة تجميل الوجه والعيون",
+        shortBio: null,
+        yearsOfExperience: 5,
+        services: [
+            {
+                title: "جراحة تجميل الوجه والجفون",
+                to: "/services/plastic-surgery",
+            },
+        ],
+        devices: [],
+        solutions: [],
+        image: "/doctors/doctor-ali.webp",
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. علي القاضي.",
+    },
+    {
+        slug: "abdulmohsen-allazzam",
+        name: "د. عبدالمحسن اللزام",
+        title: "استشاري",
+        specialty:
+            "استشاري جراحة تجميل (Reconstructive & Plastic Surgery)",
+        shortBio: null,
+        yearsOfExperience: 15,
+        services: [
+            {
+                title: "جراحة التجميل والترميم",
+                to: "/services/plastic-surgery",
+            },
+        ],
+        devices: [],
+        solutions: [],
+        image: "/doctors/doctor-abudalmohsen.webp",
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. عبدالمحسن اللزام.",
+    },
+    {
+        slug: "abdulaziz-almudaimegh",
+        name: "د. عبدالعزيز المديميغ",
+        title: "استشاري",
+        specialty: "استشاري جراحة تجميل",
+        shortBio: null,
+        yearsOfExperience: 10,
+        services: [
+            {
+                title: "جراحة التجميل ونحت القوام",
+                to: "/services/plastic-surgery",
+            },
+        ],
+        devices: [],
+        solutions: [
+            {
+                title: "نحت القوام",
+                to: "/solutions/body-contouring",
+            },
+        ],
+        image: "/doctors/doctor-abdulazez.webp",
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. عبدالعزيز المديميغ.",
+    },
+    {
+        slug: "waleed-alghamdi",
+        name: "د. وليد الغامدي",
+        title: "استشاري",
+        specialty: "استشاري زراعة شعر وجلدية وجراحة الجلد والليزر",
+        shortBio: null,
+        yearsOfExperience: 20,
+        services: [{ title: "خدمة الشعر", to: "/services/hair" }],
+        devices: [
+            {
+                title: "Regenera Activa",
+                to: "/technology/regenera-activa",
+            },
+            { title: "Magellan PRP", to: "/technology/magellan-prp" },
+        ],
+        solutions: [],
+        image: "/doctors/doctor-waled.webp",
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. وليد الغامدي.",
+    },
+    {
+        slug: "eman-almukhadab",
+        name: "د. إيمان المخضب",
+        title: "استشارية",
+        specialty:
+            "استشارية مختصة بالأمراض الجلدية والحقن التجميلي والعلاج بالليزر ومشاكل تساقط الشعر",
+        shortBio: null,
+        yearsOfExperience: 15,
+        services: [
+            { title: "الجلدية", to: "/services/dermatology" },
+            { title: "الحقن التجميلية", to: "/services/injectables" },
+            { title: "خدمة الشعر", to: "/services/hair" },
+        ],
+        devices: [],
+        solutions: [
+            {
+                title: "تساقط الشعر",
+                to: "/solutions/hair-loss",
+            },
+        ],
+        image: "/doctors/doctor-eman.webp",
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. إيمان المخضب.",
+    },
+    {
+        slug: "munira-alsaleh",
+        name: "د. منيرة الصالح",
+        title: "استشارية",
+        specialty: "استشارية الأمراض الجلدية وجراحة الجلد والليزر",
+        shortBio: null,
+        yearsOfExperience: null,
+        services: [
+            { title: "الجلدية", to: "/services/dermatology" },
+            { title: "الليزر", to: "/services/laser" },
+        ],
+        devices: [],
+        solutions: [],
+        image: null,
+        socialLinks: [],
+        whatsappMessage:
+            "مرحبًا، أرغب في حجز استشارة مع د. منيرة الصالح.",
+    },
+];
+
+export const doctorDetailsBySlug = Object.fromEntries(
+    doctorDetails.map((doctor) => [doctor.slug, doctor]),
+);

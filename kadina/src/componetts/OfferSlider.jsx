@@ -1,10 +1,14 @@
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { offers } from "../data/offers";
 import { cardItem, staggerContainer, viewportOnce } from "./motionPresets";
+import { createWhatsappUrl } from "../utils/whatsapp";
 
 function OfferLine({ item, labels }) {
   return (
@@ -41,8 +45,14 @@ function OfferLine({ item, labels }) {
   );
 }
 
-function OfferPoster({ offer, data, centerName, whatsappUrl, compact = false }) {
+function OfferPoster({
+  offer,
+  data,
+  externalLabel,
+  compact = false,
+}) {
   const isDense = offer.items.length > 6;
+  const whatsappUrl = createWhatsappUrl(`${data.slideCta}: ${offer.title}`);
 
   return (
     <article className="relative h-full overflow-hidden rounded-[1.75rem] border border-[#f8aa2d]/24 bg-[#ffe6c9] shadow-[0_12px_30px_rgba(76,44,0,0.10)] sm:rounded-[2.5rem] lg:shadow-[0_24px_70px_rgba(76,44,0,0.14)]">
@@ -56,8 +66,12 @@ function OfferPoster({ offer, data, centerName, whatsappUrl, compact = false }) 
         <div className="flex flex-col items-center gap-4 text-center lg:gap-5">
           <img
             src="/logo.png"
-            alt={centerName}
+            alt=""
             className="h-11 w-auto object-contain lg:h-14"
+            decoding="async"
+            height="75"
+            loading="lazy"
+            width="75"
             onError={(event) => {
               event.currentTarget.onerror = null;
               event.currentTarget.src = "/kadina-logo.png";
@@ -118,8 +132,9 @@ function OfferPoster({ offer, data, centerName, whatsappUrl, compact = false }) 
 
           <motion.a
             href={whatsappUrl}
+            aria-label={`${data.slideCta} (${externalLabel})`}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="inline-flex w-full max-w-sm items-center justify-center gap-3 rounded-full bg-[#f90062] px-6 py-3.5 text-base font-black text-white shadow-[0_18px_42px_rgba(249,0,98,0.30)] transition-colors duration-300 hover:bg-[#cf7d11] sm:w-auto lg:px-8 lg:py-4"
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.98 }}
@@ -135,7 +150,6 @@ function OfferPoster({ offer, data, centerName, whatsappUrl, compact = false }) 
 
 export default function OfferSlider({
   lang = "ar",
-  t,
   compact = false,
   modal = false,
   showAvailability = true,
@@ -144,9 +158,9 @@ export default function OfferSlider({
   const isRtl = lang === "ar";
   const sliderKey = modal ? `hero-offers-modal-${lang}` : `offers-${lang}`;
   const swiperRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
   const [activeSlide, setActiveSlide] = useState({ key: sliderKey, index: 0 });
   const activeIndex = activeSlide.key === sliderKey ? activeSlide.index : 0;
-  const whatsappUrl = `https://wa.me/${t.center.whatsapp}`;
   const totalOffers = data.cards.length;
   const counterText =
     lang === "ar"
@@ -221,12 +235,16 @@ export default function OfferSlider({
         slidesPerGroup={1}
         navigation={modal ? false : true}
         pagination={{ clickable: true }}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        }}
-        speed={modal ? 600 : 750}
+        autoplay={
+          shouldReduceMotion
+            ? false
+            : {
+                delay: 3000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }
+        }
+        speed={shouldReduceMotion ? 0 : modal ? 600 : 750}
         spaceBetween={modal ? 12 : 16}
         slidesPerView={modal ? 1.03 : 1.05}
         watchSlidesProgress={true}
@@ -264,8 +282,9 @@ export default function OfferSlider({
             <OfferPoster
               offer={offer}
               data={data}
-              centerName={t.center.name}
-              whatsappUrl={whatsappUrl}
+              externalLabel={
+                isRtl ? "يفتح في نافذة جديدة" : "opens in a new window"
+              }
               compact={compact || modal}
             />
           </SwiperSlide>

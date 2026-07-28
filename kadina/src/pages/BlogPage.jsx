@@ -1,0 +1,91 @@
+import ArticleCard from "../components/blog/ArticleCard";
+import PageHero from "../components/common/PageHero";
+import SectionTitle from "../components/common/SectionTitle";
+import Seo from "../components/seo/Seo";
+import {
+  createBreadcrumbSchema,
+  createWebPageSchema,
+} from "../components/seo/seoUtils";
+import { articleCategories, articles } from "../data/articles";
+
+export default function BlogPage() {
+  const publishedArticles = articles.filter(
+    (article) => article.status === "published",
+  );
+
+  return (
+    <div dir="rtl">
+      <Seo
+        canonicalPath="/blog"
+        description="مدونة كادينا الطبية: مقالات يكتبها ويراجعها استشاريو كادينا بلا مبالغة ولا تسويق مقنّع."
+        jsonLd={[
+          createBreadcrumbSchema([
+            { name: "الرئيسية", path: "/" },
+            { name: "المدونة", path: "/blog" },
+          ]),
+          createWebPageSchema({
+            name: "مدونة كادينا الطبية",
+            description:
+              "مقالات يكتبها ويراجعها استشاريو كادينا قبل أي قرار تجميلي.",
+            path: "/blog",
+          }),
+        ]}
+        title="مدونة كادينا الطبية"
+      />
+      <PageHero
+        breadcrumbLabel="المدونة"
+        eyebrow="مدونة كادينا"
+        title="دليلك الطبي... قبل أي قرار تجميلي"
+        description="مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا تسويق مقنّع. اقرأ، افهم، ثم قرر."
+      />
+
+      <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-7xl">
+          <SectionTitle
+            eyebrow="التصنيفات"
+            title="تصفّح حسب اهتمامك"
+            description="خطة المحتوى الطبي القادمة في مدونة كادينا."
+          />
+          <div className="mt-7 flex flex-wrap gap-3">
+            {articleCategories.map((category) => (
+              <span
+                className="rounded-full border border-[#f8aa2d]/30 bg-[#fff7eb] px-4 py-2 text-sm font-black text-[#4c2c00]"
+                key={category}
+              >
+                {category}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-7xl">
+          {publishedArticles.length > 0 ? (
+            <>
+              <SectionTitle
+                eyebrow="المقالات"
+                title="أحدث مقالات كادينا"
+              />
+              <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {publishedArticles.map((article) => (
+                  <ArticleCard article={article} key={article.slug} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="rounded-[2rem] border border-[#f8aa2d]/25 bg-white/70 px-6 py-14 text-center shadow-[0_18px_45px_rgba(76,44,0,0.07)] sm:px-10">
+              <h2 className="text-2xl font-black text-[#4c2c00] sm:text-3xl">
+                المقالات قريبًا
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#4c2c00]/68">
+                مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا
+                تسويق مقنّع.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}

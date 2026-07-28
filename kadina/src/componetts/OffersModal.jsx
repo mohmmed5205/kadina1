@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import OfferSlider from "./OfferSlider";
 import { smoothEase } from "./motionPresets";
+import { createWhatsappUrl } from "../utils/whatsapp";
 
 const labels = {
   ar: {
@@ -20,17 +21,36 @@ const labels = {
   },
 };
 
-function useModalEffects(open, onClose, closeButtonRef) {
+function useModalEffects(open, onClose, closeButtonRef, dialogRef) {
   useEffect(() => {
     if (!open) return undefined;
 
     const previousOverflow = document.body.style.overflow;
+    const previouslyFocusedElement = document.activeElement;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         onClose();
+        return;
+      }
+
+      if (event.key === "Tab") {
+        const focusableElements = dialogRef.current?.querySelectorAll(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (!focusableElements?.length) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        if (event.shiftKey && document.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
+        } else if (!event.shiftKey && document.activeElement === lastElement) {
+          event.preventDefault();
+          firstElement.focus();
+        }
       }
     };
 
@@ -39,22 +59,25 @@ function useModalEffects(open, onClose, closeButtonRef) {
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      previouslyFocusedElement?.focus();
     };
-  }, [closeButtonRef, onClose, open]);
+  }, [closeButtonRef, dialogRef, onClose, open]);
 }
 
 export default function OffersModal({ open, onClose, lang = "ar", t }) {
   const closeButtonRef = useRef(null);
+  const dialogRef = useRef(null);
   const isRtl = lang === "ar";
   const text = labels[lang] || labels.ar;
-  const whatsappUrl = `https://wa.me/${t.center.whatsapp}`;
+  const whatsappUrl = createWhatsappUrl(`${text.bookCta}: ${text.title}`);
 
-  useModalEffects(open, onClose, closeButtonRef);
+  useModalEffects(open, onClose, closeButtonRef, dialogRef);
 
   return (
     <AnimatePresence>
       {open ? (
         <motion.div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="offers-modal-title"
@@ -72,6 +95,9 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
                   src="/logo.png"
                   alt={t.center.name}
                   className="h-9 w-auto shrink-0 object-contain sm:h-11"
+                  decoding="async"
+                  height="75"
+                  width="75"
                   onError={(event) => {
                     event.currentTarget.onerror = null;
                     event.currentTarget.src = "/kadina-logo.png";
@@ -116,7 +142,6 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
 
                 <OfferSlider
                   lang={lang}
-                  t={t}
                   compact
                   modal
                   showAvailability={false}
@@ -125,8 +150,9 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
                 <div className="border-t border-[#f8aa2d]/20 pt-7 text-center">
                   <motion.a
                     href={whatsappUrl}
+                    aria-label={`${text.bookCta} (${isRtl ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#2b1b08] px-7 py-4 text-base font-black text-[#f8aa2d] shadow-[0_18px_40px_rgba(43,27,8,0.2)] transition-colors duration-300 hover:bg-[#f8aa2d] hover:text-[#2b1b08] sm:w-auto"
                     whileHover={{ y: -3 }}
                     whileTap={{ scale: 0.98 }}
