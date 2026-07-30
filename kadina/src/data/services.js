@@ -2,54 +2,48 @@ export const servicePages = [
   {
     slug: "dermatology",
     title: "الجلدية",
-    subtitle: "بشرتك تستحق تشخيصًا... لا تخمينًا",
+    subtitle: "بشرتك تستحق تشخيصًا.. لا تخمينًا",
     intro:
+      "نبدأ بتشخيص استشاري دقيق، ثم نختار البروتوكول الأنسب: علاج دوائي، أو أجهزة، أو ليزر، أو جلسات عناية متقدمة. من الكلف والإكزيما إلى الهالات والأكياس الدهنية ومشاكل الأظافر.",
+    additionalParagraphs: [],
+    seoSubtitle: "بشرتك تستحق تشخيصًا... لا تخمينًا",
+    seoDescription:
       "من الكلف والإكزيما إلى الهالات والأكياس الدهنية ومشاكل الأظافر، نبدأ بتشخيص استشاري دقيق، ثم نختار البروتوكول الأنسب: علاج دوائي، ليزر، أو جلسات عناية متقدمة.",
-    whyChoose: [
-      "تشخيص استشاري دقيق",
-      "اختيار البروتوكول الأنسب للحالة",
-      "علاج دوائي، ليزر، أو جلسات عناية متقدمة",
-    ],
+    treatments: [],
     relatedDevices: [
       {
-        name: "Fractional CO2",
-        use: "الندبات وآثار الحبوب",
-        to: "/technology/fractional-co2",
+        name: "Laser Spectra",
+        use: "التصبغات وآثار الحبوب",
+        to: "/technology/spectra",
+        image: "/devices/devaice-specterLaser.webp",
       },
       {
-        name: "Spectra",
-        use: "التصبغات",
-        to: "/technology/spectra",
+        name: "Fractional Laser",
+        use: "الندبات",
+        to: "/technology/fractional-co2",
+        image: "/devices/devaice-fracshnalLaser.webp",
+      },
+      {
+        name: "Bi-one Lifetouch",
+        use: "علامات التمدد",
+        to: "/technology/bi-one-lifetouch",
+        image: "/devices/devaice-Bione.webp",
       },
       {
         name: "HydraFacial",
         use: "العناية",
         to: "/technology/hydrafacial",
+        image: "/devices/devaice-haidraFaishel.webp",
       },
       {
         name: "DermaFacial",
         use: "العناية",
         to: "/technology/dermafacial",
-      },
-      {
-        name: "Bi-one",
-        use: "علامات التمدد",
-        to: "/technology/bi-one-lifetouch",
-      },
-      {
-        name: "Matrix Pro",
-        use: "الأجهزة المرتبطة بالجلدية",
-        to: "/technology/matrix-pro",
+        image: "/devices/devaice-dirmaFishel.webp",
       },
     ],
-    relatedDoctors: [
-      {
-        title: "استشاريو الجلدية",
-        description: "احجز مع استشاري جلدية.",
-        to: "/doctors",
-      },
-    ],
-    faq: [
+    showDoctorsSection: false,
+    seoFaq: [
       {
         question: "كيف تبدأ خطة علاج الجلدية في كادينا؟",
         answer:
@@ -61,44 +55,44 @@ export const servicePages = [
           "الكلف والإكزيما والهالات والأكياس الدهنية ومشاكل الأظافر والندبات وآثار الحبوب والتصبغات وعلامات التمدد.",
       },
     ],
-    cta: "احجز استشارتك",
+    faq: [],
+    ctaLabel: "احجز استشارة جلدية",
+    whatsappMessage:
+      "مرحبًا، أرغب في حجز استشارة جلدية في مركز كادينا.",
   },
   {
     slug: "laser",
     title: "الليزر",
-    subtitle: "إزالة الشعر بالليزر... بمعيار عالمي لا يقبل المنافسة",
+    subtitle: "إزالة الشعر بالليزر.. بمعيار عالمي لا يقبل المنافسة",
     intro:
+      "لا نملك جهاز ليزر واحدًا — بل ثلاثة من الطراز الأول: GentleMax Pro وGentleMax Pro Plus من Candela الأمريكية، وClarity من Lutronic. لكل نوع بشرة وشعر جهازه وإعداده الأمثل، بأنظمة تبريد تجعل الجلسة أسرع وأكثر راحة.",
+    additionalParagraphs: [],
+    seoSubtitle: "إزالة الشعر بالليزر... بمعيار عالمي لا يقبل المنافسة",
+    seoDescription:
       "لا نملك جهاز ليزر واحدًا، بل ثلاثة من الطراز الأول: GentleMax Pro وGentleMax Pro Plus من Candela الأمريكية، وClarity من Lutronic. لكل نوع بشرة وشعر جهازه وإعداده الأمثل، بأنظمة تبريد تجعل الجلسة أسرع وأكثر راحة.",
-    whyChoose: [
-      "ثلاثة أجهزة من الطراز الأول",
-      "جهاز وإعداد أمثل لكل نوع بشرة وشعر",
-      "أنظمة تبريد تجعل الجلسة أسرع وأكثر راحة",
-    ],
+    treatments: [],
     relatedDevices: [
       {
         name: "GentleMax Pro",
-        use: "إزالة الشعر بالليزر",
+        use: null,
         to: "/technology/gentlemax-pro",
+        image: "/devices/device-gentelProMaxLaiser.webp",
       },
       {
         name: "GentleMax Pro Plus",
-        use: "إزالة الشعر بالليزر",
+        use: null,
         to: "/technology/gentlemax-pro-plus",
+        image: "/devices/devaice-gintelProMax.webp",
       },
       {
-        name: "Clarity",
-        use: "إزالة الشعر بالليزر",
+        name: "Clarity Laser",
+        use: null,
         to: "/technology/clarity",
+        image: "/devices/devaice-laserKalreti.webp",
       },
     ],
-    relatedDoctors: [
-      {
-        title: "تقييم البشرة",
-        description: "لكل نوع بشرة وشعر جهازه وإعداده الأمثل.",
-        to: "/doctors",
-      },
-    ],
-    faq: [
+    showDoctorsSection: false,
+    seoFaq: [
       {
         question: "كم جهاز ليزر لإزالة الشعر لدى كادينا؟",
         answer:
@@ -110,29 +104,25 @@ export const servicePages = [
           "لكل نوع بشرة وشعر جهازه وإعداده الأمثل، مع جلسة تقييم للبشرة.",
       },
     ],
-    cta: "احجز استشارتك",
+    faq: [],
+    ctaLabel: "احجز جلسة التقييم المجانية للبشرة",
+    whatsappMessage:
+      "مرحبًا، أرغب في حجز جلسة تقييم لخدمة الليزر في مركز كادينا.",
   },
   {
     slug: "plastic-surgery",
     title: "جراحة التجميل",
     subtitle: "جراحة تضع الأمان قبل الجمال",
     intro:
+      "شد الوجه والجفون، تجميل الوجه والأنف، جراحات الثدي (رفع، تكبير، تصغير)، شفط الدهون ونحت القوام، شد البطن والذراعين، وإصلاح الترميم والحروق — بأيدي 4 استشاريي جراحة تجميل، بينهم استشارية متخصصة في الترميم والحروق.",
+    additionalParagraphs: [],
+    seoSubtitle: "جراحة تضع الأمان قبل الجمال",
+    seoDescription:
       "تجميل الوجه والأنف، شد الوجه والجفون، جراحات الثدي (رفع، تكبير، تصغير)، شفط الدهون ونحت القوام، شد البطن والذراعين، وإصلاح التشوهات، بأيدي 4 استشاريي جراحة تجميل، بينهم استشارية متخصصة في الترميم والحروق.",
-    whyChoose: [
-      "الأمان قبل الجمال",
-      "4 استشاريي جراحة تجميل",
-      "استشارية متخصصة في الترميم والحروق",
-    ],
+    treatments: [],
     relatedDevices: [],
-    relatedDoctors: [
-      {
-        title: "استشاريو جراحة التجميل",
-        description:
-          "4 استشاريي جراحة تجميل، بينهم استشارية متخصصة في الترميم والحروق.",
-        to: "/doctors",
-      },
-    ],
-    faq: [
+    showDoctorsSection: false,
+    seoFaq: [
       {
         question: "ما المجالات المذكورة ضمن جراحة التجميل؟",
         answer:
@@ -144,39 +134,38 @@ export const servicePages = [
           "4 استشاريي جراحة تجميل، بينهم استشارية متخصصة في الترميم والحروق.",
       },
     ],
-    cta: "احجز استشارتك",
+    faq: [],
+    ctaLabel: "احجز استشارة جراحية خاصة",
+    whatsappMessage:
+      "مرحبًا، أرغب في حجز استشارة خاصة لجراحة التجميل في مركز كادينا.",
   },
   {
     slug: "hair",
     title: "الشعر",
-    subtitle: "قبل أن تفكر في الزراعة... اعرف السبب",
+    subtitle: "قبل أن تفكر في الزراعة.. اعرف السبب",
     intro:
+      "تساقط الشعر ليس حالة واحدة، لذلك لا نعالجه بحل واحد: من بلازما Magellan عالية التركيز، إلى تقنية Regenera Activa بخلايا فروة رأسك نفسها، وصولًا إلى زراعة الشعر بتقنية الاقتطاف FUE — التشخيص أولًا، ثم الحل الأنسب.",
+    additionalParagraphs: [],
+    seoSubtitle: "قبل أن تفكر في الزراعة... اعرف السبب",
+    seoDescription:
       "تساقط الشعر ليس حالة واحدة، لذا لا نعالجه بحل واحد: من بلازما Magellan عالية التركيز، إلى تقنية Regenera Activa بخلايا فروة رأسك نفسها، وصولًا إلى زراعة الشعر بتقنية الاقتطاف FUE. التشخيص أولًا، ثم الحل الأنسب.",
-    whyChoose: [
-      "التشخيص أولًا، ثم الحل الأنسب",
-      "بلازما Magellan عالية التركيز",
-      "تقنية Regenera Activa وزراعة الشعر بتقنية الاقتطاف FUE",
-    ],
+    treatments: [],
     relatedDevices: [
       {
-        name: "Regenera",
-        use: "Regenera Activa",
-        to: "/technology/regenera-activa",
-      },
-      {
-        name: "Magellan",
-        use: "Magellan PRP",
+        name: "Magellan PRP",
+        use: null,
         to: "/technology/magellan-prp",
+        image: "/devices/devaice-majelan.webp",
       },
-    ],
-    relatedDoctors: [
       {
-        title: "تقييم الشعر",
-        description: "التشخيص أولًا، ثم الحل الأنسب.",
-        to: "/doctors",
+        name: "Regenera Activa",
+        use: null,
+        to: "/technology/regenera-activa",
+        image: "/devices/devaice-regnaira.webp",
       },
     ],
-    faq: [
+    showDoctorsSection: false,
+    seoFaq: [
       {
         question: "لماذا يبدأ التعامل مع تساقط الشعر بالتشخيص؟",
         answer:
@@ -188,29 +177,27 @@ export const servicePages = [
           "بلازما Magellan عالية التركيز، وتقنية Regenera Activa، وزراعة الشعر بتقنية الاقتطاف FUE.",
       },
     ],
-    cta: "احجز استشارتك",
+    faq: [],
+    ctaLabel: "احجز تقييم الشعر",
+    whatsappMessage:
+      "مرحبًا، أرغب في حجز تقييم للشعر في مركز كادينا.",
   },
   {
     slug: "injectables",
     title: "الحقن التجميلية",
-    subtitle: "نتيجة يلاحظها الجميع... ولا يعرف أحد السبب",
+    subtitle: "نتيجة يلاحظها الجميع.. ولا يعرف أحد السبب",
     intro:
+      "فلسفتنا في البوتوكس والفيلر والبلازما: الجمال الطبيعي المتوازن.",
+    additionalParagraphs: [
+      "بوتوكس يحافظ على تعابيرك، فيلر يعيد الامتلاء دون مبالغة، وبلازما تجدد النضارة من دمك أنت — بيد استشاريين من أبرز أسماء الحقن التجميلية في المملكة.",
+    ],
+    seoSubtitle: "نتيجة يلاحظها الجميع... ولا يعرف أحد السبب",
+    seoDescription:
       "فلسفتنا في البوتوكس والفيلر والبلازما: الجمال الطبيعي المتوازن. بوتوكس يحافظ على تعابيرك، فيلر يعيد الامتلاء دون مبالغة، وبلازما تجدد النضارة من دمك أنت، بيد استشاريين هم من أبرز أسماء الحقن في المملكة.",
-    whyChoose: [
-      "الجمال الطبيعي المتوازن",
-      "بوتوكس يحافظ على تعابيرك",
-      "فيلر يعيد الامتلاء دون مبالغة",
-      "بلازما تجدد النضارة من دمك أنت",
-    ],
+    treatments: [],
     relatedDevices: [],
-    relatedDoctors: [
-      {
-        title: "استشاريو الحقن التجميلي",
-        description: "من أبرز أسماء الحقن في المملكة.",
-        to: "/doctors",
-      },
-    ],
-    faq: [
+    showDoctorsSection: false,
+    seoFaq: [
       {
         question: "ما فلسفة كادينا في الحقن التجميلية؟",
         answer: "الجمال الطبيعي المتوازن.",
@@ -221,7 +208,10 @@ export const servicePages = [
           "بوتوكس يحافظ على تعابيرك، وفيلر يعيد الامتلاء دون مبالغة، وبلازما تجدد النضارة من دمك أنت.",
       },
     ],
-    cta: "احجز استشارتك",
+    faq: [],
+    ctaLabel: "احجز استشارة حقن تجميلية",
+    whatsappMessage:
+      "مرحبًا، أرغب في حجز استشارة للحقن التجميلية في مركز كادينا.",
   },
 ];
 

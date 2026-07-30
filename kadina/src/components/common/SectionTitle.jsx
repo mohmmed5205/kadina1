@@ -1,9 +1,18 @@
+import { motion } from "framer-motion";
+import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
+
 export default function SectionTitle({ eyebrow, title, description, align = "start" }) {
   const alignment =
     align === "center" ? "mx-auto items-center text-center" : "items-start";
 
   return (
-    <div className={`flex max-w-3xl flex-col ${alignment}`}>
+    <motion.div
+      className={`flex max-w-3xl flex-col ${alignment}`}
+      initial="hidden"
+      variants={fadeUp}
+      viewport={viewportOnce}
+      whileInView="visible"
+    >
       {eyebrow && (
         <p className="text-sm font-black tracking-wide text-[#cf7d11]">
           {eyebrow}
@@ -17,6 +26,6 @@ export default function SectionTitle({ eyebrow, title, description, align = "sta
           {description}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }

@@ -1,11 +1,11 @@
 import { lazy, Suspense } from "react";
 import { useOutletContext } from "react-router-dom";
 import Hero from "../componetts/Hero";
-import WhyUs from "../componetts/WhyUs";
+import HomeTrustSection from "../components/home/HomeTrustSection";
 import HomeAboutSection from "../components/home/HomeAboutSection";
 import HomeServicesSection from "../components/home/HomeServicesSection";
-import HomeSolutionsSection from "../components/home/HomeSolutionsSection";
-import HomeFaqSection from "../components/home/HomeFaqSection";
+import HomeJourneySection from "../components/home/HomeJourneySection";
+import HomeFinalCta from "../components/home/HomeFinalCta";
 import HomeContactSection from "../components/home/HomeContactSection";
 import Seo from "../components/seo/Seo";
 import { createWebPageSchema } from "../components/seo/seoUtils";
@@ -17,9 +17,6 @@ const HomeDoctorsSection = lazy(
   () => import("../components/home/HomeDoctorsSection"),
 );
 const BeforeAfter = lazy(() => import("../componetts/BeforAfter"));
-const HomeBlogSection = lazy(
-  () => import("../components/home/HomeBlogSection"),
-);
 
 const sectionFallback = (
   <div className="min-h-96 bg-[#f8ead8]" aria-hidden="true" />
@@ -32,33 +29,30 @@ export default function HomePage() {
     <>
       <Seo
         canonicalPath="/"
-        description={t.hero.description}
+        description={t.hero.seoDescription ?? t.hero.description}
         image="/homeBG.webp"
         jsonLd={createWebPageSchema({
           name: "مركز كادينا الطبي للجلدية والتجميل والليزر بالرياض",
-          description: t.hero.description,
+          description: t.hero.seoDescription ?? t.hero.description,
           path: "/",
         })}
         title="مركز كادينا الطبي للجلدية والتجميل والليزر بالرياض"
       />
       <Hero t={t} lang={lang} />
+      <HomeTrustSection />
       <HomeAboutSection />
       <HomeServicesSection />
-      <HomeSolutionsSection />
       <Suspense fallback={sectionFallback}>
         <HomeTechnologySection />
       </Suspense>
       <Suspense fallback={sectionFallback}>
         <HomeDoctorsSection />
       </Suspense>
+      <HomeJourneySection />
       <Suspense fallback={sectionFallback}>
         <BeforeAfter t={t} />
       </Suspense>
-      {/* <WhyUs t={t} /> */}
-      <HomeFaqSection />
-      <Suspense fallback={sectionFallback}>
-        <HomeBlogSection />
-      </Suspense>
+      <HomeFinalCta />
       <HomeContactSection />
     </>
   );

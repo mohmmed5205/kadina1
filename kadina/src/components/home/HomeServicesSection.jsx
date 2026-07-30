@@ -1,7 +1,26 @@
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+  ScanFace,
+  Scissors,
+  Sparkles,
+  Stethoscope,
+  Syringe,
+} from "lucide-react";
 import CardGrid from "../common/CardGrid";
 import SectionTitle from "../common/SectionTitle";
+import { cardItem } from "../../componetts/motionPresets";
 import { servicePages } from "../../data/services";
+
+const MotionLink = motion.create(Link);
+
+const serviceIcons = {
+  dermatology: Stethoscope,
+  laser: Sparkles,
+  "plastic-surgery": Scissors,
+  hair: ScanFace,
+  injectables: Syringe,
+};
 
 export default function HomeServicesSection() {
   return (
@@ -12,27 +31,34 @@ export default function HomeServicesSection() {
       <div className="mx-auto max-w-7xl">
         <SectionTitle
           eyebrow="خدماتنا"
-          title="عناية متكاملة بروح كادينا"
-          description="خمس خدمات رئيسية تبدأ بالتشخيص وتصل إلى الخطة الأنسب لكل حالة."
+          title="الخدمات"
         />
         <CardGrid className="mt-9">
-          {servicePages.map((service) => (
-            <Link
-              className="group rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-6 shadow-[0_18px_45px_rgba(76,44,0,0.07)] transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
-              key={service.slug}
-              to={`/services/${service.slug}`}
-            >
-              <h3 className="text-xl font-black text-[#4c2c00]">
-                {service.title}
-              </h3>
-              <p className="mt-3 leading-8 text-[#4c2c00]/68">
-                {service.subtitle}
-              </p>
-              <span className="mt-5 inline-block font-black text-[#cf7d11]">
-                تفاصيل الخدمة
-              </span>
-            </Link>
-          ))}
+          {servicePages.map((service) => {
+            const ServiceIcon = serviceIcons[service.slug];
+
+            return (
+              <MotionLink
+                className="group rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-6 shadow-[0_18px_45px_rgba(76,44,0,0.07)] transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
+                key={service.slug}
+                to={`/services/${service.slug}`}
+                variants={cardItem}
+              >
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f8aa2d]/16 text-[#cf7d11]">
+                  <ServiceIcon aria-hidden="true" size={24} strokeWidth={2} />
+                </span>
+                <h3 className="mt-5 text-xl font-black text-[#4c2c00]">
+                  {service.title}
+                </h3>
+                <p className="mt-3 leading-8 text-[#4c2c00]/68">
+                  {service.subtitle}
+                </p>
+                <span className="mt-5 inline-block font-black text-[#cf7d11]">
+                  التفاصيل
+                </span>
+              </MotionLink>
+            );
+          })}
         </CardGrid>
         <div className="mt-8 text-center">
           <Link

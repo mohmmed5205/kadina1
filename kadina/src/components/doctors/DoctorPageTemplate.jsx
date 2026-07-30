@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import Breadcrumbs from "../common/Breadcrumbs";
 import SectionTitle from "../common/SectionTitle";
@@ -9,20 +10,35 @@ import {
 } from "../seo/seoUtils";
 import { doctorDetails } from "../../data/doctors";
 import { createWhatsappUrl } from "../../utils/whatsapp";
+import {
+  cardItem,
+  fadeUp,
+  staggerContainer,
+  viewportOnce,
+} from "../../componetts/motionPresets";
+
+const MotionLink = motion.create(Link);
 
 function LinkCards({ items }) {
   return (
-    <div className="mt-6 grid gap-4 sm:grid-cols-2">
+    <motion.div
+      className="mt-6 grid gap-4 sm:grid-cols-2"
+      initial="hidden"
+      variants={staggerContainer}
+      viewport={viewportOnce}
+      whileInView="visible"
+    >
       {items.map((item) => (
-        <Link
+        <MotionLink
           className="rounded-[1.5rem] border border-[#f8aa2d]/25 bg-white/70 p-5 font-black leading-7 text-[#4c2c00] transition hover:-translate-y-1 hover:border-[#f8aa2d]/55 hover:text-[#cf7d11]"
           key={item.to}
           to={item.to}
+          variants={cardItem}
         >
           {item.title}
-        </Link>
+        </MotionLink>
       ))}
-    </div>
+    </motion.div>
   );
 }
 
@@ -42,7 +58,12 @@ export default function DoctorPageTemplate({ doctor }) {
           className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8"
           dir="rtl"
         >
-          <div className="mx-auto max-w-3xl rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-12">
+          <motion.div
+            animate="visible"
+            className="mx-auto max-w-3xl rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-12"
+            initial="hidden"
+            variants={fadeUp}
+          >
             <h1 className="text-3xl font-black text-[#4c2c00]">
               الطبيب غير موجود
             </h1>
@@ -55,7 +76,7 @@ export default function DoctorPageTemplate({ doctor }) {
             >
               العودة إلى الأطباء
             </Link>
-          </div>
+          </motion.div>
         </section>
       </>
     );
@@ -120,7 +141,12 @@ export default function DoctorPageTemplate({ doctor }) {
             ]}
           />
 
-          <div className="mt-10 grid items-center gap-10 lg:grid-cols-2">
+          <motion.div
+            animate="visible"
+            className="mt-10 grid items-center gap-10 lg:grid-cols-2"
+            initial="hidden"
+            variants={fadeUp}
+          >
             <div className="flex aspect-[4/5] min-h-96 w-full items-center justify-center overflow-hidden rounded-[2rem] border border-[#f8aa2d]/25 bg-white/65 shadow-[0_20px_55px_rgba(76,44,0,0.08)] sm:min-h-[30rem] lg:min-h-[34rem]">
               {doctor.image ? (
                 <img
@@ -163,7 +189,7 @@ export default function DoctorPageTemplate({ doctor }) {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -171,20 +197,27 @@ export default function DoctorPageTemplate({ doctor }) {
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <SectionTitle eyebrow={doctor.name} title="مجالات التميز" />
-            <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <motion.ul
+              className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              initial="hidden"
+              variants={staggerContainer}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               {focusAreas.map((area) => (
-                <li
+                <motion.li
                   className="flex gap-3 rounded-2xl border border-[#4c2c00]/10 bg-[#fff7eb] p-4 font-bold leading-7 text-[#4c2c00]/72"
                   key={area}
+                  variants={cardItem}
                 >
                   <span
                     aria-hidden="true"
                     className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#f8aa2d]"
                   />
                   <span>{area}</span>
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           </div>
         </section>
       )}
@@ -220,20 +253,27 @@ export default function DoctorPageTemplate({ doctor }) {
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <SectionTitle title="حسابات الطبيب" />
-            <div className="mt-6 flex flex-wrap gap-3">
+            <motion.div
+              className="mt-6 flex flex-wrap gap-3"
+              initial="hidden"
+              variants={staggerContainer}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               {doctor.socialLinks.map((socialLink) => (
-                <a
+                <motion.a
                   aria-label={`${socialLink.label} (يفتح في نافذة جديدة)`}
                   className="rounded-full border border-[#f8aa2d]/30 bg-[#fff7eb] px-5 py-3 font-black text-[#4c2c00]"
                   href={socialLink.url}
                   key={socialLink.url}
                   rel="noopener noreferrer"
                   target="_blank"
+                  variants={cardItem}
                 >
                   {socialLink.label}
-                </a>
+                </motion.a>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
       )}
@@ -242,12 +282,19 @@ export default function DoctorPageTemplate({ doctor }) {
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <SectionTitle title="أطباء ذوو تخصص قريب" />
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <motion.div
+              className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              initial="hidden"
+              variants={staggerContainer}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               {relatedDoctors.map((relatedDoctor) => (
-                <Link
+                <MotionLink
                   className="rounded-[1.5rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-5 transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
                   key={relatedDoctor.slug}
                   to={`/doctors/${relatedDoctor.slug}`}
+                  variants={cardItem}
                 >
                   <h3 className="text-lg font-black text-[#4c2c00]">
                     {relatedDoctor.name}
@@ -255,14 +302,20 @@ export default function DoctorPageTemplate({ doctor }) {
                   <p className="mt-3 text-sm font-bold leading-7 text-[#4c2c00]/60">
                     {relatedDoctor.specialty}
                   </p>
-                </Link>
+                </MotionLink>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
       )}
 
-      <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+      <motion.section
+        className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
+        initial="hidden"
+        variants={fadeUp}
+        viewport={viewportOnce}
+        whileInView="visible"
+      >
         <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
           <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
             احجز مع {doctor.name}
@@ -285,7 +338,7 @@ export default function DoctorPageTemplate({ doctor }) {
             </Link>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { FaWhatsapp } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { getPrimaryNavigation } from "../data/navigation";
-import { smoothEase } from "./motionPresets";
+import { cardItem, smoothEase, staggerContainer } from "./motionPresets";
 import { createWhatsappUrl } from "../utils/whatsapp";
 
 export default function Navbar({ t, lang, onLanguageToggle }) {
@@ -178,20 +178,14 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
             <motion.div
               initial="hidden"
               animate="visible"
-              variants={{
-                hidden: {},
-                visible: { transition: { staggerChildren: 0.045 } },
-              }}
+              variants={staggerContainer}
               className="mx-auto flex max-w-7xl flex-col gap-1 p-4"
             >
               {navigationItems.map((link) => (
                 <motion.div
                   key={link.to}
                   onClick={() => setIsOpen(false)}
-                  variants={{
-                    hidden: { opacity: 0, y: -8 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
+                  variants={cardItem}
                 >
                   <Link
                     className={clsx(

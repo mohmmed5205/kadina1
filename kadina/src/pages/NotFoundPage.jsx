@@ -1,5 +1,7 @@
+import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import Seo from "../components/seo/Seo";
+import { fadeUp } from "../componetts/motionPresets";
 
 export default function NotFoundPage() {
   const location = useLocation();
@@ -12,7 +14,9 @@ export default function NotFoundPage() {
         noindex
         title="الصفحة غير موجودة"
       />
-      <h1>Page Not Found</h1>
+      <motion.h1 animate="visible" initial="hidden" variants={fadeUp}>
+        Page Not Found
+      </motion.h1>
     </>
   );
 }

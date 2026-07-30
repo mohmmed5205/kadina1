@@ -1,14 +1,46 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
-import SectionTitle from "../components/common/SectionTitle";
 import Seo from "../components/seo/Seo";
 import {
   createBreadcrumbSchema,
   createFaqSchema,
   createWebPageSchema,
 } from "../components/seo/seoUtils";
-import { faqs } from "../data/pagesContent";
+import {
+  cardItem,
+  staggerContainer,
+  viewportOnce,
+} from "../componetts/motionPresets";
+
+const faqItems = [
+  {
+    question: "ما الفرق بين أجهزة الليزر الثلاثة لديكم؟ وأيها الأنسب لي؟",
+    answer:
+      "لكل جهاز نقاط قوته حسب نوع البشرة والشعر والمنطقة — ولهذا نبدأ بجلسة تقييم يحدد فيها الطبيب الجهاز والإعداد الأمثل لك، لا العكس.",
+  },
+  {
+    question: "هل الهايفو بديل حقيقي لعمليات الشد؟",
+    answer:
+      "للترهل الخفيف والمتوسط، يقدم Ultraformer III نتيجة شد ورفع ملموسة دون جراحة. الحالات المتقدمة قد يكون خيارها الأمثل جراحيًا — ونخبرك بذلك بصراحة في الاستشارة.",
+  },
+  {
+    question: "هل نتائج البوتوكس والفيلر تبدو مصطنعة؟",
+    answer:
+      "فلسفتنا هي الجمال الطبيعي: نتيجة يلاحظها الآخرون دون أن يعرفوا السبب.",
+  },
+  {
+    question: "ما الفرق بين ريجينيرا والبلازما لعلاج التساقط؟",
+    answer:
+      "البلازما تغذي البصيلة وتقويها، بينما ريجينيرا تحفزها بخلايا دقيقة من فروة رأسك نفسها — وقد يجمع الطبيب بينهما في خطة واحدة حسب حالتك.",
+  },
+  {
+    question: "ما مواعيد العمل وأين موقعكم؟",
+    answer:
+      "الرياض — الطريق الدائري الشمالي، من الاثنين إلى الجمعة، 9 صباحًا حتى 10 مساءً.",
+  },
+];
 
 export default function FaqPage() {
   const [openIndex, setOpenIndex] = useState(0);
@@ -29,33 +61,36 @@ export default function FaqPage() {
               "إجابات واضحة عن خدمات وتقنيات كادينا قبل الحجز.",
             path: "/faq",
           }),
-          createFaqSchema(faqs),
+          createFaqSchema(faqItems),
         ]}
         title="الأسئلة الشائعة"
       />
       <PageHero
         breadcrumbLabel="الأسئلة الشائعة"
-        eyebrow="قبل الحجز"
+        eyebrow="الأسئلة الشائعة"
         title="الأسئلة الشائعة"
-        description="إجابات واضحة تساعدك على اتخاذ قرارك قبل الحجز."
+        description="إجابات واضحة عن أكثر الأسئلة التي تسبق قرارك."
       />
 
       <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-4xl">
-          <SectionTitle
-            eyebrow="أسئلة متكررة"
-            title="ما الذي تود معرفته؟"
-          />
-          <div className="mt-8 space-y-4">
-            {faqs.map((faq, index) => {
+          <motion.div
+            className="space-y-4"
+            initial="hidden"
+            variants={staggerContainer}
+            viewport={viewportOnce}
+            whileInView="visible"
+          >
+            {faqItems.map((faq, index) => {
               const isOpen = openIndex === index;
               const panelId = `faq-panel-${index}`;
               const buttonId = `faq-button-${index}`;
 
               return (
-                <article
+                <motion.article
                   className="overflow-hidden rounded-[1.5rem] border border-[#f8aa2d]/25 bg-[#fff7eb]"
                   key={faq.question}
+                  variants={cardItem}
                 >
                   <h2>
                     <button
@@ -89,16 +124,18 @@ export default function FaqPage() {
                       {faq.answer}
                     </p>
                   </div>
-                </article>
+                </motion.article>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       <CTASection
-        title="هل أنت مستعد لخطوتك الأولى؟"
-        description="احجز جلسة تقييم ليحدد الطبيب الأنسب لك."
+        title="ما لقيت إجابة لسؤالك؟"
+        description="تواصل معنا عبر واتساب، وسنساعدك في الوصول إلى الإجابة أو القسم المناسب."
+        primaryLabel="اسألنا عبر واتساب"
+        whatsappMessage="مرحبًا، لدي استفسار عن خدمات مركز كادينا."
       />
     </div>
   );

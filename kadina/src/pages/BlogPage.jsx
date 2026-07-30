@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import ArticleCard from "../components/blog/ArticleCard";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
@@ -7,6 +8,12 @@ import {
   createWebPageSchema,
 } from "../components/seo/seoUtils";
 import { articleCategories, articles } from "../data/articles";
+import {
+  cardItem,
+  fadeUp,
+  staggerContainer,
+  viewportOnce,
+} from "../componetts/motionPresets";
 
 export default function BlogPage() {
   const publishedArticles = articles.filter(
@@ -46,16 +53,23 @@ export default function BlogPage() {
             title="تصفّح حسب اهتمامك"
             description="خطة المحتوى الطبي القادمة في مدونة كادينا."
           />
-          <div className="mt-7 flex flex-wrap gap-3">
+          <motion.div
+            className="mt-7 flex flex-wrap gap-3"
+            initial="hidden"
+            variants={staggerContainer}
+            viewport={viewportOnce}
+            whileInView="visible"
+          >
             {articleCategories.map((category) => (
-              <span
+              <motion.span
                 className="rounded-full border border-[#f8aa2d]/30 bg-[#fff7eb] px-4 py-2 text-sm font-black text-[#4c2c00]"
                 key={category}
+                variants={cardItem}
               >
                 {category}
-              </span>
+              </motion.span>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -67,14 +81,28 @@ export default function BlogPage() {
                 eyebrow="المقالات"
                 title="أحدث مقالات كادينا"
               />
-              <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <motion.div
+                className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+                initial="hidden"
+                variants={staggerContainer}
+                viewport={viewportOnce}
+                whileInView="visible"
+              >
                 {publishedArticles.map((article) => (
-                  <ArticleCard article={article} key={article.slug} />
+                  <motion.div key={article.slug} variants={cardItem}>
+                    <ArticleCard article={article} />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </>
           ) : (
-            <div className="rounded-[2rem] border border-[#f8aa2d]/25 bg-white/70 px-6 py-14 text-center shadow-[0_18px_45px_rgba(76,44,0,0.07)] sm:px-10">
+            <motion.div
+              className="rounded-[2rem] border border-[#f8aa2d]/25 bg-white/70 px-6 py-14 text-center shadow-[0_18px_45px_rgba(76,44,0,0.07)] sm:px-10"
+              initial="hidden"
+              variants={fadeUp}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               <h2 className="text-2xl font-black text-[#4c2c00] sm:text-3xl">
                 المقالات قريبًا
               </h2>
@@ -82,7 +110,7 @@ export default function BlogPage() {
                 مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا
                 تسويق مقنّع.
               </p>
-            </div>
+            </motion.div>
           )}
         </div>
       </section>

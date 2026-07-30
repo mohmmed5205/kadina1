@@ -58,6 +58,18 @@ video {
   height: auto;
 }
 
+.home-card-swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.home-card-swiper .swiper-slide {
+  height: auto;
+}
+
+.home-card-swiper .swiper-slide > a {
+  height: 100%;
+}
+
 body {
   margin: 0;
   background: var(--beige-mid);

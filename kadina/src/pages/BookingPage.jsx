@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
 import Seo from "../components/seo/Seo";
 import { doctors } from "../data/pagesContent";
 import { createWhatsappUrl } from "../utils/whatsapp";
+import { fadeUp, viewportOnce } from "../componetts/motionPresets";
 
 const serviceOptions = [
   "الجلدية",
@@ -88,10 +90,14 @@ export default function BookingPage() {
             description="أدخل بياناتك المطلوبة، ثم أرسل الطلب عبر واتساب."
           />
 
-          <form
+          <motion.form
             className="rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-5 shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-8"
+            initial="hidden"
             noValidate
             onSubmit={handleSubmit}
+            variants={fadeUp}
+            viewport={viewportOnce}
+            whileInView="visible"
           >
             <div className="grid gap-5 sm:grid-cols-2">
               <label className="font-black text-[#4c2c00]">
@@ -232,7 +238,7 @@ export default function BookingPage() {
                 اتصال: 0114555444
               </a>
             </div>
-          </form>
+          </motion.form>
         </div>
       </section>
 

@@ -6,6 +6,56 @@ export const services = [
   { title: "الحقن التجميلية", to: "/services/injectables" },
 ];
 
+export const homePageContent = {
+  trustMetrics: [
+    { value: "15+", label: "عامًا من الخبرة" },
+    { value: "9", label: "استشاريين" },
+    { value: "13+", label: "جهازًا عالميًا" },
+    { value: "146", label: "خدمة" },
+  ],
+  whyKadina: [
+    {
+      title: "استشاريون لا ممارسون",
+      description:
+        "كل حالة يقودها استشاري متخصص فيها تحديدًا، لا طبيب مناوب.",
+    },
+    {
+      title: "أجهزة من الطراز الأول عالميًا",
+      description:
+        "من GentleMax Pro إلى Ultraformer III، نستثمر في التقنية لأن نتيجتك تستحق الأفضل.",
+    },
+    {
+      title: "متابعة حتى الرضا",
+      description:
+        "رحلتك لا تنتهي بانتهاء الجلسة؛ نتابع نتيجتك خطوة بخطوة.",
+    },
+  ],
+  journey: [
+    {
+      title: "الاستشارة",
+      description: "نبدأ بفهم احتياجك وتشخيص حالتك بدقة.",
+    },
+    {
+      title: "الخطة",
+      description: "نضع خطة واضحة تناسب حالتك وهدفك.",
+    },
+    {
+      title: "الإجراء",
+      description: "ينفذ الإجراء على يد المختص وبالتقنية المناسبة.",
+    },
+    {
+      title: "المتابعة",
+      description:
+        "نتابع النتيجة معك خطوة بخطوة حتى اكتمال الرحلة.",
+    },
+  ],
+  finalCta: {
+    title: "خطوتك الأولى نحو النسخة الأفضل منك",
+    label: "احجز استشارتك عبر واتساب",
+    message: "مرحبًا، أرغب في حجز استشارة في مركز كادينا.",
+  },
+};
+
 export const technologyCategories = [
   {
     title: "إزالة الشعر بالليزر",

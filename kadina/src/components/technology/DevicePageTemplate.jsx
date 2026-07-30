@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import Breadcrumbs from "../common/Breadcrumbs";
 import SectionTitle from "../common/SectionTitle";
@@ -8,23 +9,38 @@ import {
 } from "../seo/seoUtils";
 import { deviceDetailsBySlug } from "../../data/devices";
 import { createWhatsappUrl } from "../../utils/whatsapp";
+import {
+  cardItem,
+  fadeUp,
+  staggerContainer,
+  viewportOnce,
+} from "../../componetts/motionPresets";
+
+const MotionLink = motion.create(Link);
 
 function DetailList({ items }) {
   return (
-    <ul className="mt-6 grid gap-4">
+    <motion.ul
+      className="mt-6 grid gap-4"
+      initial="hidden"
+      variants={staggerContainer}
+      viewport={viewportOnce}
+      whileInView="visible"
+    >
       {items.map((item) => (
-        <li
+        <motion.li
           className="flex gap-3 rounded-2xl border border-[#4c2c00]/10 bg-white/65 p-4 font-medium leading-7 text-[#4c2c00]/72"
           key={item}
+          variants={cardItem}
         >
           <span
             aria-hidden="true"
             className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#f8aa2d]"
           />
           <span>{item}</span>
-        </li>
+        </motion.li>
       ))}
-    </ul>
+    </motion.ul>
   );
 }
 
@@ -44,7 +60,12 @@ export default function DevicePageTemplate({ device }) {
           className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8"
           dir="rtl"
         >
-          <div className="mx-auto max-w-3xl rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-12">
+          <motion.div
+            animate="visible"
+            className="mx-auto max-w-3xl rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-12"
+            initial="hidden"
+            variants={fadeUp}
+          >
             <h1 className="text-3xl font-black text-[#4c2c00]">
               الجهاز غير موجود
             </h1>
@@ -57,7 +78,7 @@ export default function DevicePageTemplate({ device }) {
             >
               العودة إلى الأجهزة
             </Link>
-          </div>
+          </motion.div>
         </section>
       </>
     );
@@ -103,7 +124,12 @@ export default function DevicePageTemplate({ device }) {
             ]}
           />
 
-          <div className="mt-10 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <motion.div
+            animate="visible"
+            className="mt-10 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]"
+            initial="hidden"
+            variants={fadeUp}
+          >
             <div>
               <p className="text-sm font-black tracking-wide text-[#cf7d11]">
                 متوفر في كادينا
@@ -147,7 +173,7 @@ export default function DevicePageTemplate({ device }) {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -155,9 +181,15 @@ export default function DevicePageTemplate({ device }) {
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <SectionTitle title="عن الجهاز" />
-            <p className="mt-6 max-w-4xl text-lg font-medium leading-9 text-[#4c2c00]/72">
+            <motion.p
+              className="mt-6 max-w-4xl text-lg font-medium leading-9 text-[#4c2c00]/72"
+              initial="hidden"
+              variants={fadeUp}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               {device.intro}
-            </p>
+            </motion.p>
           </div>
         </section>
       )}
@@ -166,9 +198,15 @@ export default function DevicePageTemplate({ device }) {
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <SectionTitle eyebrow="التقنية" title="آلية العمل" />
-            <p className="mt-6 max-w-4xl text-lg font-medium leading-9 text-[#4c2c00]/72">
+            <motion.p
+              className="mt-6 max-w-4xl text-lg font-medium leading-9 text-[#4c2c00]/72"
+              initial="hidden"
+              variants={fadeUp}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               {device.mechanism}
-            </p>
+            </motion.p>
           </div>
         </section>
       )}
@@ -218,12 +256,19 @@ export default function DevicePageTemplate({ device }) {
           {relatedDevices.length > 0 && (
             <div className={device.relatedService ? "mt-12" : ""}>
               <SectionTitle title="أجهزة ذات صلة" />
-              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <motion.div
+                className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                initial="hidden"
+                variants={staggerContainer}
+                viewport={viewportOnce}
+                whileInView="visible"
+              >
                 {relatedDevices.map((relatedDevice) => (
-                  <Link
+                  <MotionLink
                     className="rounded-[1.5rem] border border-[#f8aa2d]/25 bg-white/70 p-5 transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
                     key={relatedDevice.slug}
                     to={`/technology/${relatedDevice.slug}`}
+                    variants={cardItem}
                   >
                     <h3 className="text-lg font-black text-[#4c2c00]">
                       {relatedDevice.arabicName}
@@ -236,15 +281,21 @@ export default function DevicePageTemplate({ device }) {
                         {relatedDevice.englishName}
                       </p>
                     )}
-                  </Link>
+                  </MotionLink>
                 ))}
-              </div>
+              </motion.div>
             </div>
           )}
         </div>
       </section>
 
-      <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+      <motion.section
+        className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
+        initial="hidden"
+        variants={fadeUp}
+        viewport={viewportOnce}
+        whileInView="visible"
+      >
         <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
           <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
             استفسر عن الجهاز
@@ -267,7 +318,7 @@ export default function DevicePageTemplate({ device }) {
             </Link>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

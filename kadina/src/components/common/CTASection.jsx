@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
 import { createWhatsappUrl } from "../../utils/whatsapp";
 
 export default function CTASection({
@@ -13,7 +15,13 @@ export default function CTASection({
   const whatsappUrl = createWhatsappUrl(whatsappMessage);
 
   return (
-    <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+    <motion.section
+      className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
+      initial="hidden"
+      variants={fadeUp}
+      viewport={viewportOnce}
+      whileInView="visible"
+    >
       <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
         <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
           {title}
@@ -50,6 +58,6 @@ export default function CTASection({
           )}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

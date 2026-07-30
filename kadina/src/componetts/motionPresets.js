@@ -15,23 +15,6 @@ export const fadeUp = {
   },
 };
 
-export const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.7, ease: smoothEase },
-  },
-};
-
-export const scaleIn = {
-  hidden: { opacity: 0, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.65, ease: smoothEase },
-  },
-};
-
 export const staggerContainer = {
   hidden: {},
   visible: {

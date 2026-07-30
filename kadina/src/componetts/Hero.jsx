@@ -6,10 +6,11 @@ import { createWhatsappUrl } from "../utils/whatsapp";
 
 const OffersModal = lazy(() => import("./OffersModal"));
 const MotionLink = motion.create(Link);
+const bookingMessage = "مرحبًا، أرغب في حجز استشارة في مركز كادينا.";
 
 export default function Hero({ t, lang = "ar" }) {
   const [isOffersOpen, setIsOffersOpen] = useState(false);
-  const whatsappUrl = createWhatsappUrl(t.hero.primaryCta);
+  const whatsappUrl = createWhatsappUrl(bookingMessage);
 
   return (
     <>
@@ -78,16 +79,6 @@ export default function Hero({ t, lang = "ar" }) {
             >
               {t.hero.description}
             </motion.p>
-
-            {/* Trust */}
-            <motion.div
-              variants={fadeUp}
-              className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm font-semibold text-[#fff7eb] lg:justify-start"
-            >
-              <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur-md">
-                {t.hero.trust}
-              </span>
-            </motion.div>
 
             {/* Buttons */}
             <motion.div

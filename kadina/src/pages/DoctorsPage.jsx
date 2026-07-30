@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
@@ -8,6 +9,12 @@ import {
 } from "../components/seo/seoUtils";
 import { doctorDetails } from "../data/doctors";
 import { createWhatsappUrl } from "../utils/whatsapp";
+import {
+  cardItem,
+  fadeUp,
+  staggerContainer,
+  viewportOnce,
+} from "../componetts/motionPresets";
 
 export default function DoctorsPage() {
   const whatsappUrl = createWhatsappUrl(
@@ -46,13 +53,19 @@ export default function DoctorsPage() {
           <SectionTitle
             eyebrow="فريق الاستشاريين"
             title="تعرّف على أطباء كادينا"
-            description="التخصصات والخبرة كما وردت في البطاقات الرسمية ضمن ملف المحتوى."
           />
-          <div className="mt-9 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            className="mt-9 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
+            initial="hidden"
+            variants={staggerContainer}
+            viewport={viewportOnce}
+            whileInView="visible"
+          >
             {doctorDetails.map((doctor) => (
-              <article
+              <motion.article
                 className="overflow-hidden rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] shadow-[0_18px_45px_rgba(76,44,0,0.08)]"
                 key={doctor.slug}
+                variants={cardItem}
               >
                 <div className="flex aspect-[4/5] min-h-[220px] w-full items-center justify-center overflow-hidden bg-[linear-gradient(135deg,rgba(248,170,45,0.24),rgba(255,247,235,0.85))] md:min-h-[260px]">
                   {doctor.image ? (
@@ -92,17 +105,19 @@ export default function DoctorsPage() {
                     الملف التعريفي
                   </Link>
                 </div>
-              </article>
+              </motion.article>
             ))}
-          </div>
-          <p className="mt-8 rounded-[1.5rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-5 text-sm font-bold leading-7 text-[#4c2c00]/68">
-            تُستكمل النبذ المهنية التفصيلية من السير الذاتية الرسمية للأطباء
-            قبل النشر.
-          </p>
+          </motion.div>
         </div>
       </section>
 
-      <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+      <motion.section
+        className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
+        initial="hidden"
+        variants={fadeUp}
+        viewport={viewportOnce}
+        whileInView="visible"
+      >
         <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
           <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
             اختر طبيبك واحجز معه
@@ -120,7 +135,7 @@ export default function DoctorsPage() {
             تواصل عبر واتساب
           </a>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }
