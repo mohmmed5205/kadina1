@@ -1,4 +1,4 @@
-export const SEO_BASE_URL = "https://kadina.netlify.app";
+export const SEO_BASE_URL = "https://kadinacenter.com";
 
 export function absoluteUrl(path = "/") {
   return new URL(path || "/", `${SEO_BASE_URL}/`).toString();

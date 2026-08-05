@@ -2,9 +2,9 @@ import { createWhatsappUrl } from "../utils/whatsapp";
 
 export const contactPhone = "0114555444";
 export const contactEmail = "info@kadina.com.sa";
-export const contactAddress = "الرياض — الطريق الدائري الشمالي";
+export const contactAddress = "الرياض   —  الحي المروج  -  مخرج 5   ";
 export const contactHours = {
-  days: "الاثنين – الجمعة",
+  days: "السبت – الخميس",
   time: "9:00 ص – 10:00 م",
 };
 export const contactMapUrl =

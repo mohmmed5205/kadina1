@@ -77,7 +77,7 @@ export default function HomeContactSection() {
           >
             <h3 className="text-xl font-black text-[#4c2c00]">{lang === "ar" ? "الموقع" : "Location"}</h3>
             <p className="mt-3 leading-8 text-[#4c2c00]/68">
-              {lang === "ar" ? contactAddress : "Riyadh — Northern Ring Road"}
+              {lang === "ar" ? contactAddress : "Riyadh — Al-Murooj-Exit 5"}
             </p>
             <a
               aria-label={lang === "ar" ? "افتح الخريطة (يفتح في نافذة جديدة)" : "Open map (opens in a new window)"}
@@ -95,7 +95,7 @@ export default function HomeContactSection() {
           >
             <h3 className="text-xl font-black text-[#4c2c00]">{lang === "ar" ? "المواعيد" : "Hours"}</h3>
             <p className="mt-3 leading-8 text-[#4c2c00]/68">
-              {lang === "ar" ? contactHours.days : "Monday – Friday"}
+              {lang === "ar" ? contactHours.days : "Saturday – Thursday"}
               <br />
               {lang === "ar" ? contactHours.time : "9:00 AM – 10:00 PM"}
             </p>

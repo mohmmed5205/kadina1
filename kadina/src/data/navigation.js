@@ -18,7 +18,7 @@ export const primaryNavigation = [
 
   { id: "faq", to: "/faq", ar: "الأسئلة الشائعة", en: "FAQ" },
 
-  { id: "blog", to: "/blog", ar: "المدونة", en: "Blog" },
+  // { id: "blog", to: "/blog", ar: "المدونة", en: "Blog" },
 
   { id: "contact", to: "/contact", ar: "تواصل معنا", en: "Contact Us" },
 

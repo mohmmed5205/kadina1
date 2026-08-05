@@ -105,7 +105,7 @@ export default function ContactPage() {
             >
               <h2 className="text-xl font-black text-[#4c2c00]">{en ? "Location" : "الموقع"}</h2>
               <p className="mt-3 leading-8 text-[#4c2c00]/68">
-                {en ? "Riyadh — Northern Ring Road" : contactAddress}
+                {en ? "Riyadh — Al-Murooj-Exit 5" : contactAddress}
               </p>
               <a
                 aria-label={en ? "Open map (opens in a new window)" : "افتح الخريطة (يفتح في نافذة جديدة)"}
@@ -124,7 +124,7 @@ export default function ContactPage() {
             >
               <h2 className="text-xl font-black text-[#4c2c00]">{en ? "Hours" : "المواعيد"}</h2>
               <p className="mt-3 leading-8 text-[#4c2c00]/68">
-                {en ? "Monday – Friday" : contactHours.days}
+                {en ? "Saturday – Saturday" : contactHours.days}
                 <br />
                 {en ? "9:00 AM – 10:00 PM" : contactHours.time}
               </p>
