@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -227,7 +227,7 @@ export default function OfferSlider({
       <Swiper
         key={sliderKey}
         dir={isRtl ? "rtl" : "ltr"}
-        modules={[Autoplay, Navigation, Pagination]}
+        modules={[Navigation, Pagination]}
         className={`offers-swiper ${modal ? "offers-modal-swiper" : ""}`}
         centeredSlides={true}
         loop={false}
@@ -235,15 +235,6 @@ export default function OfferSlider({
         slidesPerGroup={1}
         navigation={modal ? false : true}
         pagination={{ clickable: true }}
-        autoplay={
-          shouldReduceMotion
-            ? false
-            : {
-                delay: 3000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-              }
-        }
         speed={shouldReduceMotion ? 0 : modal ? 600 : 750}
         spaceBetween={modal ? 12 : 16}
         slidesPerView={modal ? 1.03 : 1.05}

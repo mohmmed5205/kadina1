@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
 import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
 import { createWhatsappUrl } from "../../utils/whatsapp";
-import { homePageContent } from "../../data/pagesContent";
+import { getHomePageContent } from "../../data/pagesContent";
 
 export default function HomeFinalCta() {
+  const { lang } = useOutletContext();
+  const homePageContent = getHomePageContent(lang);
   const { finalCta } = homePageContent;
 
   return (
@@ -19,7 +22,7 @@ export default function HomeFinalCta() {
           {finalCta.title}
         </h2>
         <a
-          aria-label={`${finalCta.label} (يفتح في نافذة جديدة)`}
+          aria-label={`${finalCta.label} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
           className="mt-7 inline-flex rounded-full bg-[#f8aa2d] px-7 py-3.5 font-black text-[#2b1b08] shadow-[0_16px_38px_rgba(207,125,17,0.32)] transition hover:bg-[#cf7d11] hover:text-white"
           href={createWhatsappUrl(finalCta.message)}
           rel="noopener noreferrer"

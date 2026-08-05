@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import Seo from "../components/seo/Seo";
@@ -8,7 +8,7 @@ import {
   createBreadcrumbSchema,
   createWebPageSchema,
 } from "../components/seo/seoUtils";
-import { deviceDetails } from "../data/devices";
+import { getDeviceSummaries } from "../data/devices";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import {
   cardItem,
@@ -20,55 +20,59 @@ import {
 const MotionLink = motion.create(Link);
 
 const categoryFilters = [
-  { slug: "all", label: "الكل", category: null },
+  { slug: "all", label: { ar: "الكل", en: "All" }, category: null },
   {
     slug: "laser",
-    label: "إزالة الشعر بالليزر",
+    label: { ar: "إزالة الشعر بالليزر", en: "Laser Hair Removal" },
     category: "إزالة الشعر بالليزر",
   },
   {
     slug: "skin-renewal",
-    label: "تجديد البشرة",
+    label: { ar: "تجديد البشرة", en: "Skin Renewal" },
     category: "تجديد البشرة وعلاج آثارها",
   },
   {
     slug: "skincare",
-    label: "العناية والنضارة",
+    label: { ar: "العناية والنضارة", en: "Skin Care & Radiance" },
     category: "العناية والنضارة",
   },
   {
     slug: "lifting-contouring",
-    label: "الشد والنحت",
+    label: { ar: "الشد والنحت", en: "Lifting & Contouring" },
     category: "الشد والنحت غير الجراحي",
   },
-  { slug: "hair", label: "علاج الشعر", category: "علاج الشعر" },
+  { slug: "hair", label: { ar: "علاج الشعر", en: "Hair Treatment" }, category: "علاج الشعر" },
 ];
 
 const filterBySlug = Object.fromEntries(
   categoryFilters.map((filter) => [filter.slug, filter]),
 );
 
-function getResultsLabel(count) {
+function getResultsLabel(count, lang) {
+  if (lang === "en") return `${count} ${count === 1 ? "device" : "devices"}`;
   if (count === 2) return "جهازان";
   if (count >= 3 && count <= 10) return `${count} أجهزة`;
   return `${count} جهازًا`;
 }
 
 export default function TechnologyPage() {
+  const { lang } = useOutletContext();
+  const en = lang === "en";
   const [searchParams, setSearchParams] = useSearchParams();
   const requestedCategory = searchParams.get("cat");
   const activeFilter = filterBySlug[requestedCategory] || filterBySlug.all;
+  const localizedDevices = useMemo(() => getDeviceSummaries(lang), [lang]);
   const filteredDevices = useMemo(
     () =>
       activeFilter.category
-        ? deviceDetails.filter(
+        ? localizedDevices.filter(
             (device) => device.category === activeFilter.category,
           )
-        : deviceDetails,
-    [activeFilter.category],
+        : localizedDevices,
+    [activeFilter.category, localizedDevices],
   );
   const emptyStateWhatsappUrl = createWhatsappUrl(
-    "مرحبًا، أرغب في معرفة الجهاز أو التقنية الأنسب لحالتي في مركز كادينا.",
+    en ? "Hello, I would like to know which device or technology is most suitable for my case at Kadina Center." : "مرحبًا، أرغب في معرفة الجهاز أو التقنية الأنسب لحالتي في مركز كادينا.",
   );
 
   const selectFilter = (slug) => {
@@ -76,30 +80,29 @@ export default function TechnologyPage() {
   };
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath="/technology"
-        description="تعرّف على أجهزة وتقنيات كادينا الـ13 لإزالة الشعر وتجديد البشرة والعناية والشد والنحت وعلاج الشعر."
+        description={en ? "Explore Kadina's 13+ devices and technologies for hair removal, skin renewal, care, lifting, contouring and hair treatment." : "تعرّف على أجهزة وتقنيات كادينا الـ13 لإزالة الشعر وتجديد البشرة والعناية والشد والنحت وعلاج الشعر."}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "التقنيات والأجهزة", path: "/technology" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "Technology & Devices" : "التقنيات والأجهزة", path: "/technology" },
           ]),
           createWebPageSchema({
             type: "MedicalWebPage",
-            name: "تقنيات وأجهزة كادينا",
-            description:
-              "أجهزة إزالة الشعر وتجديد البشرة والعناية والشد والنحت وعلاج الشعر في كادينا.",
+            name: en ? "Kadina Technology & Devices" : "تقنيات وأجهزة كادينا",
+            description: en ? "Kadina devices for hair removal, skin renewal and care, lifting, contouring and hair treatment." : "أجهزة إزالة الشعر وتجديد البشرة والعناية والشد والنحت وعلاج الشعر في كادينا.",
             path: "/technology",
           }),
         ]}
-        title="أجهزة وتقنيات كادينا الطبية"
+        title={en ? "Kadina Medical Technology & Devices" : "أجهزة وتقنيات كادينا الطبية"}
       />
       <PageHero
-        breadcrumbLabel="التقنيات والأجهزة"
-        eyebrow="التقنيات والأجهزة"
-        title="ترسانة كادينا التقنية: 13+ جهازًا من الطراز العالمي الأول"
-        description="الجهاز وحده لا يصنع النتيجة، لكن الجهاز الصحيح، بيد الاستشاري الصحيح، وبالإعداد الصحيح لبشرتك، هو معادلة كادينا."
+        breadcrumbLabel={en ? "Technology & Devices" : "التقنيات والأجهزة"}
+        eyebrow={en ? "Technology & Devices" : "التقنيات والأجهزة"}
+        title={en ? "Kadina's technology: 13+ world-class devices" : "ترسانة كادينا التقنية: 13+ جهازًا من الطراز العالمي الأول"}
+        description={en ? "A device alone does not create the result. The right device, in the right consultant's hands, with the right settings for your skin—that is the Kadina formula." : "الجهاز وحده لا يصنع النتيجة، لكن الجهاز الصحيح، بيد الاستشاري الصحيح، وبالإعداد الصحيح لبشرتك، هو معادلة كادينا."}
       />
 
       <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
@@ -111,12 +114,12 @@ export default function TechnologyPage() {
             viewport={viewportOnce}
             whileInView="visible"
           >
-            تصفح أجهزتنا، واعرف ماذا يفعل كل جهاز، ولمن يناسب.
+            {en ? "Browse our devices and learn what each one does and who it suits." : "تصفح أجهزتنا، واعرف ماذا يفعل كل جهاز، ولمن يناسب."}
           </motion.p>
 
           <div className="mt-8 border-y border-[#f8aa2d]/20 py-5">
             <div
-              aria-label="تصفية الأجهزة حسب المجال"
+              aria-label={en ? "Filter devices by area" : "تصفية الأجهزة حسب المجال"}
               className="flex gap-3 overflow-x-auto pb-2"
               role="group"
             >
@@ -136,7 +139,7 @@ export default function TechnologyPage() {
                     onClick={() => selectFilter(filter.slug)}
                     type="button"
                   >
-                    {filter.label}
+                    {filter.label[lang]}
                   </button>
                 );
               })}
@@ -148,7 +151,7 @@ export default function TechnologyPage() {
             className="mt-6 font-black text-[#4c2c00]"
             role="status"
           >
-            {getResultsLabel(filteredDevices.length)}
+            {getResultsLabel(filteredDevices.length, lang)}
           </p>
 
           {filteredDevices.length > 0 ? (
@@ -169,7 +172,7 @@ export default function TechnologyPage() {
                 >
                   <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-white/75 p-5">
                     <img
-                      alt={`${device.arabicName}${device.englishName ? ` — ${device.englishName}` : ""}`}
+                      alt={device.displayName}
                       className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
                       decoding="async"
                       loading="lazy"
@@ -178,7 +181,7 @@ export default function TechnologyPage() {
                   </div>
                   <div className="flex flex-1 flex-col p-6">
                     <h2 className="text-xl font-black text-[#4c2c00]">
-                      {device.arabicName}
+                      {device.displayName}
                     </h2>
                     {device.englishName && (
                       <p
@@ -189,10 +192,10 @@ export default function TechnologyPage() {
                       </p>
                     )}
                     <p className="mt-3 line-clamp-2 leading-7 text-[#4c2c00]/68">
-                      {device.uses[0]}
+                      {device.cardDescription}
                     </p>
                     <span className="mt-5 inline-block font-black text-[#cf7d11]">
-                      التفاصيل
+                      {en ? "Details" : "التفاصيل"}
                     </span>
                   </div>
                 </MotionLink>
@@ -210,19 +213,19 @@ export default function TechnologyPage() {
               whileInView="visible"
             >
               <h2 className="text-2xl font-black text-[#4c2c00]">
-                لم نجد أجهزة مطابقة لهذا التصنيف.
+                {en ? "No devices match this category." : "لم نجد أجهزة مطابقة لهذا التصنيف."}
               </h2>
               <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#4c2c00]/70">
-                تواصل معنا وسنساعدك في الوصول إلى التقنية الأنسب لحالتك.
+                {en ? "Contact us and we will help you find the most suitable technology for your case." : "تواصل معنا وسنساعدك في الوصول إلى التقنية الأنسب لحالتك."}
               </p>
               <a
-                aria-label="اسألنا عبر واتساب (يفتح في نافذة جديدة)"
+                aria-label={en ? "Ask us on WhatsApp (opens in a new window)" : "اسألنا عبر واتساب (يفتح في نافذة جديدة)"}
                 className="mt-6 inline-flex rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
                 href={emptyStateWhatsappUrl}
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                اسألنا عبر واتساب
+                {en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}
               </a>
             </motion.div>
           )}
@@ -230,10 +233,10 @@ export default function TechnologyPage() {
       </section>
 
       <CTASection
-        title="لست متأكدًا أي جهاز يناسب حالتك؟"
-        description="ابدأ باستشارة، وسيساعدك استشاري كادينا في اختيار التقنية الأنسب."
-        primaryLabel="استشرنا عبر واتساب"
-        whatsappMessage="مرحبًا، أرغب في معرفة الجهاز أو التقنية الأنسب لحالتي في مركز كادينا."
+        title={en ? "Not sure which device is right for your case?" : "لست متأكدًا أي جهاز يناسب حالتك؟"}
+        description={en ? "Begin with a consultation and a Kadina consultant will help select the most suitable technology." : "ابدأ باستشارة، وسيساعدك استشاري كادينا في اختيار التقنية الأنسب."}
+        primaryLabel={en ? "Consult Us on WhatsApp" : "استشرنا عبر واتساب"}
+        whatsappMessage={en ? "Hello, I would like to know which device or technology is most suitable for my case at Kadina Center." : "مرحبًا، أرغب في معرفة الجهاز أو التقنية الأنسب لحالتي في مركز كادينا."}
       />
     </div>
   );

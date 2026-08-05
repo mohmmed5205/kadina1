@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import CardGrid from "../components/common/CardGrid";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
@@ -9,7 +9,7 @@ import {
   createFaqSchema,
   createWebPageSchema,
 } from "../components/seo/seoUtils";
-import { servicePagesBySlug } from "../data/services";
+import { getServicePage } from "../data/services";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import {
   cardItem,
@@ -21,13 +21,15 @@ import {
 const MotionLink = motion.create(Link);
 
 export default function ServicePageTemplate({ slug }) {
-  const service = servicePagesBySlug[slug];
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const service = getServicePage(slug, lang);
 
   if (!service) return null;
 
   const ctaButton = (
     <a
-      aria-label={`${service.ctaLabel} عبر واتساب (يفتح في نافذة جديدة)`}
+      aria-label={`${service.ctaLabel} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
       className="inline-flex rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] shadow-[0_14px_34px_rgba(207,125,17,0.28)] transition hover:bg-[#cf7d11] hover:text-white"
       href={createWhatsappUrl(service.whatsappMessage)}
       rel="noopener noreferrer"
@@ -38,13 +40,13 @@ export default function ServicePageTemplate({ slug }) {
   );
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath={`/services/${service.slug}`}
         description={service.seoDescription}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
             {
               name: service.title,
               path: `/services/${service.slug}`,
@@ -62,10 +64,10 @@ export default function ServicePageTemplate({ slug }) {
       />
       <PageHero
         breadcrumbItems={[
-          { label: "الخدمات", to: "/services" },
+          { label: en ? "Services" : "الخدمات", to: "/services" },
           { label: service.title },
         ]}
-        eyebrow="خدمات كادينا"
+        eyebrow={en ? "Kadina Services" : "خدمات كادينا"}
         title={service.subtitle}
       />
 
@@ -97,7 +99,7 @@ export default function ServicePageTemplate({ slug }) {
       {service.treatments.length > 0 && (
         <section className="bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle title="ماذا نعالج؟" />
+            <SectionTitle title={en ? "What Do We Treat?" : "ماذا نعالج؟"} />
             <CardGrid className="mt-8">
               {service.treatments.map((treatment) => (
                 <motion.article
@@ -116,7 +118,7 @@ export default function ServicePageTemplate({ slug }) {
       {service.relatedDevices.length > 0 && (
         <section className="bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle title="الأجهزة المرتبطة" />
+            <SectionTitle title={en ? "Related Devices" : "الأجهزة المرتبطة"} />
             <CardGrid className="mt-8">
               {service.relatedDevices.map((device) => (
                 <MotionLink
@@ -147,7 +149,7 @@ export default function ServicePageTemplate({ slug }) {
                       </p>
                     )}
                     <span className="mt-5 inline-block rounded-full border border-[#f8aa2d]/35 px-4 py-2 text-sm font-black text-[#cf7d11] transition group-hover:bg-[#f8aa2d] group-hover:text-[#2b1b08]">
-                      التفاصيل
+                      {en ? "Details" : "التفاصيل"}
                     </span>
                   </div>
                 </MotionLink>
@@ -161,7 +163,7 @@ export default function ServicePageTemplate({ slug }) {
       {service.faq.length > 0 && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-4xl">
-            <SectionTitle eyebrow="قبل الحجز" title="الأسئلة الشائعة" />
+            <SectionTitle eyebrow={en ? "Before Booking" : "قبل الحجز"} title={en ? "Frequently Asked Questions" : "الأسئلة الشائعة"} />
             <motion.div
               className="mt-8 space-y-4"
               initial="hidden"

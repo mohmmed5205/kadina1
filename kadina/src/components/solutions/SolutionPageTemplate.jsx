@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useOutletContext } from "react-router-dom";
 import PageHero from "../common/PageHero";
 import SectionTitle from "../common/SectionTitle";
 import Seo from "../seo/Seo";
@@ -8,6 +8,7 @@ import {
   createWebPageSchema,
 } from "../seo/seoUtils";
 import { createWhatsappUrl } from "../../utils/whatsapp";
+import { getSolutionDetail } from "../../data/solutions";
 import {
   cardItem,
   fadeUp,
@@ -66,21 +67,23 @@ function RelatedLinks({ items }) {
   );
 }
 
-export default function SolutionPageTemplate({ solution }) {
+export default function SolutionPageTemplate({ solution: rawSolution }) {
   const location = useLocation();
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const solution = rawSolution ? getSolutionDetail(rawSolution.slug, lang) : null;
 
   if (!solution) {
     return (
       <>
         <Seo
           canonicalPath={location.pathname}
-          description="الحل المطلوب غير موجود ضمن صفحات المشاكل والحلول في كادينا."
+          description={en ? "The requested solution was not found among Kadina's problem and solution pages." : "الحل المطلوب غير موجود ضمن صفحات المشاكل والحلول في كادينا."}
           noindex
-          title="الحل غير موجود"
+          title={en ? "Solution Not Found" : "الحل غير موجود"}
         />
         <section
           className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8"
-          dir="rtl"
         >
           <motion.div
             animate="visible"
@@ -89,16 +92,16 @@ export default function SolutionPageTemplate({ solution }) {
             variants={fadeUp}
           >
             <h1 className="text-3xl font-black text-[#4c2c00]">
-              الحل غير موجود
+              {en ? "Solution Not Found" : "الحل غير موجود"}
             </h1>
             <p className="mt-4 leading-8 text-[#4c2c00]/68">
-              لم نتمكن من العثور على الحل المطلوب.
+              {en ? "We could not find the requested solution." : "لم نتمكن من العثور على الحل المطلوب."}
             </p>
             <Link
               className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
               to="/solutions"
             >
-              العودة إلى الحلول
+              {en ? "Back to Solutions" : "العودة إلى الحلول"}
             </Link>
           </motion.div>
         </section>
@@ -109,15 +112,15 @@ export default function SolutionPageTemplate({ solution }) {
   const whatsappUrl = createWhatsappUrl(solution.whatsappMessage);
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath={`/solutions/${solution.slug}`}
         description={solution.seoDescription}
         image={solution.image}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "المشاكل والحلول", path: "/solutions" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "Problems & Solutions" : "المشاكل والحلول", path: "/solutions" },
             {
               name: solution.shortTitle,
               path: `/solutions/${solution.slug}`,
@@ -134,7 +137,7 @@ export default function SolutionPageTemplate({ solution }) {
       />
       <PageHero
         breadcrumbItems={[
-          { label: "المشكلات والحلول", to: "/solutions" },
+          { label: en ? "Problems & Solutions" : "المشكلات والحلول", to: "/solutions" },
           { label: solution.shortTitle },
         ]}
         description={solution.intro}
@@ -145,7 +148,7 @@ export default function SolutionPageTemplate({ solution }) {
       {solution.isThisYou && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle eyebrow="بداية الفهم" title="هل هذا أنت؟" />
+            <SectionTitle eyebrow={en ? "Understanding the Concern" : "بداية الفهم"} title={en ? "Does This Sound Like You?" : "هل هذا أنت؟"} />
             <motion.p
               className="mt-6 max-w-4xl text-lg font-medium leading-9 text-[#4c2c00]/72"
               initial="hidden"
@@ -158,7 +161,7 @@ export default function SolutionPageTemplate({ solution }) {
             {solution.signs.length > 0 && (
               <>
                 <h3 className="mt-10 text-xl font-black text-[#4c2c00]">
-                  علامات المشكلة
+                  {en ? "Signs of the Concern" : "علامات المشكلة"}
                 </h3>
                 <SolutionList items={solution.signs} />
               </>
@@ -170,7 +173,7 @@ export default function SolutionPageTemplate({ solution }) {
       {solution.kadinaSolution.length > 0 && (
         <section className="bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle title="حل كادينا" />
+            <SectionTitle title={en ? "The Kadina Solution" : "حل كادينا"} />
             {solution.kadinaSolutionTitle && (
               <h3 className="mt-6 text-xl font-black text-[#4c2c00] sm:text-2xl">
                 {solution.kadinaSolutionTitle}
@@ -204,7 +207,7 @@ export default function SolutionPageTemplate({ solution }) {
               {solution.relatedDevices.length > 0 && (
                 <div>
                   <h3 className="text-lg font-black text-[#4c2c00]">
-                    الأجهزة المستخدمة
+                    {en ? "Devices Used" : "الأجهزة المستخدمة"}
                   </h3>
                   <RelatedLinks items={solution.relatedDevices} />
                 </div>
@@ -212,7 +215,7 @@ export default function SolutionPageTemplate({ solution }) {
               {solution.relatedServices.length > 0 && (
                 <div>
                   <h3 className="text-lg font-black text-[#4c2c00]">
-                    الخدمات المرتبطة
+                    {en ? "Related Services" : "الخدمات المرتبطة"}
                   </h3>
                   <RelatedLinks items={solution.relatedServices} />
                 </div>
@@ -220,7 +223,7 @@ export default function SolutionPageTemplate({ solution }) {
               {solution.relatedDoctor && (
                 <div>
                   <h3 className="text-lg font-black text-[#4c2c00]">
-                    الطبيب المختص
+                    {en ? "Specialist Doctor" : "الطبيب المختص"}
                   </h3>
                   <RelatedLinks items={[solution.relatedDoctor]} />
                 </div>
@@ -233,7 +236,7 @@ export default function SolutionPageTemplate({ solution }) {
       {solution.whatToExpect && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle title="ماذا تتوقع؟" />
+            <SectionTitle title={en ? "What to Expect" : "ماذا تتوقع؟"} />
             <motion.p
               className="mt-6 max-w-4xl font-medium leading-8 text-[#4c2c00]/70"
               initial="hidden"
@@ -261,7 +264,7 @@ export default function SolutionPageTemplate({ solution }) {
             </p>
           )}
           <a
-            aria-label={`${solution.ctaLabel} عبر واتساب (يفتح في نافذة جديدة)`}
+            aria-label={`${solution.ctaLabel} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
             className="inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] shadow-[0_14px_34px_rgba(207,125,17,0.28)] transition hover:bg-[#cf7d11] hover:text-white"
             href={whatsappUrl}
             rel="noopener noreferrer"
@@ -277,7 +280,7 @@ export default function SolutionPageTemplate({ solution }) {
         solution.relatedArticle) && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle title="روابط تساعدك على الخطوة التالية" />
+            <SectionTitle title={en ? "Helpful Next Steps" : "روابط تساعدك على الخطوة التالية"} />
             <motion.div
               className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
               initial="hidden"
@@ -287,19 +290,19 @@ export default function SolutionPageTemplate({ solution }) {
             >
               {solution.relatedDevices[0] && (
                 <RelatedCard
-                  eyebrow="الجهاز المستخدم"
+                  eyebrow={en ? "Device Used" : "الجهاز المستخدم"}
                   item={solution.relatedDevices[0]}
                 />
               )}
               {solution.relatedDoctor && (
                 <RelatedCard
-                  eyebrow="الطبيب المختص"
+                  eyebrow={en ? "Specialist Doctor" : "الطبيب المختص"}
                   item={solution.relatedDoctor}
                 />
               )}
               {solution.relatedArticle && (
                 <RelatedCard
-                  eyebrow="مقال ذو صلة"
+                  eyebrow={en ? "Related Article" : "مقال ذو صلة"}
                   item={solution.relatedArticle}
                 />
               )}
@@ -322,7 +325,7 @@ function RelatedCard({ eyebrow, item }) {
         <h3 className="mt-3 text-xl font-black leading-8 text-[#4c2c00]">
           {item.title}
         </h3>
-        <span className="mt-5 font-black text-[#cf7d11]">اعرف المزيد</span>
+        <span className="mt-5 font-black text-[#cf7d11]">{/[\u0600-\u06FF]/.test(eyebrow) ? "اعرف المزيد" : "Learn More"}</span>
       </Link>
     </motion.article>
   );

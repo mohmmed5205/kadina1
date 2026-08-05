@@ -5,14 +5,20 @@ import Navbar from "../componetts/Navbar";
 import Bottom from "../componetts/Bottom";
 import ScrollToHash from "../components/common/ScrollToHash";
 import { content } from "../data/content";
+import { getLocalizedValue, normalizeLanguage } from "../utils/i18n";
 
 export default function MainLayout() {
-  const [lang, setLang] = useState("ar");
-  const t = content[lang];
+  const [lang, setLang] = useState(() => {
+    if (typeof window === "undefined") return "ar";
+    const savedLanguage = window.localStorage.getItem("kadina-language");
+    return normalizeLanguage(savedLanguage);
+  });
+  const t = getLocalizedValue(content, lang);
 
   useEffect(() => {
     document.documentElement.dir = t.dir;
     document.documentElement.lang = lang;
+    window.localStorage.setItem("kadina-language", lang);
   }, [lang, t.dir]);
 
   return (
@@ -26,12 +32,16 @@ export default function MainLayout() {
           className="fixed start-4 top-3 z-[10000] -translate-y-24 rounded-full bg-[#2b1b08] px-5 py-3 font-black text-[#fff7eb] shadow-lg transition-transform focus:translate-y-0"
           href="#main-content"
         >
-          تخطَّ إلى المحتوى
+          {lang === "ar" ? "تخطَّ إلى المحتوى" : "Skip to content"}
         </a>
         <Navbar
           t={t}
           lang={lang}
-          onLanguageToggle={() => setLang(lang === "ar" ? "en" : "ar")}
+          onLanguageToggle={() =>
+            setLang((currentLanguage) =>
+              currentLanguage === "ar" ? "en" : "ar",
+            )
+          }
         />
         <main id="main-content" tabIndex="-1">
           <Outlet context={{ lang, t }} />

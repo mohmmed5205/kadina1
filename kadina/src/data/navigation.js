@@ -1,14 +1,14 @@
 export const primaryNavigation = [
   { id: "home", to: "/", ar: "الرئيسية", en: "Home" },
 
-  { id: "about", to: "/about", ar: "من نحن", en: "About" },
+  { id: "about", to: "/about", ar: "من نحن", en: "About Us" },
 
   { id: "services", to: "/services", ar: "خدماتنا", en: "Services" },
 {
     id: "technology",
     to: "/technology",
     ar: "التقنيات والأجهزة",
-    en: "Technology",
+    en: "Technology & Devices",
   },
 
   { id: "solutions", to: "/solutions", ar: "الحلول", en: "Solutions" },
@@ -18,9 +18,9 @@ export const primaryNavigation = [
 
   { id: "faq", to: "/faq", ar: "الأسئلة الشائعة", en: "FAQ" },
 
-  // { id: "blog", to: "/blog", ar: "المدونة", en: "Blog" },
+  { id: "blog", to: "/blog", ar: "المدونة", en: "Blog" },
 
-  { id: "contact", to: "/contact", ar: "تواصل معنا", en: "Contact" },
+  { id: "contact", to: "/contact", ar: "تواصل معنا", en: "Contact Us" },
 
 ];
 

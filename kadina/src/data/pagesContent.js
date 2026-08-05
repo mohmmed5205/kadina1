@@ -56,6 +56,35 @@ export const homePageContent = {
   },
 };
 
+export const homePageContentEn = {
+  trustMetrics: [
+    { value: "15+", label: "Years of experience" },
+    { value: "9", label: "Consultants" },
+    { value: "13+", label: "World-class devices" },
+    { value: "146", label: "Services" },
+  ],
+  whyKadina: [
+    { title: "Consultants, not general practitioners", description: "Every case is led by a consultant who specializes in it, not a doctor on rotation." },
+    { title: "World-class technology", description: "From GentleMax Pro to Ultraformer III, we invest in technology because your result deserves the best." },
+    { title: "Follow-up until satisfaction", description: "Your journey does not end when the session does; we follow your progress step by step." },
+  ],
+  journey: [
+    { title: "Consultation", description: "We begin by understanding your needs and accurately assessing your case." },
+    { title: "Plan", description: "We create a clear plan suited to your condition and goal." },
+    { title: "Procedure", description: "The procedure is performed by the specialist using the appropriate technology." },
+    { title: "Follow-up", description: "We follow your result step by step until the journey is complete." },
+  ],
+  finalCta: {
+    title: "Your first step toward the best version of yourself",
+    label: "Book Your Consultation on WhatsApp",
+    message: "Hello, I would like to book a consultation at Kadina Center.",
+  },
+};
+
+export function getHomePageContent(lang) {
+  return lang === "en" ? homePageContentEn : homePageContent;
+}
+
 export const technologyCategories = [
   {
     title: "إزالة الشعر بالليزر",

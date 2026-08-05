@@ -1,16 +1,18 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import SectionTitle from "../common/SectionTitle";
-import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
-import { doctorDetails } from "../../data/doctors";
+import { fadeUp } from "../../componetts/motionPresets";
+import { getDoctorDetails } from "../../data/doctors";
 
 export default function HomeDoctorsSection() {
+  const { lang } = useOutletContext();
   const swiperRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
+  const localizedDoctors = getDoctorDetails(lang);
 
   return (
     <section
@@ -19,21 +21,22 @@ export default function HomeDoctorsSection() {
     >
       <div className="mx-auto max-w-7xl">
         <SectionTitle
-          title="نخبة الاستشاريين.. تحت سقف واحد"
+          title={lang === "ar" ? "نخبة الاستشاريين.. تحت سقف واحد" : "Leading consultants under one roof"}
         />
 
         <motion.div
+          key={lang}
           className="mt-9"
           initial="hidden"
+          animate="visible"
           variants={fadeUp}
-          viewport={viewportOnce}
-          whileInView="visible"
         >
           <Swiper
+            key={`doctors-${lang}`}
             modules={[Autoplay]}
-            aria-label="أطباء مركز كادينا"
+            aria-label={lang === "ar" ? "أطباء مركز كادينا" : "Kadina Center doctors"}
             className="home-card-swiper"
-            dir="rtl"
+            dir={lang === "ar" ? "rtl" : "ltr"}
             loop={true}
             grabCursor={true}
             slidesPerView={1}
@@ -69,7 +72,7 @@ export default function HomeDoctorsSection() {
               }
             }}
           >
-            {doctorDetails.map((doctor) => (
+            {localizedDoctors.map((doctor) => (
               <SwiperSlide key={doctor.slug}>
                 <Link
                   className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] shadow-[0_18px_45px_rgba(76,44,0,0.08)] transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
@@ -101,7 +104,7 @@ export default function HomeDoctorsSection() {
                       {doctor.specialty}
                     </p>
                     <span className="mt-5 inline-block font-black text-[#cf7d11]">
-                      الملف التعريفي
+                      {lang === "ar" ? "الملف التعريفي" : "Profile"}
                     </span>
                   </div>
                 </Link>
@@ -115,7 +118,7 @@ export default function HomeDoctorsSection() {
             className="inline-block font-black text-[#cf7d11] underline decoration-[#f8aa2d]/40 underline-offset-8"
             to="/doctors"
           >
-            تعرّف على كل الأطباء
+            {lang === "ar" ? "تعرّف على كل الأطباء" : "View All Doctors"}
           </Link>
         </div>
       </div>

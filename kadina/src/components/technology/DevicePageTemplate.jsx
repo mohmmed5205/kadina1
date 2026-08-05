@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useOutletContext } from "react-router-dom";
 import Breadcrumbs from "../common/Breadcrumbs";
 import SectionTitle from "../common/SectionTitle";
 import Seo from "../seo/Seo";
@@ -7,7 +7,7 @@ import {
   createBreadcrumbSchema,
   createWebPageSchema,
 } from "../seo/seoUtils";
-import { deviceDetailsBySlug } from "../../data/devices";
+import { getDeviceDetail } from "../../data/devices";
 import { createWhatsappUrl } from "../../utils/whatsapp";
 import {
   cardItem,
@@ -44,21 +44,23 @@ function DetailList({ items }) {
   );
 }
 
-export default function DevicePageTemplate({ device }) {
+export default function DevicePageTemplate({ device: rawDevice }) {
   const location = useLocation();
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const device = rawDevice ? getDeviceDetail(rawDevice.slug, lang) : null;
 
   if (!device) {
     return (
       <>
         <Seo
           canonicalPath={location.pathname}
-          description="الجهاز المطلوب غير موجود ضمن أجهزة كادينا."
+          description={en ? "The requested device was not found among Kadina's devices." : "الجهاز المطلوب غير موجود ضمن أجهزة كادينا."}
           noindex
-          title="الجهاز غير موجود"
+          title={en ? "Device Not Found" : "الجهاز غير موجود"}
         />
         <section
           className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8"
-          dir="rtl"
         >
           <motion.div
             animate="visible"
@@ -67,16 +69,16 @@ export default function DevicePageTemplate({ device }) {
             variants={fadeUp}
           >
             <h1 className="text-3xl font-black text-[#4c2c00]">
-              الجهاز غير موجود
+              {en ? "Device Not Found" : "الجهاز غير موجود"}
             </h1>
             <p className="mt-4 leading-8 text-[#4c2c00]/68">
-              لم نتمكن من العثور على الجهاز المطلوب.
+              {en ? "We could not find the requested device." : "لم نتمكن من العثور على الجهاز المطلوب."}
             </p>
             <Link
               className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
               to="/technology"
             >
-              العودة إلى الأجهزة
+              {en ? "Back to Devices" : "العودة إلى الأجهزة"}
             </Link>
           </motion.div>
         </section>
@@ -85,21 +87,21 @@ export default function DevicePageTemplate({ device }) {
   }
 
   const relatedDevices = device.relatedDevices
-    .map((slug) => deviceDetailsBySlug[slug])
+    .map((slug) => getDeviceDetail(slug, lang))
     .filter(Boolean);
   const whatsappUrl = createWhatsappUrl(device.whatsappMessage);
   const origin = [device.company, device.country].filter(Boolean);
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath={`/technology/${device.slug}`}
         description={device.tagline}
         image={device.image}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "التقنيات والأجهزة", path: "/technology" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "Technology & Devices" : "التقنيات والأجهزة", path: "/technology" },
             {
               name: device.arabicName,
               path: `/technology/${device.slug}`,
@@ -112,14 +114,14 @@ export default function DevicePageTemplate({ device }) {
             path: `/technology/${device.slug}`,
           }),
         ]}
-        title={`${device.arabicName} — ${device.englishName || "أجهزة كادينا"}`}
+        title={`${device.arabicName} — ${device.englishName || (en ? "Kadina Devices" : "أجهزة كادينا")}`}
       />
       <section className="relative overflow-hidden border-b border-[#f8aa2d]/20 bg-[#fff7eb] px-4 pb-14 pt-28 sm:px-5 sm:pb-16 sm:pt-32 lg:px-8 lg:pb-20">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,170,45,0.2),transparent_38%)]" />
         <div className="relative mx-auto max-w-7xl">
           <Breadcrumbs
             items={[
-              { label: "التقنيات والأجهزة", to: "/technology" },
+              { label: en ? "Technology & Devices" : "التقنيات والأجهزة", to: "/technology" },
               { label: device.arabicName },
             ]}
           />
@@ -132,7 +134,7 @@ export default function DevicePageTemplate({ device }) {
           >
             <div>
               <p className="text-sm font-black tracking-wide text-[#cf7d11]">
-                متوفر في كادينا
+                {en ? "Available at Kadina" : "متوفر في كادينا"}
               </p>
               <h1 className="mt-3 text-3xl font-black leading-tight text-[#4c2c00] sm:text-4xl lg:text-5xl">
                 {device.arabicName}
@@ -180,7 +182,7 @@ export default function DevicePageTemplate({ device }) {
       {device.intro && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle title="عن الجهاز" />
+            <SectionTitle title={en ? "About the Device" : "عن الجهاز"} />
             <motion.p
               className="mt-6 max-w-4xl text-lg font-medium leading-9 text-[#4c2c00]/72"
               initial="hidden"
@@ -197,7 +199,7 @@ export default function DevicePageTemplate({ device }) {
       {device.mechanism && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle eyebrow="التقنية" title="آلية العمل" />
+            <SectionTitle eyebrow={en ? "Technology" : "التقنية"} title={en ? "How It Works" : "آلية العمل"} />
             <motion.p
               className="mt-6 max-w-4xl text-lg font-medium leading-9 text-[#4c2c00]/72"
               initial="hidden"
@@ -216,13 +218,13 @@ export default function DevicePageTemplate({ device }) {
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
             {device.uses.length > 0 && (
               <div>
-                <SectionTitle title="الاستخدامات" />
+                <SectionTitle title={en ? "Uses" : "الاستخدامات"} />
                 <DetailList items={device.uses} />
               </div>
             )}
             {device.benefits.length > 0 && (
               <div>
-                <SectionTitle title="المميزات" />
+                <SectionTitle title={en ? "Benefits" : "المميزات"} />
                 <DetailList items={device.benefits} />
               </div>
             )}
@@ -233,7 +235,7 @@ export default function DevicePageTemplate({ device }) {
       {device.suitableFor.length > 0 && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle eyebrow="التقييم" title="لمن يناسب" />
+            <SectionTitle eyebrow={en ? "Assessment" : "التقييم"} title={en ? "Who Is It For?" : "لمن يناسب"} />
             <DetailList items={device.suitableFor} />
           </div>
         </section>
@@ -243,7 +245,7 @@ export default function DevicePageTemplate({ device }) {
         <div className="mx-auto max-w-7xl">
           {device.relatedService && (
             <div>
-              <SectionTitle title="الخدمة المرتبطة" />
+              <SectionTitle title={en ? "Related Service" : "الخدمة المرتبطة"} />
               <Link
                 className="mt-6 inline-block rounded-full border border-[#f8aa2d]/35 bg-white/70 px-5 py-3 font-black text-[#4c2c00] transition hover:border-[#f8aa2d] hover:text-[#cf7d11]"
                 to={device.relatedService.to}
@@ -255,7 +257,7 @@ export default function DevicePageTemplate({ device }) {
 
           {relatedDevices.length > 0 && (
             <div className={device.relatedService ? "mt-12" : ""}>
-              <SectionTitle title="أجهزة ذات صلة" />
+              <SectionTitle title={en ? "Related Devices" : "أجهزة ذات صلة"} />
               <motion.div
                 className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
                 initial="hidden"
@@ -298,23 +300,23 @@ export default function DevicePageTemplate({ device }) {
       >
         <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
           <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
-            استفسر عن الجهاز
+            {en ? "Ask About This Device" : "استفسر عن الجهاز"}
           </h2>
           <a
-            aria-label="احجز جلستك عبر واتساب (يفتح في نافذة جديدة)"
+            aria-label={en ? "Book your session on WhatsApp (opens in a new window)" : "احجز جلستك عبر واتساب (يفتح في نافذة جديدة)"}
             className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
             href={whatsappUrl}
             rel="noopener noreferrer"
             target="_blank"
           >
-            احجز جلستك عبر واتساب
+            {en ? "Book Your Session on WhatsApp" : "احجز جلستك عبر واتساب"}
           </a>
           <div>
             <Link
               className="mt-6 inline-block font-black text-[#fff7eb]/75 underline decoration-[#f8aa2d]/45 underline-offset-8 transition hover:text-[#f8aa2d]"
               to="/technology"
             >
-              العودة إلى جميع الأجهزة
+              {en ? "Back to All Devices" : "العودة إلى جميع الأجهزة"}
             </Link>
           </div>
         </div>

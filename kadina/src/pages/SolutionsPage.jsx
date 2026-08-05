@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import Seo from "../components/seo/Seo";
@@ -8,7 +8,7 @@ import {
   createBreadcrumbSchema,
   createWebPageSchema,
 } from "../components/seo/seoUtils";
-import { solutionDetails } from "../data/solutions";
+import { getSolutionDetails } from "../data/solutions";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import {
   cardItem,
@@ -20,18 +20,19 @@ import {
 const MotionLink = motion.create(Link);
 
 const areaFilters = [
-  { slug: "all", label: "الكل" },
-  { slug: "face", label: "الوجه" },
-  { slug: "body", label: "الجسم" },
-  { slug: "hair", label: "الشعر" },
-  { slug: "skin", label: "البشرة" },
+  { slug: "all", label: { ar: "الكل", en: "All" } },
+  { slug: "face", label: { ar: "الوجه", en: "Face" } },
+  { slug: "body", label: { ar: "الجسم", en: "Body" } },
+  { slug: "hair", label: { ar: "الشعر", en: "Hair" } },
+  { slug: "skin", label: { ar: "البشرة", en: "Skin" } },
 ];
 
 const filterBySlug = Object.fromEntries(
   areaFilters.map((filter) => [filter.slug, filter]),
 );
 
-function getResultsLabel(count) {
+function getResultsLabel(count, lang) {
+  if (lang === "en") return `${count} ${count === 1 ? "solution" : "solutions"}`;
   if (count === 0) return "لا توجد حلول";
   if (count === 1) return "حل واحد";
   if (count === 2) return "حلّان";
@@ -41,6 +42,9 @@ function getResultsLabel(count) {
 }
 
 export default function SolutionsPage() {
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const solutionDetails = useMemo(() => getSolutionDetails(lang), [lang]);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const requestedArea = searchParams.get("area");
@@ -54,10 +58,10 @@ export default function SolutionsPage() {
     return solutionDetails.filter(
       (solution) => solution.areaSlug === activeFilter.slug,
     );
-  }, [activeFilter.slug]);
+  }, [activeFilter.slug, solutionDetails]);
 
   const emptyStateWhatsappUrl = createWhatsappUrl(
-    "مرحبًا، أرغب في معرفة الحل الأنسب لحالتي في مركز كادينا.",
+    en ? "Hello, I would like to know the most suitable solution for my case at Kadina Center." : "مرحبًا، أرغب في معرفة الحل الأنسب لحالتي في مركز كادينا.",
   );
 
   const selectFilter = (slug) => {
@@ -65,31 +69,30 @@ export default function SolutionsPage() {
   };
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath="/solutions"
-        description="اكتشف حلول كادينا لمشكلات الوجه والجسم والشعر والبشرة، واختر المشكلة الأقرب لاحتياجك."
+        description={en ? "Explore Kadina solutions for face, body, hair and skin concerns and choose the concern closest to your needs." : "اكتشف حلول كادينا لمشكلات الوجه والجسم والشعر والبشرة، واختر المشكلة الأقرب لاحتياجك."}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "المشاكل والحلول", path: "/solutions" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "Problems & Solutions" : "المشاكل والحلول", path: "/solutions" },
           ]),
           createWebPageSchema({
             type: "MedicalWebPage",
-            name: "المشاكل والحلول في كادينا",
-            description:
-              "حلول كادينا لمشكلات البشرة والشعر والوجه والجسم.",
+            name: en ? "Problems & Solutions at Kadina" : "المشاكل والحلول في كادينا",
+            description: en ? "Kadina solutions for skin, hair, face and body concerns." : "حلول كادينا لمشكلات البشرة والشعر والوجه والجسم.",
             path: "/solutions",
           }),
         ]}
-        title="المشكلات والحلول"
+        title={en ? "Problems & Solutions" : "المشكلات والحلول"}
       />
 
       <PageHero
-        breadcrumbLabel="المشكلات والحلول"
-        eyebrow="المشكلات والحلول"
-        title="مشكلتك لها حل.. ونعرفه بالاسم"
-        description="قد لا تعرف اسم الجهاز أو الإجراء — ولا يلزمك ذلك. اختر ما يزعجك، وسنريك كيف نعالجه في كادينا: بأي تقنية، وبيد أي استشاري، وماذا تتوقع."
+        breadcrumbLabel={en ? "Problems & Solutions" : "المشكلات والحلول"}
+        eyebrow={en ? "Problems & Solutions" : "المشكلات والحلول"}
+        title={en ? "Your concern has a solution" : "مشكلتك لها حل.. ونعرفه بالاسم"}
+        description={en ? "You do not need to know the name of a device or procedure. Choose what concerns you and see how Kadina approaches it, which technology may be used and what to expect." : "قد لا تعرف اسم الجهاز أو الإجراء — ولا يلزمك ذلك. اختر ما يزعجك، وسنريك كيف نعالجه في كادينا: بأي تقنية، وبيد أي استشاري، وماذا تتوقع."}
       />
 
       <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
@@ -101,13 +104,12 @@ export default function SolutionsPage() {
             viewport={viewportOnce}
             whileInView="visible"
           >
-            ابدأ من اسم المشكلة، وتصفّح الحلول حسب الوجه، الجسم، الشعر،
-            والبشرة.
+            {en ? "Start with the name of your concern and browse solutions for the face, body, hair and skin." : "ابدأ من اسم المشكلة، وتصفّح الحلول حسب الوجه، الجسم، الشعر، والبشرة."}
           </motion.p>
 
           <div className="mt-8 border-y border-[#f8aa2d]/20 py-5">
             <div
-              aria-label="تصفية الحلول حسب المنطقة"
+              aria-label={en ? "Filter solutions by area" : "تصفية الحلول حسب المنطقة"}
               className="flex gap-3 overflow-x-auto pb-2"
               role="group"
             >
@@ -127,7 +129,7 @@ export default function SolutionsPage() {
                     onClick={() => selectFilter(filter.slug)}
                     type="button"
                   >
-                    {filter.label}
+                    {filter.label[lang]}
                   </button>
                 );
               })}
@@ -139,7 +141,7 @@ export default function SolutionsPage() {
             className="mt-6 font-black text-[#4c2c00]"
             role="status"
           >
-            {getResultsLabel(filteredSolutions.length)}
+            {getResultsLabel(filteredSolutions.length, lang)}
           </p>
 
           {filteredSolutions.length > 0 ? (
@@ -177,7 +179,7 @@ export default function SolutionsPage() {
                   </p>
 
                   <span className="mt-auto pt-8 font-black text-[#cf7d11]">
-                    اعرف الحل
+                    {en ? "Discover the Solution" : "اعرف الحل"}
                   </span>
                 </MotionLink>
               ))}
@@ -194,21 +196,21 @@ export default function SolutionsPage() {
               variants={fadeUp}
             >
               <h2 className="text-2xl font-black text-[#4c2c00]">
-                لم نجد حلولًا مطابقة لهذا التصنيف.
+                {en ? "No solutions match this category." : "لم نجد حلولًا مطابقة لهذا التصنيف."}
               </h2>
 
               <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#4c2c00]/70">
-                تواصل معنا، وسنساعدك في الوصول إلى القسم الأنسب لحالتك.
+                {en ? "Contact us and we will help direct you to the right department for your case." : "تواصل معنا، وسنساعدك في الوصول إلى القسم الأنسب لحالتك."}
               </p>
 
               <a
-                aria-label="اسألنا عبر واتساب (يفتح في نافذة جديدة)"
+                aria-label={en ? "Ask us on WhatsApp (opens in a new window)" : "اسألنا عبر واتساب (يفتح في نافذة جديدة)"}
                 className="mt-6 inline-flex rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
                 href={emptyStateWhatsappUrl}
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                اسألنا عبر واتساب
+                {en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}
               </a>
             </motion.div>
           )}
@@ -216,10 +218,10 @@ export default function SolutionsPage() {
       </section>
 
       <CTASection
-        title="غير متأكد من اسم المشكلة؟"
-        description="صف لنا ما يزعجك عبر واتساب، وسنوجهك إلى الخدمة أو التقنية المناسبة."
-        primaryLabel="استشرنا عبر واتساب"
-        whatsappMessage="مرحبًا، أرغب في معرفة الحل الأنسب لحالتي في مركز كادينا."
+        title={en ? "Not sure what your concern is called?" : "غير متأكد من اسم المشكلة؟"}
+        description={en ? "Describe what concerns you on WhatsApp and we will direct you to the appropriate service or technology." : "صف لنا ما يزعجك عبر واتساب، وسنوجهك إلى الخدمة أو التقنية المناسبة."}
+        primaryLabel={en ? "Consult Us on WhatsApp" : "استشرنا عبر واتساب"}
+        whatsappMessage={en ? "Hello, I would like to know the most suitable solution for my case at Kadina Center." : "مرحبًا، أرغب في معرفة الحل الأنسب لحالتي في مركز كادينا."}
       />
     </div>
   );

@@ -319,3 +319,40 @@ export const articles = [
 export const articlesBySlug = Object.fromEntries(
   articles.map((article) => [article.slug, article]),
 );
+
+const articleTranslations = {
+  "sweating-botox-before-summer": "Sweating Botox: Everything You Need to Know Before Summer",
+  "gentlemax-pro-vs-clarity": "GentleMax Pro vs Clarity: Which Is Right for Your Skin?",
+  "prp-or-hair-transplant": "When Is PRP Enough, and When Is a Hair Transplant Needed?",
+  "hifu-vs-surgical-facelift": "HIFU or a Surgical Facelift? A Clear Comparison",
+  "acne-scars-treatment-guide": "Acne Scars: A Guide from Lighter to Stronger Treatments",
+  "melasma-why-it-returns": "Melasma: Why Does It Return After Treatment and How Can It Be Controlled?",
+  "hydrafacial-before-an-event": "HydraFacial Before an Event: Exactly When Should You Book?",
+  "natural-looking-fillers": "Natural-looking Fillers: How to Achieve a Subtle Result",
+  "how-regenera-treats-hair": "Regenera: How Your Hair Uses Its Own Cells for Treatment",
+  "red-vs-white-stretch-marks": "Red vs White Stretch Marks: Differences and Treatment",
+  "questions-before-plastic-surgery": "Questions to Ask Before Any Plastic Surgery Procedure",
+  "fractional-laser-recovery-day-by-day": "Fractional Laser: Recovery Day by Day",
+};
+
+const articleCategoryTranslations = {
+  "العناية بالبشرة": "Skin Care", "الشعر": "Hair", "الليزر": "Laser", "الحقن التجميلية": "Cosmetic Injectables", "جراحة التجميل": "Plastic Surgery", "قبل الإجراء وبعده": "Before & After Procedures",
+};
+
+export function getArticle(slug, lang = "ar") {
+  const article = articlesBySlug[slug];
+  if (!article || lang !== "en") return article;
+  const title = articleTranslations[slug];
+  return {
+    ...article,
+    title,
+    category: articleCategoryTranslations[article.category] || article.category,
+    relatedService: article.relatedService ? { ...article.relatedService, title: articleCategoryTranslations[article.relatedService.title] || ({ "الجلدية": "Dermatology" })[article.relatedService.title] || article.relatedService.title } : null,
+    relatedSolution: article.relatedSolution ? { ...article.relatedSolution, title: ({ "فرط التعرق": "Hyperhidrosis", "الشعر غير المرغوب فيه": "Unwanted Hair", "تساقط الشعر": "Hair Loss", "ترهل الوجه وبداية التجاعيد": "Facial Laxity and Early Wrinkles", "آثار حب الشباب": "Acne Scars", "الكلف والتصبغات": "Melasma and Pigmentation", "علامات التمدد": "Stretch Marks" })[article.relatedSolution.title] || article.relatedSolution.title } : null,
+    whatsappMessage: `Hello, I would like to ask about the article: ${title}.`,
+  };
+}
+
+export function getArticles(lang = "ar") {
+  return articles.map((article) => getArticle(article.slug, lang));
+}

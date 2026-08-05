@@ -1,11 +1,13 @@
 import { useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { absoluteUrl } from "./seoUtils";
 
-function formatTitle(title) {
+function formatTitle(title, lang) {
   const normalizedTitle = title.trim();
-  return normalizedTitle.includes("كادينا")
+  const brandName = lang === "en" ? "Kadina" : "كادينا";
+  return normalizedTitle.toLocaleLowerCase().includes(brandName.toLocaleLowerCase())
     ? normalizedTitle
-    : `${normalizedTitle} | كادينا`;
+    : `${normalizedTitle} | ${brandName}`;
 }
 
 function formatDescription(description) {
@@ -36,7 +38,8 @@ export default function Seo({
   noindex = false,
   jsonLd,
 }) {
-  const resolvedTitle = formatTitle(title);
+  const { lang = "ar" } = useOutletContext();
+  const resolvedTitle = formatTitle(title, lang);
   const resolvedDescription = formatDescription(description);
   const canonicalUrl = absoluteUrl(canonicalPath);
   const imageUrl = image ? absoluteUrl(image) : null;

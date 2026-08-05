@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import CTASection from "../components/common/CTASection";
 import CardGrid from "../components/common/CardGrid";
 import PageHero from "../components/common/PageHero";
@@ -9,11 +9,7 @@ import {
   createBreadcrumbSchema,
   createWebPageSchema,
 } from "../components/seo/seoUtils";
-import {
-  aboutContent,
-  aboutMetrics,
-  aboutValues,
-} from "../data/about";
+import { getAboutData } from "../data/about";
 import {
   cardItem,
   fadeUp,
@@ -22,31 +18,33 @@ import {
 } from "../componetts/motionPresets";
 
 export default function AboutPage() {
+  const { lang } = useOutletContext();
+  const { content: aboutContent, metrics: aboutMetrics, values: aboutValues } = getAboutData(lang);
+  const en = lang === "en";
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath="/about"
-        title="عن كادينا"
-        description="تعرّف على قصة مركز كادينا الطبي في الرياض منذ عام 2013، ورؤيته ورسالته وقيمه في الرعاية الاستشارية المتخصصة."
+        title={en ? "About Kadina" : "عن كادينا"}
+        description={en ? "Learn about Kadina Medical Center's story in Riyadh since 2013, its vision, mission and values in specialist consultant care." : "تعرّف على قصة مركز كادينا الطبي في الرياض منذ عام 2013، ورؤيته ورسالته وقيمه في الرعاية الاستشارية المتخصصة."}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "عن كادينا", path: "/about" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "About Kadina" : "عن كادينا", path: "/about" },
           ]),
           createWebPageSchema({
-            name: "عن كادينا",
-            description:
-              "قصة مركز كادينا الطبي، ورؤيته ورسالته وقيمه في الرعاية الاستشارية المتخصصة.",
+            name: en ? "About Kadina" : "عن كادينا",
+            description: en ? "The story, vision, mission and values of Kadina Medical Center." : "قصة مركز كادينا الطبي، ورؤيته ورسالته وقيمه في الرعاية الاستشارية المتخصصة.",
             path: "/about",
           }),
         ]}
       />
 
       <PageHero
-        breadcrumbLabel="عن كادينا"
-        eyebrow="منذ عام 2013"
-        title="عن كادينا"
-        description="من نحن، ولماذا نستحق أن نلمس وجهك."
+        breadcrumbLabel={en ? "About Kadina" : "عن كادينا"}
+        eyebrow={en ? "Since 2013" : "منذ عام 2013"}
+        title={en ? "About Kadina" : "عن كادينا"}
+        description={aboutContent.intro}
       />
 
       {/* قصتنا */}
@@ -54,8 +52,8 @@ export default function AboutPage() {
         <div className="mx-auto grid max-w-7xl items-start gap-10 lg:grid-cols-2 lg:gap-14">
           <div>
             <SectionTitle
-              eyebrow="قصتنا"
-              title="مركز واحد يجمع الخبرة والتقنية"
+              eyebrow={en ? "Our Story" : "قصتنا"}
+              title={en ? "One center combining expertise and technology" : "مركز واحد يجمع الخبرة والتقنية"}
             />
 
             <motion.p
@@ -80,10 +78,10 @@ export default function AboutPage() {
               className="rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-6 shadow-[0_18px_45px_rgba(76,44,0,0.08)] sm:p-7"
               variants={cardItem}
             >
-              <p className="text-sm font-black text-[#cf7d11]">رؤيتنا</p>
+              <p className="text-sm font-black text-[#cf7d11]">{en ? "Our Vision" : "رؤيتنا"}</p>
 
               <h2 className="mt-2 text-xl font-black text-[#4c2c00]">
-                أن نكون المرجع الأول
+                {en ? "To be the leading reference" : "أن نكون المرجع الأول"}
               </h2>
 
               <p className="mt-4 leading-8 text-[#4c2c00]/70">
@@ -95,10 +93,10 @@ export default function AboutPage() {
               className="rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-6 shadow-[0_18px_45px_rgba(76,44,0,0.08)] sm:p-7"
               variants={cardItem}
             >
-              <p className="text-sm font-black text-[#cf7d11]">رسالتنا</p>
+              <p className="text-sm font-black text-[#cf7d11]">{en ? "Our Mission" : "رسالتنا"}</p>
 
               <h2 className="mt-2 text-xl font-black text-[#4c2c00]">
-                رعاية تبدأ بتشخيص صادق
+                {en ? "Care that begins with an honest diagnosis" : "رعاية تبدأ بتشخيص صادق"}
               </h2>
 
               <p className="mt-4 leading-8 text-[#4c2c00]/70">
@@ -113,9 +111,9 @@ export default function AboutPage() {
       <section className="bg-[#fff7eb]/70 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <SectionTitle
-            eyebrow="قيمنا الأربع"
-            title="مبادئ تقود كل قرار"
-            description="قيم ثابتة تحكم طريقة التشخيص، واختيار الإجراء، ومتابعة النتيجة."
+            eyebrow={en ? "Our Four Values" : "قيمنا الأربع"}
+            title={en ? "Principles that guide every decision" : "مبادئ تقود كل قرار"}
+            description={en ? "Consistent values that guide diagnosis, procedure selection and result follow-up." : "قيم ثابتة تحكم طريقة التشخيص، واختيار الإجراء، ومتابعة النتيجة."}
           />
 
           <CardGrid className="mt-9 md:grid-cols-2 lg:grid-cols-4">
@@ -149,8 +147,8 @@ export default function AboutPage() {
       <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <SectionTitle
-            eyebrow="لماذا كادينا؟"
-            title="كادينا بالأرقام"
+            eyebrow={en ? "Why Kadina?" : "لماذا كادينا؟"}
+            title={en ? "Kadina in Numbers" : "كادينا بالأرقام"}
             align="center"
           />
 
@@ -189,27 +187,27 @@ export default function AboutPage() {
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#cf7d11] px-7 py-3 text-sm font-black text-[#cf7d11] transition hover:bg-[#fff7eb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#cf7d11] focus-visible:ring-offset-2"
               to="/doctors"
             >
-              قابل أطباءنا
+              {en ? "Meet Our Doctors" : "قابل أطباءنا"}
             </Link>
 
             <a
               className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#cf7d11] px-7 py-3 text-sm font-black text-white shadow-[0_12px_30px_rgba(207,125,17,0.25)] transition hover:bg-[#b86d0e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#cf7d11] focus-visible:ring-offset-2"
               href={`https://wa.me/966114555444?text=${encodeURIComponent(
-                "مرحبًا، أرغب في حجز استشارة في مركز كادينا."
+                en ? "Hello, I would like to book a consultation at Kadina Center." : "مرحبًا، أرغب في حجز استشارة في مركز كادينا."
               )}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              احجز استشارتك عبر واتساب
-              <span className="sr-only"> — يفتح في نافذة جديدة</span>
+              {en ? "Book Your Consultation on WhatsApp" : "احجز استشارتك عبر واتساب"}
+              <span className="sr-only"> — {en ? "opens in a new window" : "يفتح في نافذة جديدة"}</span>
             </a>
           </motion.div>
         </div>
       </section>
 
       <CTASection
-        title="رعاية استشارية تبدأ بتشخيص صادق"
-        description="نبدأ بفهم حالتك، ثم نختار الإجراء والتقنية الأنسب للوصول إلى نتيجة طبيعية ومدروسة."
+        title={en ? "Consultant care that begins with an honest diagnosis" : "رعاية استشارية تبدأ بتشخيص صادق"}
+        description={en ? "We begin by understanding your case, then select the most appropriate procedure and technology for a natural, considered result." : "نبدأ بفهم حالتك، ثم نختار الإجراء والتقنية الأنسب للوصول إلى نتيجة طبيعية ومدروسة."}
       />
     </div>
   );

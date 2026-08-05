@@ -304,3 +304,39 @@ export const doctorDetails = [
 export const doctorDetailsBySlug = Object.fromEntries(
     doctorDetails.map((doctor) => [doctor.slug, doctor]),
 );
+
+const doctorTranslations = {
+    "mohammed-alhaddab": ["Dr. Mohammed Al-Haddab", "Dermatology, Skin Surgery, Laser and Aesthetic Injections Consultant"],
+    "hosam-alghamdi": ["Dr. Hosam Al-Ghamdi", "Dermatology, Skin Surgery and Laser Consultant"],
+    "naif-alshahrani": ["Dr. Naif Al-Shahrani", "Dermatology, Aesthetic Injections and Skin Surgery Consultant"],
+    "ali-alqadi": ["Dr. Ali Al-Qadhi", "Facial and Oculoplastic Surgery Consultant"],
+    "abdulmohsen-allazzam": ["Dr. Abdulmohsen Al-Lazzam", "Plastic and Reconstructive Surgery Consultant"],
+    "abdulaziz-almudaimegh": ["Dr. Abdulaziz Al-Mudaimigh", "Plastic Surgery Consultant"],
+    "waleed-alghamdi": ["Dr. Waleed Al-Ghamdi", "Hair Transplant, Dermatology, Skin Surgery and Laser Consultant"],
+    "eman-almukhadab": ["Dr. Eman Al-Mukhadab", "Dermatology, Aesthetic Injections, Laser and Hair Loss Consultant"],
+    "munira-alsaleh": ["Dr. Munira Al-Saleh", "Dermatology, Skin Surgery and Laser Consultant"],
+};
+
+const doctorRelationTitles = {
+    "الجلدية": "Dermatology", "الليزر": "Laser", "الحقن التجميلية": "Cosmetic Injectables", "جراحة تجميل الوجه والجفون": "Facial and Eyelid Plastic Surgery", "جراحة التجميل والترميم": "Plastic and Reconstructive Surgery", "جراحة التجميل ونحت القوام": "Plastic Surgery and Body Contouring", "خدمة الشعر": "Hair", "نحت القوام": "Body Contouring", "تساقط الشعر": "Hair Loss",
+};
+
+export function getDoctorDetail(slug, lang = "ar") {
+    const doctor = doctorDetailsBySlug[slug];
+    if (!doctor || lang !== "en") return doctor;
+    const [name, specialty] = doctorTranslations[slug];
+    const localizeItems = (items) => items.map((item) => ({ ...item, title: doctorRelationTitles[item.title] || item.title }));
+    return {
+        ...doctor,
+        name,
+        title: "Consultant",
+        specialty,
+        services: localizeItems(doctor.services),
+        solutions: localizeItems(doctor.solutions),
+        whatsappMessage: `Hello, I would like to book a consultation with ${name} at Kadina Center.`,
+    };
+}
+
+export function getDoctorDetails(lang = "ar") {
+    return doctorDetails.map((doctor) => getDoctorDetail(doctor.slug, lang));
+}

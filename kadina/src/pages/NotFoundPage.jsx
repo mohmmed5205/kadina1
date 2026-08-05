@@ -1,22 +1,26 @@
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useOutletContext } from "react-router-dom";
 import Seo from "../components/seo/Seo";
 import { fadeUp } from "../componetts/motionPresets";
 
 export default function NotFoundPage() {
   const location = useLocation();
+  const { lang } = useOutletContext();
+  const en = lang === "en";
 
   return (
     <>
       <Seo
         canonicalPath={location.pathname}
-        description="الصفحة المطلوبة غير موجودة على موقع كادينا."
+        description={en ? "The requested page was not found on the Kadina website." : "الصفحة المطلوبة غير موجودة على موقع كادينا."}
         noindex
-        title="الصفحة غير موجودة"
+        title={en ? "Page Not Found" : "الصفحة غير موجودة"}
       />
-      <motion.h1 animate="visible" initial="hidden" variants={fadeUp}>
-        Page Not Found
-      </motion.h1>
+      <motion.section className="min-h-[70vh] px-4 pb-20 pt-32 text-center" animate="visible" initial="hidden" variants={fadeUp}>
+        <h1 className="text-3xl font-black text-[#4c2c00]">{en ? "Page Not Found" : "الصفحة غير موجودة"}</h1>
+        <p className="mt-4 text-[#4c2c00]/70">{en ? "We could not find the page you requested." : "لم نتمكن من العثور على الصفحة المطلوبة."}</p>
+        <Link className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08]" to="/">{en ? "Back to Home" : "العودة إلى الرئيسية"}</Link>
+      </motion.section>
     </>
   );
 }

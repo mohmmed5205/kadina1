@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
 import ArticleCard from "../components/blog/ArticleCard";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
@@ -7,7 +8,7 @@ import {
   createBreadcrumbSchema,
   createWebPageSchema,
 } from "../components/seo/seoUtils";
-import { articleCategories, articles } from "../data/articles";
+import { articleCategories, getArticles } from "../data/articles";
 import {
   cardItem,
   fadeUp,
@@ -16,42 +17,44 @@ import {
 } from "../componetts/motionPresets";
 
 export default function BlogPage() {
-  const publishedArticles = articles.filter(
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const localizedCategories = en ? ["Skin Care", "Hair", "Laser", "Cosmetic Injectables", "Plastic Surgery", "Before & After Procedures"] : articleCategories;
+  const publishedArticles = getArticles(lang).filter(
     (article) => article.status === "published",
   );
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath="/blog"
-        description="مدونة كادينا الطبية: مقالات يكتبها ويراجعها استشاريو كادينا بلا مبالغة ولا تسويق مقنّع."
+        description={en ? "Kadina Medical Blog: articles written and reviewed by Kadina consultants without exaggeration or disguised marketing." : "مدونة كادينا الطبية: مقالات يكتبها ويراجعها استشاريو كادينا بلا مبالغة ولا تسويق مقنّع."}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "المدونة", path: "/blog" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "Blog" : "المدونة", path: "/blog" },
           ]),
           createWebPageSchema({
-            name: "مدونة كادينا الطبية",
-            description:
-              "مقالات يكتبها ويراجعها استشاريو كادينا قبل أي قرار تجميلي.",
+            name: en ? "Kadina Medical Blog" : "مدونة كادينا الطبية",
+            description: en ? "Articles written and reviewed by Kadina consultants before any aesthetic decision." : "مقالات يكتبها ويراجعها استشاريو كادينا قبل أي قرار تجميلي.",
             path: "/blog",
           }),
         ]}
-        title="مدونة كادينا الطبية"
+        title={en ? "Kadina Medical Blog" : "مدونة كادينا الطبية"}
       />
       <PageHero
-        breadcrumbLabel="المدونة"
-        eyebrow="مدونة كادينا"
-        title="دليلك الطبي... قبل أي قرار تجميلي"
-        description="مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا تسويق مقنّع. اقرأ، افهم، ثم قرر."
+        breadcrumbLabel={en ? "Blog" : "المدونة"}
+        eyebrow={en ? "Kadina Blog" : "مدونة كادينا"}
+        title={en ? "Your medical guide before an aesthetic decision" : "دليلك الطبي... قبل أي قرار تجميلي"}
+        description={en ? "Articles written and reviewed by Kadina consultants without exaggeration or disguised marketing. Read, understand, then decide." : "مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا تسويق مقنّع. اقرأ، افهم، ثم قرر."}
       />
 
       <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <SectionTitle
-            eyebrow="التصنيفات"
-            title="تصفّح حسب اهتمامك"
-            description="خطة المحتوى الطبي القادمة في مدونة كادينا."
+            eyebrow={en ? "Categories" : "التصنيفات"}
+            title={en ? "Browse by Interest" : "تصفّح حسب اهتمامك"}
+            description={en ? "The upcoming medical content plan for Kadina's blog." : "خطة المحتوى الطبي القادمة في مدونة كادينا."}
           />
           <motion.div
             className="mt-7 flex flex-wrap gap-3"
@@ -60,7 +63,7 @@ export default function BlogPage() {
             viewport={viewportOnce}
             whileInView="visible"
           >
-            {articleCategories.map((category) => (
+            {localizedCategories.map((category) => (
               <motion.span
                 className="rounded-full border border-[#f8aa2d]/30 bg-[#fff7eb] px-4 py-2 text-sm font-black text-[#4c2c00]"
                 key={category}
@@ -78,8 +81,8 @@ export default function BlogPage() {
           {publishedArticles.length > 0 ? (
             <>
               <SectionTitle
-                eyebrow="المقالات"
-                title="أحدث مقالات كادينا"
+                eyebrow={en ? "Articles" : "المقالات"}
+                title={en ? "Latest Kadina Articles" : "أحدث مقالات كادينا"}
               />
               <motion.div
                 className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
@@ -104,11 +107,10 @@ export default function BlogPage() {
               whileInView="visible"
             >
               <h2 className="text-2xl font-black text-[#4c2c00] sm:text-3xl">
-                المقالات قريبًا
+                {en ? "Articles Coming Soon" : "المقالات قريبًا"}
               </h2>
               <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#4c2c00]/68">
-                مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا
-                تسويق مقنّع.
+                {en ? "Articles written and reviewed by Kadina consultants, without exaggeration or disguised marketing." : "مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا تسويق مقنّع."}
               </p>
             </motion.div>
           )}

@@ -218,3 +218,91 @@ export const servicePages = [
 export const servicePagesBySlug = Object.fromEntries(
   servicePages.map((service) => [service.slug, service]),
 );
+
+const servicePageTranslations = {
+  dermatology: {
+    title: "Dermatology",
+    subtitle: "Your skin deserves a diagnosis, not a guess",
+    intro: "We begin with an accurate consultant assessment, then select the most appropriate protocol: medication, devices, laser, or advanced care sessions. This includes melasma and eczema, dark circles, sebaceous cysts, and nail concerns.",
+    seoSubtitle: "Your skin deserves a diagnosis, not a guess",
+    seoDescription: "From melasma and eczema to dark circles, sebaceous cysts and nail concerns, we begin with an accurate consultant diagnosis before selecting medication, laser or advanced care sessions.",
+    relatedDevices: ["Pigmentation and acne marks", "Scars", "Stretch marks", "Skin care", "Skin care"],
+    seoFaq: [
+      { question: "How does a dermatology treatment plan begin at Kadina?", answer: "We begin with an accurate consultant diagnosis, then choose the most appropriate protocol: medication, laser, or advanced care sessions." },
+      { question: "Which conditions are included in dermatology care?", answer: "Melasma, eczema, dark circles, sebaceous cysts, nail concerns, scars, acne marks, pigmentation and stretch marks." },
+    ],
+    ctaLabel: "Book a Dermatology Consultation",
+    whatsappMessage: "Hello, I would like to book a dermatology consultation at Kadina Center.",
+  },
+  laser: {
+    title: "Laser",
+    subtitle: "Laser hair removal to a world-class standard",
+    intro: "We do not have just one laser device, but three leading systems: GentleMax Pro and GentleMax Pro Plus by Candela in the United States, and Clarity by Lutronic. Each skin and hair type has an optimal device and setting, with cooling systems that make sessions faster and more comfortable.",
+    seoSubtitle: "Laser hair removal to a world-class standard",
+    seoDescription: "Kadina uses three leading laser systems: GentleMax Pro, GentleMax Pro Plus and Clarity. The device and settings are selected for each skin and hair type, with cooling for a faster, more comfortable session.",
+    seoFaq: [
+      { question: "How many laser hair removal devices does Kadina have?", answer: "Three leading devices: GentleMax Pro, GentleMax Pro Plus and Clarity." },
+      { question: "How are the device and settings selected?", answer: "The optimal device and settings are selected for each skin and hair type after a skin assessment." },
+    ],
+    ctaLabel: "Book a Complimentary Skin Assessment",
+    whatsappMessage: "Hello, I would like to book an assessment for laser services at Kadina Center.",
+  },
+  "plastic-surgery": {
+    title: "Plastic Surgery",
+    subtitle: "Surgery that puts safety before beauty",
+    intro: "Face and eyelid lifts, facial and nasal surgery, breast surgery (lift, augmentation and reduction), liposuction and body contouring, tummy and arm lifts, and reconstructive and burn repair—performed by four plastic surgery consultants, including a consultant specializing in reconstruction and burns.",
+    seoSubtitle: "Surgery that puts safety before beauty",
+    seoDescription: "Facial and nasal surgery, face and eyelid lifts, breast surgery, liposuction and body contouring, tummy and arm lifts, and reconstructive repair, performed by four plastic surgery consultants.",
+    seoFaq: [
+      { question: "Which areas are covered by plastic surgery?", answer: "Facial and nasal surgery, face and eyelid lifts, breast surgery, liposuction and body contouring, tummy and arm lifts, and reconstructive repair." },
+      { question: "How many plastic surgery consultants work at Kadina?", answer: "Four plastic surgery consultants, including a consultant specializing in reconstruction and burns." },
+    ],
+    ctaLabel: "Book a Private Surgical Consultation",
+    whatsappMessage: "Hello, I would like to book a private plastic surgery consultation at Kadina Center.",
+  },
+  hair: {
+    title: "Hair",
+    subtitle: "Understand the cause before considering a transplant",
+    intro: "Hair loss is not one condition, so we do not treat it with one solution. Options range from high-concentration Magellan PRP and Regenera Activa using cells from your own scalp to FUE hair transplantation—diagnosis first, followed by the most appropriate solution.",
+    seoSubtitle: "Understand the cause before considering a transplant",
+    seoDescription: "Hair loss is not one condition, so treatment may include Magellan PRP, Regenera Activa or FUE hair transplantation. Diagnosis comes first, then the most appropriate solution.",
+    seoFaq: [
+      { question: "Why does hair-loss care begin with a diagnosis?", answer: "Hair loss is not one condition and cannot be treated with one solution. Diagnosis comes first, followed by the most appropriate option." },
+      { question: "Which hair treatment options are mentioned?", answer: "High-concentration Magellan PRP, Regenera Activa and FUE hair transplantation." },
+    ],
+    ctaLabel: "Book a Hair Assessment",
+    whatsappMessage: "Hello, I would like to book a hair assessment at Kadina Center.",
+  },
+  injectables: {
+    title: "Cosmetic Injectables",
+    subtitle: "A result everyone notices, without knowing why",
+    intro: "Our approach to Botox, fillers and plasma treatments is balanced, natural beauty.",
+    additionalParagraphs: ["Botox preserves your expressions, filler restores volume without excess, and plasma renews radiance using your own blood—all in the hands of leading aesthetic injection consultants in the Kingdom."],
+    seoSubtitle: "A result everyone notices, without knowing why",
+    seoDescription: "Our approach to Botox, fillers and plasma treatments is balanced, natural beauty: preserved expression, restored volume without excess and renewed radiance.",
+    seoFaq: [
+      { question: "What is Kadina's approach to cosmetic injectables?", answer: "Balanced, natural beauty." },
+      { question: "Which injectable options are mentioned?", answer: "Botox to preserve expression, filler to restore volume without excess, and plasma to renew radiance using your own blood." },
+    ],
+    ctaLabel: "Book a Cosmetic Injectables Consultation",
+    whatsappMessage: "Hello, I would like to book a cosmetic injectables consultation at Kadina Center.",
+  },
+};
+
+export function getServicePage(slug, lang = "ar") {
+  const service = servicePagesBySlug[slug];
+  if (!service || lang !== "en") return service;
+  const translation = servicePageTranslations[slug];
+  return {
+    ...service,
+    ...translation,
+    relatedDevices: service.relatedDevices.map((device, index) => ({
+      ...device,
+      use: translation.relatedDevices?.[index] ?? device.use,
+    })),
+  };
+}
+
+export function getServicePages(lang = "ar") {
+  return servicePages.map((service) => getServicePage(service.slug, lang));
+}

@@ -32,11 +32,11 @@ export default function HomePage() {
         description={t.hero.seoDescription ?? t.hero.description}
         image="/homeBG.webp"
         jsonLd={createWebPageSchema({
-          name: "مركز كادينا الطبي للجلدية والتجميل والليزر بالرياض",
+          name: lang === "ar" ? "مركز كادينا الطبي للجلدية والتجميل والليزر بالرياض" : "Kadina Medical Center for Dermatology, Aesthetics and Laser in Riyadh",
           description: t.hero.seoDescription ?? t.hero.description,
           path: "/",
         })}
-        title="مركز كادينا الطبي للجلدية والتجميل والليزر بالرياض"
+        title={lang === "ar" ? "مركز كادينا الطبي للجلدية والتجميل والليزر بالرياض" : "Kadina Medical Center for Dermatology, Aesthetics and Laser in Riyadh"}
       />
       <Hero t={t} lang={lang} />
       <HomeTrustSection />

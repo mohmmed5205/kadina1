@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useOutletContext } from "react-router-dom";
 import Breadcrumbs from "../common/Breadcrumbs";
 import SectionTitle from "../common/SectionTitle";
 import Seo from "../seo/Seo";
@@ -8,7 +8,7 @@ import {
   createBreadcrumbSchema,
   createWebPageSchema,
 } from "../seo/seoUtils";
-import { doctorDetails } from "../../data/doctors";
+import { getDoctorDetail, getDoctorDetails } from "../../data/doctors";
 import { createWhatsappUrl } from "../../utils/whatsapp";
 import {
   cardItem,
@@ -42,21 +42,23 @@ function LinkCards({ items }) {
   );
 }
 
-export default function DoctorPageTemplate({ doctor }) {
+export default function DoctorPageTemplate({ doctor: rawDoctor }) {
   const location = useLocation();
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const doctor = rawDoctor ? getDoctorDetail(rawDoctor.slug, lang) : null;
 
   if (!doctor) {
     return (
       <>
         <Seo
           canonicalPath={location.pathname}
-          description="تعذر العثور على صفحة الطبيب المطلوبة."
+          description={en ? "The requested doctor page could not be found." : "تعذر العثور على صفحة الطبيب المطلوبة."}
           noindex
-          title="الطبيب غير موجود"
+          title={en ? "Doctor Not Found" : "الطبيب غير موجود"}
         />
         <section
           className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8"
-          dir="rtl"
         >
           <motion.div
             animate="visible"
@@ -65,16 +67,16 @@ export default function DoctorPageTemplate({ doctor }) {
             variants={fadeUp}
           >
             <h1 className="text-3xl font-black text-[#4c2c00]">
-              الطبيب غير موجود
+              {en ? "Doctor Not Found" : "الطبيب غير موجود"}
             </h1>
             <p className="mt-4 leading-8 text-[#4c2c00]/68">
-              لم نتمكن من العثور على الطبيب المطلوب.
+              {en ? "We could not find the requested doctor." : "لم نتمكن من العثور على الطبيب المطلوب."}
             </p>
             <Link
               className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
               to="/doctors"
             >
-              العودة إلى الأطباء
+              {en ? "Back to Doctors" : "العودة إلى الأطباء"}
             </Link>
           </motion.div>
         </section>
@@ -93,7 +95,7 @@ export default function DoctorPageTemplate({ doctor }) {
     ...(doctor.image && { image: absoluteUrl(doctor.image) }),
   };
   const doctorServicePaths = new Set(doctor.services.map((item) => item.to));
-  const relatedDoctors = doctorDetails
+  const relatedDoctors = getDoctorDetails(lang)
     .filter(
       (candidate) =>
         candidate.slug !== doctor.slug &&
@@ -110,15 +112,15 @@ export default function DoctorPageTemplate({ doctor }) {
   const whatsappUrl = createWhatsappUrl(doctor.whatsappMessage);
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath={canonicalPath}
         description={seoDescription}
         image={doctor.image}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "الأطباء", path: "/doctors" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "Doctors" : "الأطباء", path: "/doctors" },
             { name: doctor.name, path: canonicalPath },
           ]),
           createWebPageSchema({
@@ -136,7 +138,7 @@ export default function DoctorPageTemplate({ doctor }) {
         <div className="relative mx-auto max-w-7xl">
           <Breadcrumbs
             items={[
-              { label: "الأطباء", to: "/doctors" },
+              { label: en ? "Doctors" : "الأطباء", to: "/doctors" },
               { label: doctor.name },
             ]}
           />
@@ -185,7 +187,7 @@ export default function DoctorPageTemplate({ doctor }) {
               )}
               {doctor.yearsOfExperience !== null && (
                 <div className="mt-7 inline-flex rounded-full border border-[#f8aa2d]/30 bg-[#f8aa2d]/12 px-5 py-3 font-black text-[#4c2c00]">
-                  الخبرة: {doctor.yearsOfExperience} سنة
+                  {en ? "Experience" : "الخبرة"}: {doctor.yearsOfExperience} {en ? "years" : "سنة"}
                 </div>
               )}
             </div>
@@ -196,7 +198,7 @@ export default function DoctorPageTemplate({ doctor }) {
       {focusAreas.length > 0 && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle eyebrow={doctor.name} title="مجالات التميز" />
+            <SectionTitle eyebrow={doctor.name} title={en ? "Areas of Expertise" : "مجالات التميز"} />
             <motion.ul
               className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
               initial="hidden"
@@ -229,19 +231,19 @@ export default function DoctorPageTemplate({ doctor }) {
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-3">
             {doctor.services.length > 0 && (
               <div>
-                <SectionTitle title="الخدمات المرتبطة" />
+                <SectionTitle title={en ? "Related Services" : "الخدمات المرتبطة"} />
                 <LinkCards items={doctor.services} />
               </div>
             )}
             {doctor.devices.length > 0 && (
               <div>
-                <SectionTitle title="الأجهزة المرتبطة" />
+                <SectionTitle title={en ? "Related Devices" : "الأجهزة المرتبطة"} />
                 <LinkCards items={doctor.devices} />
               </div>
             )}
             {doctor.solutions.length > 0 && (
               <div>
-                <SectionTitle title="الحلول المرتبطة" />
+                <SectionTitle title={en ? "Related Solutions" : "الحلول المرتبطة"} />
                 <LinkCards items={doctor.solutions} />
               </div>
             )}
@@ -252,7 +254,7 @@ export default function DoctorPageTemplate({ doctor }) {
       {doctor.socialLinks.length > 0 && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle title="حسابات الطبيب" />
+            <SectionTitle title={en ? "Doctor's Accounts" : "حسابات الطبيب"} />
             <motion.div
               className="mt-6 flex flex-wrap gap-3"
               initial="hidden"
@@ -262,7 +264,7 @@ export default function DoctorPageTemplate({ doctor }) {
             >
               {doctor.socialLinks.map((socialLink) => (
                 <motion.a
-                  aria-label={`${socialLink.label} (يفتح في نافذة جديدة)`}
+                  aria-label={`${socialLink.label} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
                   className="rounded-full border border-[#f8aa2d]/30 bg-[#fff7eb] px-5 py-3 font-black text-[#4c2c00]"
                   href={socialLink.url}
                   key={socialLink.url}
@@ -281,7 +283,7 @@ export default function DoctorPageTemplate({ doctor }) {
       {relatedDoctors.length > 0 && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle title="أطباء ذوو تخصص قريب" />
+            <SectionTitle title={en ? "Doctors with Related Specialties" : "أطباء ذوو تخصص قريب"} />
             <motion.div
               className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
               initial="hidden"
@@ -318,23 +320,23 @@ export default function DoctorPageTemplate({ doctor }) {
       >
         <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
           <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
-            احجز مع {doctor.name}
+            {en ? "Book with" : "احجز مع"} {doctor.name}
           </h2>
           <a
-            aria-label="احجز استشارتك عبر واتساب (يفتح في نافذة جديدة)"
+            aria-label={en ? "Book your consultation on WhatsApp (opens in a new window)" : "احجز استشارتك عبر واتساب (يفتح في نافذة جديدة)"}
             className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
             href={whatsappUrl}
             rel="noopener noreferrer"
             target="_blank"
           >
-            احجز استشارتك عبر واتساب
+            {en ? "Book Your Consultation on WhatsApp" : "احجز استشارتك عبر واتساب"}
           </a>
           <div>
             <Link
               className="mt-6 inline-block font-black text-[#fff7eb]/75 underline decoration-[#f8aa2d]/45 underline-offset-8 transition hover:text-[#f8aa2d]"
               to="/doctors"
             >
-              العودة إلى جميع الأطباء
+              {en ? "Back to All Doctors" : "العودة إلى جميع الأطباء"}
             </Link>
           </div>
         </div>

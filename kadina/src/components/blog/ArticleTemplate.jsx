@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useOutletContext } from "react-router-dom";
 import Breadcrumbs from "../common/Breadcrumbs";
 import SectionTitle from "../common/SectionTitle";
 import Seo from "../seo/Seo";
@@ -9,6 +9,7 @@ import {
   createWebPageSchema,
 } from "../seo/seoUtils";
 import { createWhatsappUrl } from "../../utils/whatsapp";
+import { getArticle } from "../../data/articles";
 import {
   cardItem,
   fadeUp,
@@ -18,22 +19,22 @@ import {
 
 const MotionLink = motion.create(Link);
 
-export default function ArticleTemplate({ article }) {
+export default function ArticleTemplate({ article: rawArticle }) {
   const location = useLocation();
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const article = rawArticle ? getArticle(rawArticle.slug, lang) : null;
 
   if (!article || article.status !== "published") {
     return (
       <>
         <Seo
           canonicalPath={location.pathname}
-          description="المقال المطلوب غير متاح للنشر حاليًا."
+          description={en ? "The requested article is not currently available for publication." : "المقال المطلوب غير متاح للنشر حاليًا."}
           noindex
-          title="المقال غير متاح حاليًا"
+          title={en ? "Article Currently Unavailable" : "المقال غير متاح حاليًا"}
         />
-        <section
-          className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8"
-          dir="rtl"
-        >
+        <section className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8">
           <motion.div
             animate="visible"
             className="mx-auto max-w-3xl rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-12"
@@ -41,16 +42,16 @@ export default function ArticleTemplate({ article }) {
             variants={fadeUp}
           >
             <h1 className="text-3xl font-black text-[#4c2c00]">
-              المقال غير متاح حاليًا
+              {en ? "Article Currently Unavailable" : "المقال غير متاح حاليًا"}
             </h1>
             <p className="mt-4 leading-8 text-[#4c2c00]/68">
-              يمكنك العودة إلى المدونة للاطلاع على المقالات المتاحة.
+              {en ? "Return to the blog to view available articles." : "يمكنك العودة إلى المدونة للاطلاع على المقالات المتاحة."}
             </p>
             <Link
               className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
               to="/blog"
             >
-              العودة إلى المدونة
+              {en ? "Back to Blog" : "العودة إلى المدونة"}
             </Link>
           </motion.div>
         </section>
@@ -84,15 +85,15 @@ export default function ArticleTemplate({ article }) {
   const whatsappUrl = createWhatsappUrl(article.whatsappMessage);
 
   return (
-    <article dir="rtl">
+    <article>
       <Seo
         canonicalPath={canonicalPath}
         description={seoDescription}
         image={article.coverImage}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "المدونة", path: "/blog" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "Blog" : "المدونة", path: "/blog" },
             { name: article.title, path: canonicalPath },
           ]),
           createWebPageSchema({
@@ -115,7 +116,7 @@ export default function ArticleTemplate({ article }) {
         >
           <Breadcrumbs
             items={[
-              { label: "المدونة", to: "/blog" },
+              { label: en ? "Blog" : "المدونة", to: "/blog" },
               { label: article.title },
             ]}
           />
@@ -127,18 +128,18 @@ export default function ArticleTemplate({ article }) {
           </h1>
           <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold text-[#4c2c00]/60">
             {article.publishedAt && (
-              <span>تاريخ النشر: {article.publishedAt}</span>
+              <span>{en ? "Published" : "تاريخ النشر"}: {article.publishedAt}</span>
             )}
             {article.updatedAt && (
-              <span>آخر تحديث: {article.updatedAt}</span>
+              <span>{en ? "Last Updated" : "آخر تحديث"}: {article.updatedAt}</span>
             )}
             {article.readingTime && (
-              <span>وقت القراءة: {article.readingTime}</span>
+              <span>{en ? "Reading Time" : "وقت القراءة"}: {article.readingTime}</span>
             )}
           </div>
           {article.reviewedBy && (
             <p className="mt-4 font-bold text-[#4c2c00]/65">
-              راجعه طبيًا: {article.reviewedBy}
+              {en ? "Medically Reviewed by" : "راجعه طبيًا"}: {article.reviewedBy}
             </p>
           )}
         </motion.div>
@@ -193,7 +194,7 @@ export default function ArticleTemplate({ article }) {
       {relatedLinks.length > 0 && (
         <section className="bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-5xl">
-            <SectionTitle title="روابط ذات صلة" />
+            <SectionTitle title={en ? "Related Links" : "روابط ذات صلة"} />
             <motion.div
               className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
               initial="hidden"
@@ -225,16 +226,16 @@ export default function ArticleTemplate({ article }) {
       >
         <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
           <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
-            استفسر عن موضوع المقال
+            {en ? "Ask About This Article" : "استفسر عن موضوع المقال"}
           </h2>
           <a
-            aria-label="استفسر عبر واتساب (يفتح في نافذة جديدة)"
+            aria-label={en ? "Ask on WhatsApp (opens in a new window)" : "استفسر عبر واتساب (يفتح في نافذة جديدة)"}
             className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
             href={whatsappUrl}
             rel="noopener noreferrer"
             target="_blank"
           >
-            استفسر عبر واتساب
+            {en ? "Ask on WhatsApp" : "استفسر عبر واتساب"}
           </a>
         </div>
       </motion.section>

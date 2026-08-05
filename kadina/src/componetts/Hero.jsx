@@ -6,11 +6,13 @@ import { createWhatsappUrl } from "../utils/whatsapp";
 
 const OffersModal = lazy(() => import("./OffersModal"));
 const MotionLink = motion.create(Link);
-const bookingMessage = "مرحبًا، أرغب في حجز استشارة في مركز كادينا.";
-
 export default function Hero({ t, lang = "ar" }) {
   const [isOffersOpen, setIsOffersOpen] = useState(false);
-  const whatsappUrl = createWhatsappUrl(bookingMessage);
+  const whatsappUrl = createWhatsappUrl(
+    lang === "ar"
+      ? "مرحبًا، أرغب في حجز استشارة في مركز كادينا."
+      : "Hello, I would like to book a consultation at Kadina Center.",
+  );
 
   return (
     <>

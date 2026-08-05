@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import Seo from "../components/seo/Seo";
@@ -42,34 +43,44 @@ const faqItems = [
   },
 ];
 
+const faqItemsEn = [
+  { question: "What is the difference between your three laser devices, and which is right for me?", answer: "Each device has strengths based on skin type, hair and treatment area. We therefore begin with an assessment in which the doctor selects the optimal device and settings for you." },
+  { question: "Is HIFU a genuine alternative to surgical lifting?", answer: "For mild to moderate laxity, Ultraformer III can provide noticeable non-surgical tightening and lifting. Advanced cases may be better suited to surgery, which we explain honestly during consultation." },
+  { question: "Will Botox and filler results look artificial?", answer: "Our philosophy is natural beauty: a result others notice without knowing why." },
+  { question: "What is the difference between Regenera and PRP for hair loss?", answer: "PRP nourishes and strengthens follicles, while Regenera stimulates them using micrografts from your own scalp. A doctor may combine them in one plan depending on your case." },
+  { question: "What are your opening hours and where are you located?", answer: "Riyadh — Northern Ring Road, Monday to Friday, 9:00 AM to 10:00 PM." },
+];
+
 export default function FaqPage() {
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const localizedFaqItems = en ? faqItemsEn : faqItems;
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath="/faq"
-        description="إجابات كادينا عن أجهزة الليزر والهايفو والبوتوكس والفيلر وعلاجات تساقط الشعر والموقع ومواعيد العمل."
+        description={en ? "Kadina answers about laser devices, HIFU, Botox, fillers, hair-loss treatments, location and opening hours." : "إجابات كادينا عن أجهزة الليزر والهايفو والبوتوكس والفيلر وعلاجات تساقط الشعر والموقع ومواعيد العمل."}
         jsonLd={[
           createBreadcrumbSchema([
-            { name: "الرئيسية", path: "/" },
-            { name: "الأسئلة الشائعة", path: "/faq" },
+            { name: en ? "Home" : "الرئيسية", path: "/" },
+            { name: en ? "FAQ" : "الأسئلة الشائعة", path: "/faq" },
           ]),
           createWebPageSchema({
-            name: "الأسئلة الشائعة",
-            description:
-              "إجابات واضحة عن خدمات وتقنيات كادينا قبل الحجز.",
+            name: en ? "Frequently Asked Questions" : "الأسئلة الشائعة",
+            description: en ? "Clear answers about Kadina services and technologies before booking." : "إجابات واضحة عن خدمات وتقنيات كادينا قبل الحجز.",
             path: "/faq",
           }),
-          createFaqSchema(faqItems),
+          createFaqSchema(localizedFaqItems),
         ]}
-        title="الأسئلة الشائعة"
+        title={en ? "Frequently Asked Questions" : "الأسئلة الشائعة"}
       />
       <PageHero
-        breadcrumbLabel="الأسئلة الشائعة"
-        eyebrow="الأسئلة الشائعة"
-        title="الأسئلة الشائعة"
-        description="إجابات واضحة عن أكثر الأسئلة التي تسبق قرارك."
+        breadcrumbLabel={en ? "FAQ" : "الأسئلة الشائعة"}
+        eyebrow={en ? "FAQ" : "الأسئلة الشائعة"}
+        title={en ? "Frequently Asked Questions" : "الأسئلة الشائعة"}
+        description={en ? "Clear answers to the questions most often asked before making a decision." : "إجابات واضحة عن أكثر الأسئلة التي تسبق قرارك."}
       />
 
       <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
@@ -81,7 +92,7 @@ export default function FaqPage() {
             viewport={viewportOnce}
             whileInView="visible"
           >
-            {faqItems.map((faq, index) => {
+            {localizedFaqItems.map((faq, index) => {
               const isOpen = openIndex === index;
               const panelId = `faq-panel-${index}`;
               const buttonId = `faq-button-${index}`;
@@ -96,7 +107,7 @@ export default function FaqPage() {
                     <button
                       aria-controls={panelId}
                       aria-expanded={isOpen}
-                      className="flex w-full items-center justify-between gap-5 px-5 py-5 text-right text-base font-black text-[#4c2c00] outline-none transition hover:bg-[#f8aa2d]/10 focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#f8aa2d]/35 sm:px-6 sm:text-lg"
+                      className="flex w-full items-center justify-between gap-5 px-5 py-5 text-start text-base font-black text-[#4c2c00] outline-none transition hover:bg-[#f8aa2d]/10 focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#f8aa2d]/35 sm:px-6 sm:text-lg"
                       id={buttonId}
                       onClick={() =>
                         setOpenIndex((current) =>
@@ -132,10 +143,10 @@ export default function FaqPage() {
       </section>
 
       <CTASection
-        title="ما لقيت إجابة لسؤالك؟"
-        description="تواصل معنا عبر واتساب، وسنساعدك في الوصول إلى الإجابة أو القسم المناسب."
-        primaryLabel="اسألنا عبر واتساب"
-        whatsappMessage="مرحبًا، لدي استفسار عن خدمات مركز كادينا."
+        title={en ? "Did Not Find Your Answer?" : "ما لقيت إجابة لسؤالك؟"}
+        description={en ? "Contact us on WhatsApp and we will help you find the answer or the appropriate department." : "تواصل معنا عبر واتساب، وسنساعدك في الوصول إلى الإجابة أو القسم المناسب."}
+        primaryLabel={en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}
+        whatsappMessage={en ? "Hello, I have a question about Kadina Center services." : "مرحبًا، لدي استفسار عن خدمات مركز كادينا."}
       />
     </div>
   );

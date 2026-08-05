@@ -599,6 +599,105 @@ export const deviceDetailsBySlug = Object.fromEntries(
     deviceDetails.map((device) => [device.slug, device]),
 );
 
+export function getDeviceSummaries(lang = "ar") {
+    const localizedItems = devices[lang]?.items ?? devices.ar.items;
+    const itemsByImage = new Map(
+        localizedItems.map((item) => [item.image, item]),
+    );
+
+    return deviceDetails.map((device) => {
+        const localizedItem = itemsByImage.get(device.image);
+
+        return {
+            ...device,
+            displayName:
+                localizedItem?.name ??
+                (lang === "en" ? device.englishName : device.arabicName),
+            cardDescription:
+                localizedItem?.description ?? device.uses?.[0] ?? "",
+        };
+    });
+}
+
+const deviceDetailTranslations = {
+  "gentlemax-pro": {
+    country: "United States", tagline: "A global gold standard in laser hair removal and a trusted name among informed clients.", mechanism: "Combines two wavelengths in one device: Alexandrite 755 nm for lighter skin and Nd:YAG 1064 nm for medium and darker skin, making it suitable for different skin and hair types.",
+    uses: ["Removal of unwanted hair for all skin types", "Fast sessions for both large and precise areas"], benefits: ["Synchronized cooling reduces heat sensation during each pulse", "Fast sessions with globally recognized safety precision"], suitableFor: ["All skin types; the doctor selects the optimal wavelength and settings during assessment."],
+  },
+  "gentlemax-pro-plus": {
+    country: "United States", tagline: "The latest, more powerful generation of the GentleMax family, with the same trusted safety and greater speed and effectiveness.", mechanism: "Uses Alexandrite 755 nm and Nd:YAG 1064 nm at higher power, with multiple spot sizes for greater flexibility according to skin type, hair and treatment area.",
+    uses: ["Effective hair removal to reduce growth on the face and body", "Noticeable progressive results over the course of sessions"], benefits: ["Faster, more comfortable sessions with multiple cooling technologies", "Multiple spot sizes cover large areas in less time", "Flexible settings for multiple skin tones"], suitableFor: ["Those seeking faster results and shorter sessions, particularly for large areas."],
+  },
+  clarity: {
+    country: "South Korea", tagline: "A dual-wavelength laser combining precision and speed for treating multiple areas in one session.", mechanism: "Targets melanin in the hair follicle with precise pulses, while continuous cooling lowers heat sensation throughout the session.",
+    uses: ["Precise, fast laser hair removal", "Suitable for multiple areas in a single session"], benefits: ["Effective cooling reduces heat sensation", "Precise follicle targeting while protecting surrounding tissue"], suitableFor: ["Those who prefer a comfortable session covering more than one area."],
+  },
+  "fractional-co2": {
+    tagline: "A leading global technology for resurfacing skin affected by acne scars, scarring and enlarged pores.", mechanism: "Delivers a fractionated laser beam that creates microscopic treatment columns, stimulating natural renewal and new collagen to rebuild the skin surface.",
+    uses: ["Improving acne marks and scars", "Renewing skin and evening its texture", "Reducing enlarged pores"], benefits: ["Cumulative results improve as collagen develops", "Supports smoother, more radiant skin"], suitableFor: ["People with acne scars, other scars and enlarged pores."],
+  },
+  spectra: {
+    country: "South Korea", tagline: "A specialized pigmentation technology for uneven skin tone.", mechanism: "Uses ultra-short laser pulses to break pigment into tiny particles that the body clears naturally without damaging surrounding skin.",
+    uses: ["Improving pigmentation and evening skin tone", "Enhancing skin radiance", "Reducing acne marks and the appearance of pores"], benefits: ["Precise pigmentation targeting without a long recovery period", "Suitable for regular radiance sessions"], suitableFor: ["People with pigmentation, superficial melasma or uneven skin tone."],
+  },
+  "bi-one-lifetouch": {
+    tagline: "A specialized option for two persistent concerns: stretch marks and scars.", mechanism: "Safely stimulates tissue renewal and increases collagen and elastin production to improve skin quality and elasticity.",
+    uses: ["Treating red and white stretch marks and improving tone", "Improving surgical scars and acne scars", "Addressing fine lines and signs of aging on the face and neck", "Supporting skin tightening and body definition"], benefits: ["Treats both red and white stretch marks", "Naturally stimulates collagen and elastin without surgery"], suitableFor: ["After pregnancy or weight changes, and for people with surgical scars."],
+  },
+  hydrafacial: {
+    tagline: "A widely known radiance treatment and a popular option before special occasions.", mechanism: "A spiral water-based technology that cleanses, exfoliates and hydrates in sequence: gently clearing buildup and pores, then infusing nourishing hydrating serums.",
+    uses: ["Deep skin cleansing and hydration", "Purifying pores and removing buildup", "Immediate radiance before events and for routine care"], benefits: ["Radiance and softness from the first session", "No pain or recovery period; return to your routine immediately"], suitableFor: ["Suitable for everyone and an ideal first step in a skin-care journey."],
+  },
+  dermafacial: {
+    tagline: "An advanced care session combining cleansing and stimulation in one protocol.", mechanism: "Combines cleansing and skin stimulation through multiple applicators to improve pores, dullness and skin texture.",
+    uses: ["Improving pores, dullness and skin texture", "Enhancing radiance and preparing skin for care or light aesthetic procedures"], benefits: ["An ideal preparatory protocol before aesthetic procedures", "Noticeable radiance without a recovery period"], suitableFor: ["Those seeking a step beyond traditional cleansing."],
+  },
+  "ultraformer-iii": {
+    tagline: "Non-surgical lifting and tightening for those seeking improvement without a surgical procedure.", mechanism: "Uses focused ultrasound (HIFU) to reach deeper skin layers and stimulate natural collagen, creating a firmer appearance that develops over time.",
+    uses: ["Tightening facial and neck laxity and improving lines without surgery", "Improving facial definition, jawline and cheek lift", "Improving mild to moderate laxity"], benefits: ["No surgery and no needles", "Results develop gradually as collagen builds over several weeks"], suitableFor: ["Those noticing early laxity who want prevention or correction without surgery."],
+  },
+  "matrix-pro": {
+    tagline: "Two technologies in one: microneedles deliver radiofrequency energy to support renewal.", mechanism: "Combines microneedling with radiofrequency energy; the needles deliver energy to a controlled depth to stimulate collagen and tighten skin from within.",
+    uses: ["Improving pores and acne marks", "Smoothing fine lines and overall texture", "Tightening skin and stimulating collagen"], benefits: ["Treats texture and firmness in one protocol", "Adjustable depth according to area and condition"], suitableFor: ["People with enlarged pores and acne marks with early skin laxity."],
+  },
+  "exilis-elite": {
+    tagline: "A body-contouring combination: technology for tightening and localized fat, supported by lymphatic massage.", mechanism: "Exilis Elite tightens skin, stimulates collagen and helps reduce localized fat without surgery. The protocol can include manual lymphatic massage by specialists to support natural drainage and reduce fluid retention and swelling.",
+    uses: ["Tightening skin and stimulating collagen", "Helping reduce localized fat and improve contour without surgery", "Supporting lymphatic drainage and reducing fluid retention"], benefits: ["Each service can be used independently or combined in an integrated plan", "A non-surgical option for improving body contour"], suitableFor: ["Those seeking contour improvement without liposuction or surgery."],
+  },
+  "regenera-activa": {
+    tagline: "An advanced hair-loss treatment that uses cells from your own scalp.", mechanism: "Uses micrografts taken from the scalp, processed and reintroduced into thinning areas to stimulate natural follicle activity.",
+    uses: ["Reducing hair loss", "Supporting natural hair growth in thinning areas"], benefits: ["Uses your own cells rather than foreign material", "A single minimally invasive in-clinic procedure"], suitableFor: ["Early to moderate hair loss before transplantation is needed."],
+  },
+  "magellan-prp": {
+    tagline: "Not all PRP is the same; Magellan is designed to deliver a higher concentration.", mechanism: "An advanced separation system extracts platelet-rich plasma from the client's own blood, which is injected into the scalp to stimulate hair growth.",
+    uses: ["Stimulating hair growth with concentrated PRP", "Strengthening follicles and reducing hair shedding"], benefits: ["Higher platelet concentration than conventional PRP systems", "A treatment derived entirely from your own blood"], suitableFor: ["A useful complement to hair-loss plans and post-transplant care."],
+  },
+};
+
+const deviceCategoryTranslations = {
+  "إزالة الشعر بالليزر": "Laser Hair Removal",
+  "تجديد البشرة وعلاج آثارها": "Skin Renewal & Scar Treatment",
+  "العناية والنضارة": "Skin Care & Radiance",
+  "الشد والنحت غير الجراحي": "Non-surgical Lifting & Contouring",
+  "علاج الشعر": "Hair Treatment",
+};
+
+export function getDeviceDetail(slug, lang = "ar") {
+  const device = deviceDetailsBySlug[slug];
+  if (!device || lang !== "en") return device;
+  const translation = deviceDetailTranslations[slug] || {};
+  return {
+    ...device,
+    ...translation,
+    arabicName: device.englishName,
+    englishName: null,
+    country: translation.country ?? device.country,
+    category: deviceCategoryTranslations[device.category] || device.category,
+    relatedService: { ...device.relatedService, title: device.relatedService.to === "/services/hair" ? "Hair" : device.relatedService.to === "/services/laser" ? "Laser" : device.relatedService.to === "/services/dermatology" ? "Dermatology" : "Services" },
+    whatsappMessage: `Hello, I would like to ask about and book a ${device.englishName} session at Kadina Center.`,
+  };
+}
+
 export const deviceCategories = [
     "إزالة الشعر بالليزر",
     "تجديد البشرة وعلاج آثارها",

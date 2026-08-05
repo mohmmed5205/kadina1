@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
 import CardGrid from "../common/CardGrid";
 import SectionTitle from "../common/SectionTitle";
 import {
@@ -14,6 +15,14 @@ import {
 } from "../../data/contact";
 
 export default function HomeContactSection() {
+  const { lang } = useOutletContext();
+  const localizedItems = contactItems.map((item, index) => lang === "ar" ? item : ({
+    ...item,
+    title: ["Phone", "WhatsApp", "Email"][index],
+    value: index === 1 ? "Instant chat" : item.value,
+    label: ["Call Now", "Start Chat", "Send Email"][index],
+    href: index === 1 ? item.href.replace(encodeURIComponent("للحجز والاستفسار"), encodeURIComponent("Hello, I would like to book or ask about Kadina services.")) : item.href,
+  }));
   return (
     <section
       className="scroll-mt-24 bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
@@ -21,15 +30,15 @@ export default function HomeContactSection() {
     >
       <div className="mx-auto max-w-7xl">
         <SectionTitle
-          eyebrow="تواصل معنا"
-          title="نسمعك قبل أن نعالجك"
-          description="تواصل مع مركز كادينا في الرياض عبر الهاتف أو واتساب أو البريد."
+          eyebrow={lang === "ar" ? "تواصل معنا" : "Contact Us"}
+          title={lang === "ar" ? "نسمعك قبل أن نعالجك" : "We listen before we treat"}
+          description={lang === "ar" ? "تواصل مع مركز كادينا في الرياض عبر الهاتف أو واتساب أو البريد." : "Contact Kadina Center in Riyadh by phone, WhatsApp or email."}
         />
         <CardGrid className="mt-9">
-          {contactItems.map((item) => (
+          {localizedItems.map((item) => (
             <motion.article
               className="rounded-[1.75rem] border border-[#f8aa2d]/25 bg-white/75 p-6 shadow-[0_18px_45px_rgba(76,44,0,0.08)]"
-              key={item.title}
+              key={item.href}
               variants={cardItem}
             >
               <h3 className="text-lg font-black text-[#4c2c00]">
@@ -41,7 +50,7 @@ export default function HomeContactSection() {
               <a
                 aria-label={
                   item.external
-                    ? `${item.label} (يفتح في نافذة جديدة)`
+                    ? `${item.label} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`
                     : undefined
                 }
                 className="mt-6 inline-block font-black text-[#cf7d11]"
@@ -66,29 +75,29 @@ export default function HomeContactSection() {
             className="rounded-[1.75rem] border border-[#4c2c00]/10 bg-white/75 p-6"
             variants={cardItem}
           >
-            <h3 className="text-xl font-black text-[#4c2c00]">الموقع</h3>
+            <h3 className="text-xl font-black text-[#4c2c00]">{lang === "ar" ? "الموقع" : "Location"}</h3>
             <p className="mt-3 leading-8 text-[#4c2c00]/68">
-              {contactAddress}
+              {lang === "ar" ? contactAddress : "Riyadh — Northern Ring Road"}
             </p>
             <a
-              aria-label="افتح الخريطة (يفتح في نافذة جديدة)"
+              aria-label={lang === "ar" ? "افتح الخريطة (يفتح في نافذة جديدة)" : "Open map (opens in a new window)"}
               className="mt-5 inline-block font-black text-[#cf7d11]"
               href={contactMapUrl}
               rel="noopener noreferrer"
               target="_blank"
             >
-              افتح الخريطة
+              {lang === "ar" ? "افتح الخريطة" : "Open Map"}
             </a>
           </motion.article>
           <motion.article
             className="rounded-[1.75rem] border border-[#4c2c00]/10 bg-white/75 p-6"
             variants={cardItem}
           >
-            <h3 className="text-xl font-black text-[#4c2c00]">المواعيد</h3>
+            <h3 className="text-xl font-black text-[#4c2c00]">{lang === "ar" ? "المواعيد" : "Hours"}</h3>
             <p className="mt-3 leading-8 text-[#4c2c00]/68">
-              {contactHours.days}
+              {lang === "ar" ? contactHours.days : "Monday – Friday"}
               <br />
-              {contactHours.time}
+              {lang === "ar" ? contactHours.time : "9:00 AM – 10:00 PM"}
             </p>
           </motion.article>
         </motion.div>

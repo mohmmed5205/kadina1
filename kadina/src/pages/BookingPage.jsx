@@ -1,21 +1,18 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
 import Seo from "../components/seo/Seo";
-import { doctors } from "../data/pagesContent";
+import { getDoctorDetails } from "../data/doctors";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import { fadeUp, viewportOnce } from "../componetts/motionPresets";
 
-const serviceOptions = [
-  "الجلدية",
-  "الليزر",
-  "جراحة التجميل",
-  "الشعر",
-  "الحقن التجميلية",
-  "جلسات العناية",
-];
+const serviceOptions = {
+  ar: ["الجلدية", "الليزر", "جراحة التجميل", "الشعر", "الحقن التجميلية", "جلسات العناية"],
+  en: ["Dermatology", "Laser", "Plastic Surgery", "Hair", "Cosmetic Injectables", "Care Sessions"],
+};
 
 const initialForm = {
   fullName: "",
@@ -26,6 +23,9 @@ const initialForm = {
 };
 
 export default function BookingPage() {
+  const { lang } = useOutletContext();
+  const en = lang === "en";
+  const doctors = getDoctorDetails(lang);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
 
@@ -39,25 +39,25 @@ export default function BookingPage() {
     event.preventDefault();
 
     const nextErrors = {};
-    if (!form.fullName.trim()) nextErrors.fullName = "الاسم الكامل مطلوب.";
+    if (!form.fullName.trim()) nextErrors.fullName = en ? "Full name is required." : "الاسم الكامل مطلوب.";
     if (!/^05\d{8}$/.test(form.mobile)) {
-      nextErrors.mobile = "أدخل رقم جوال سعودي بالصيغة 05xxxxxxxx.";
+      nextErrors.mobile = en ? "Enter a Saudi mobile number in the format 05xxxxxxxx." : "أدخل رقم جوال سعودي بالصيغة 05xxxxxxxx.";
     }
-    if (!form.service) nextErrors.service = "اختر الخدمة.";
+    if (!form.service) nextErrors.service = en ? "Choose a service." : "اختر الخدمة.";
     if (!form.preferredTime) {
-      nextErrors.preferredTime = "اختر الوقت المفضل.";
+      nextErrors.preferredTime = en ? "Choose your preferred time." : "اختر الوقت المفضل.";
     }
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
     const message = [
-      "طلب حجز جديد — مركز كادينا",
-      `الاسم الكامل: ${form.fullName.trim()}`,
-      `رقم الجوال: ${form.mobile}`,
-      `الخدمة: ${form.service}`,
-      `الطبيب: ${form.doctor || "لم يتم الاختيار"}`,
-      `الوقت المفضل: ${form.preferredTime}`,
+      en ? "New booking request — Kadina Center" : "طلب حجز جديد — مركز كادينا",
+      `${en ? "Full name" : "الاسم الكامل"}: ${form.fullName.trim()}`,
+      `${en ? "Mobile number" : "رقم الجوال"}: ${form.mobile}`,
+      `${en ? "Service" : "الخدمة"}: ${form.service}`,
+      `${en ? "Doctor" : "الطبيب"}: ${form.doctor || (en ? "Not selected" : "لم يتم الاختيار")}`,
+      `${en ? "Preferred time" : "الوقت المفضل"}: ${form.preferredTime}`,
     ].join("\n");
 
     const whatsappUrl = createWhatsappUrl(message);
@@ -68,26 +68,26 @@ export default function BookingPage() {
     "mt-2 w-full rounded-2xl border border-[#4c2c00]/15 bg-white/70 px-4 py-3.5 font-bold text-[#4c2c00] outline-none transition placeholder:text-[#4c2c00]/35 focus:border-[#f8aa2d] focus:ring-4 focus:ring-[#f8aa2d]/12";
 
   return (
-    <div dir="rtl">
+    <div>
       <Seo
         canonicalPath="/booking"
-        description="صفحة طلب موعد قديمة؛ التواصل والحجز المعتمد لدى كادينا يتم عبر واتساب."
+        description={en ? "Kadina appointments and communication are handled through WhatsApp." : "صفحة طلب موعد قديمة؛ التواصل والحجز المعتمد لدى كادينا يتم عبر واتساب."}
         noindex
-        title="الحجز عبر واتساب"
+        title={en ? "Booking via WhatsApp" : "الحجز عبر واتساب"}
       />
       <PageHero
-        breadcrumbLabel="الحجز"
-        eyebrow="الحجز"
-        title="خطوتك الأولى نحو النسخة الأفضل منك"
-        description="استشارة واحدة تفصلك عن خطة واضحة بيد استشاري متخصص. املأ البيانات وسيتواصل معك فريقنا خلال ساعات العمل."
+        breadcrumbLabel={en ? "Booking" : "الحجز"}
+        eyebrow={en ? "Booking" : "الحجز"}
+        title={en ? "Your first step toward the best version of yourself" : "خطوتك الأولى نحو النسخة الأفضل منك"}
+        description={en ? "One consultation can lead to a clear plan with a specialist consultant. Enter your details and our team will contact you during working hours." : "استشارة واحدة تفصلك عن خطة واضحة بيد استشاري متخصص. املأ البيانات وسيتواصل معك فريقنا خلال ساعات العمل."}
       />
 
       <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
           <SectionTitle
-            eyebrow="طلب موعد"
-            title="بيانات الحجز"
-            description="أدخل بياناتك المطلوبة، ثم أرسل الطلب عبر واتساب."
+            eyebrow={en ? "Appointment Request" : "طلب موعد"}
+            title={en ? "Booking Details" : "بيانات الحجز"}
+            description={en ? "Enter the requested details, then send your request through WhatsApp." : "أدخل بياناتك المطلوبة، ثم أرسل الطلب عبر واتساب."}
           />
 
           <motion.form
@@ -101,7 +101,7 @@ export default function BookingPage() {
           >
             <div className="grid gap-5 sm:grid-cols-2">
               <label className="font-black text-[#4c2c00]">
-                الاسم الكامل
+                {en ? "Full Name" : "الاسم الكامل"}
                 <input
                   aria-describedby={errors.fullName ? "fullName-error" : undefined}
                   aria-invalid={Boolean(errors.fullName)}
@@ -122,7 +122,7 @@ export default function BookingPage() {
               </label>
 
               <label className="font-black text-[#4c2c00]">
-                رقم الجوال
+                {en ? "Mobile Number" : "رقم الجوال"}
                 <input
                   aria-describedby={errors.mobile ? "mobile-error" : undefined}
                   aria-invalid={Boolean(errors.mobile)}
@@ -145,7 +145,7 @@ export default function BookingPage() {
               </label>
 
               <label className="font-black text-[#4c2c00]">
-                الخدمة
+                {en ? "Service" : "الخدمة"}
                 <select
                   aria-describedby={errors.service ? "service-error" : undefined}
                   aria-invalid={Boolean(errors.service)}
@@ -154,8 +154,8 @@ export default function BookingPage() {
                   onChange={updateField}
                   value={form.service}
                 >
-                  <option value="">اختر الخدمة</option>
-                  {serviceOptions.map((service) => (
+                  <option value="">{en ? "Choose a Service" : "اختر الخدمة"}</option>
+                  {serviceOptions[lang].map((service) => (
                     <option key={service} value={service}>
                       {service}
                     </option>
@@ -172,14 +172,14 @@ export default function BookingPage() {
               </label>
 
               <label className="font-black text-[#4c2c00]">
-                الطبيب (اختياري)
+                {en ? "Doctor (Optional)" : "الطبيب (اختياري)"}
                 <select
                   className={inputClass}
                   name="doctor"
                   onChange={updateField}
                   value={form.doctor}
                 >
-                  <option value="">بدون اختيار</option>
+                  <option value="">{en ? "No Selection" : "بدون اختيار"}</option>
                   {doctors.map((doctor) => (
                     <option key={doctor.slug} value={doctor.name}>
                       {doctor.name}
@@ -191,10 +191,10 @@ export default function BookingPage() {
 
             <fieldset className="mt-6">
               <legend className="font-black text-[#4c2c00]">
-                الوقت المفضل
+                {en ? "Preferred Time" : "الوقت المفضل"}
               </legend>
               <div className="mt-3 flex flex-wrap gap-3">
-                {["صباحي", "مسائي"].map((time) => (
+                {(en ? ["Morning", "Evening"] : ["صباحي", "مسائي"]).map((time) => (
                   <label
                     className="cursor-pointer rounded-full border border-[#4c2c00]/15 bg-white/70 px-5 py-3 font-bold"
                     key={time}
@@ -221,21 +221,21 @@ export default function BookingPage() {
               className="mt-7 w-full rounded-full bg-[#f8aa2d] px-6 py-3.5 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
               type="submit"
             >
-              أكّد الحجز عبر واتساب
+              {en ? "Confirm Booking via WhatsApp" : "أكّد الحجز عبر واتساب"}
             </button>
 
             <div className="mt-5 flex flex-wrap justify-center gap-4 text-sm font-black">
               <a
-                aria-label="واتساب مباشر (يفتح في نافذة جديدة)"
+                aria-label={en ? "Direct WhatsApp (opens in a new window)" : "واتساب مباشر (يفتح في نافذة جديدة)"}
                 className="text-[#cf7d11]"
-                href={createWhatsappUrl("للحجز والاستفسار")}
+                href={createWhatsappUrl(en ? "Hello, I would like to book or ask about Kadina services." : "للحجز والاستفسار")}
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                واتساب مباشر
+                {en ? "Direct WhatsApp" : "واتساب مباشر"}
               </a>
               <a className="text-[#cf7d11]" href="tel:0114555444">
-                اتصال: 0114555444
+                {en ? "Call" : "اتصال"}: 0114555444
               </a>
             </div>
           </motion.form>
@@ -243,9 +243,9 @@ export default function BookingPage() {
       </section>
 
       <CTASection
-        title="استشارة واحدة تفصلك عن خطة واضحة"
-        description="املأ البيانات وسيتواصل معك فريق كادينا خلال ساعات العمل."
-        primaryLabel="تواصل معنا"
+        title={en ? "One Consultation Away from a Clear Plan" : "استشارة واحدة تفصلك عن خطة واضحة"}
+        description={en ? "Enter your details and the Kadina team will contact you during working hours." : "املأ البيانات وسيتواصل معك فريق كادينا خلال ساعات العمل."}
+        primaryLabel={en ? "Contact Us" : "تواصل معنا"}
         primaryTo="/contact"
       />
     </div>

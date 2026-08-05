@@ -36,3 +36,31 @@ export const aboutMetrics = [
   { value: "9", label: "استشاريين" },
   { value: "13+", label: "جهازًا عالميًا" },
 ];
+
+const aboutContentEn = {
+  intro: "Who we are, and why we deserve your trust.",
+  story: "In 2013, in the heart of Riyadh, Kadina Center began with one question: why should someone seeking aesthetic care move between a dermatology clinic, a surgery clinic, and a laser clinic? The answer was one center bringing together leading consultants and world-class technology, while treating every case as unique.",
+  vision: "For Kadina to be the Kingdom's leading reference for dermatology and aesthetics—the destination chosen when the result cannot be left to chance.",
+  mission: "We give those who trust us with their appearance specialist consultant care that begins with an honest diagnosis, is delivered by consultants using leading global technologies, and is followed step by step toward a natural result they can be proud of.",
+};
+
+const aboutValuesEn = [
+  { title: "Safety before beauty", description: "There is no such thing as a 'simple' procedure in our practice. Anything that touches the human body deserves the highest level of care." },
+  { title: "Honesty before a sale", description: "Our diagnosis is a medical judgment, not a sales pitch." },
+  { title: "Natural is the standard", description: "We measure success with one question: does the result look naturally yours?" },
+  { title: "Technology is an investment", description: "We do not acquire a device for display, but for the difference it can make to the client." },
+];
+
+const aboutMetricsEn = [
+  { value: "15+", label: "Years of medical experience" },
+  { value: "22", label: "Healthcare departments" },
+  { value: "146", label: "Services" },
+  { value: "9", label: "Consultants" },
+  { value: "13+", label: "World-class devices" },
+];
+
+export function getAboutData(lang) {
+  return lang === "en"
+    ? { content: aboutContentEn, values: aboutValuesEn, metrics: aboutMetricsEn }
+    : { content: aboutContent, values: aboutValues, metrics: aboutMetrics };
+}

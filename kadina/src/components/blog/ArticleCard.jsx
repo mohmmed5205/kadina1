@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
 export default function ArticleCard({ article }) {
+  const { lang } = useOutletContext();
   return (
     <article className="overflow-hidden rounded-[1.75rem] border border-[#f8aa2d]/25 bg-white/75 shadow-[0_18px_45px_rgba(76,44,0,0.07)]">
       <div className="flex min-h-52 items-center justify-center overflow-hidden bg-[linear-gradient(135deg,rgba(248,170,45,0.2),rgba(255,247,235,0.9))]">
@@ -34,7 +35,7 @@ export default function ArticleCard({ article }) {
           className="mt-5 inline-block font-black text-[#cf7d11]"
           to={`/blog/${article.slug}`}
         >
-          اقرأ المقال
+          {lang === "ar" ? "اقرأ المقال" : "Read Article"}
         </Link>
       </div>
     </article>

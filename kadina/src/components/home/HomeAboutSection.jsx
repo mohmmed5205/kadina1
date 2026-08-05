@@ -1,21 +1,23 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import SectionTitle from "../common/SectionTitle";
 import {
   cardItem,
   staggerContainer,
   viewportOnce,
 } from "../../componetts/motionPresets";
-import { homePageContent } from "../../data/pagesContent";
+import { getHomePageContent } from "../../data/pagesContent";
 
 export default function HomeAboutSection() {
+  const { lang } = useOutletContext();
+  const homePageContent = getHomePageContent(lang);
   return (
     <section
       className="scroll-mt-24 bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
       id="about"
     >
       <div className="mx-auto max-w-7xl">
-        <SectionTitle title="لماذا كادينا؟" />
+        <SectionTitle title={lang === "ar" ? "لماذا كادينا؟" : "Why Kadina?"} />
         <motion.div
           className="mt-9 grid gap-5 md:grid-cols-3"
           initial="hidden"
@@ -26,7 +28,7 @@ export default function HomeAboutSection() {
           {homePageContent.whyKadina.map((item, index) => (
             <motion.article
               className="rounded-[1.75rem] border border-[#f8aa2d]/25 bg-white/75 p-6 shadow-[0_18px_45px_rgba(76,44,0,0.07)]"
-              key={item.title}
+              key={`why-kadina-${index}`}
               variants={cardItem}
             >
               <span
@@ -49,7 +51,7 @@ export default function HomeAboutSection() {
             className="inline-block font-black text-[#cf7d11] underline decoration-[#f8aa2d]/40 underline-offset-8"
             to="/about"
           >
-            تعرّف علينا أكثر
+            {lang === "ar" ? "تعرّف علينا أكثر" : "Learn More About Us"}
           </Link>
         </div>
       </div>
