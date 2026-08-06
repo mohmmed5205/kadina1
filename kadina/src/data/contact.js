@@ -8,7 +8,7 @@ export const contactHours = {
   time: "9:00 ص – 10:00 م",
 };
 export const contactMapUrl =
-  "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6+%D8%A7%D9%84%D8%B7%D8%B1%D9%8A%D9%82+%D8%A7%D9%84%D8%AF%D8%A7%D8%A6%D8%B1%D9%8A+%D8%A7%D9%84%D8%B4%D9%85%D8%A7%D9%84%D9%8A";
+  "https://maps.app.goo.gl/cLeVtBdTjNd71GrPA?g_st=ic";
 
 // TODO: Confirm contact data before publishing. The PDF email differs from the
 // current project data, and it mentions WhatsApp without a separate number.
