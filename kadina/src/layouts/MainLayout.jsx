@@ -4,6 +4,9 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../componetts/Navbar";
 import Bottom from "../componetts/Bottom";
 import ScrollToHash from "../components/common/ScrollToHash";
+import PageTransition from "../components/motion/PageTransition";
+import ScrollProgress from "../components/motion/ScrollProgress";
+import SmoothScroll from "../components/motion/SmoothScroll";
 import { content } from "../data/content";
 import { getLocalizedValue, normalizeLanguage } from "../utils/i18n";
 
@@ -25,11 +28,13 @@ export default function MainLayout() {
     <MotionConfig reducedMotion="user">
       <div
         dir={t.dir}
-        className="min-h-screen overflow-x-hidden bg-[#f8ead8] text-[#4c2c00]"
+        className="min-h-screen overflow-x-hidden bg-[var(--color-surface)] text-[var(--color-text)]"
       >
+        <SmoothScroll />
+        <ScrollProgress />
         <ScrollToHash />
         <a
-          className="fixed start-4 top-3 z-[10000] -translate-y-24 rounded-full bg-[#2b1b08] px-5 py-3 font-black text-[#fff7eb] shadow-lg transition-transform focus:translate-y-0"
+          className="ds-button fixed start-4 top-3 z-[10000] -translate-y-24 bg-[var(--color-surface-dark)] text-[var(--color-text-on-dark)] transition-transform focus:translate-y-0"
           href="#main-content"
         >
           {lang === "ar" ? "تخطَّ إلى المحتوى" : "Skip to content"}
@@ -44,7 +49,9 @@ export default function MainLayout() {
           }
         />
         <main id="main-content" tabIndex="-1">
-          <Outlet context={{ lang, t }} />
+          <PageTransition>
+            <Outlet context={{ lang, t }} />
+          </PageTransition>
         </main>
         <Bottom lang={lang} t={t} />
       </div>

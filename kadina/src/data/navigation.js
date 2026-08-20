@@ -1,3 +1,5 @@
+import { getLocalizedText } from "../utils/i18n";
+
 export const primaryNavigation = [
   { id: "home", to: "/", ar: "الرئيسية", en: "Home" },
 
@@ -25,11 +27,9 @@ export const primaryNavigation = [
 ];
 
 export function getPrimaryNavigation(lang) {
-  const labelKey = lang === "en" ? "en" : "ar";
-
   return primaryNavigation.map((item) => ({
     id: item.id,
     to: item.to,
-    title: item[labelKey],
+    title: getLocalizedText(item, lang),
   }));
 }

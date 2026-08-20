@@ -1,37 +1,103 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import Breadcrumbs from "./Breadcrumbs";
-import { fadeUp } from "../../componetts/motionPresets";
+import { staggerFast, textReveal } from "../../componetts/motionPresets";
 
 export default function PageHero({
+  children,
+  className = "",
   breadcrumbLabel,
   breadcrumbItems,
   eyebrow,
   title,
+  secondaryTitle,
+  secondaryTitleDir,
   description,
+  variant,
+  visual,
+  visualFallback,
 }) {
+  const { pathname } = useLocation();
+  const shouldReduceMotion = useReducedMotion();
+  const resolvedVariant = variant || (/^\/(contact|faq|blog|booking)/.test(pathname) ? "utility" : "editorial");
+  const utility = resolvedVariant === "utility";
+  const detail = resolvedVariant === "detail";
+  const hasVisual = Boolean(visual || visualFallback);
+  const variantClassName = utility
+    ? "page-hero-utility"
+    : detail
+      ? "page-hero-detail"
+      : "page-hero-editorial";
+
   return (
-    <section className="relative overflow-hidden border-b border-[#f8aa2d]/20 bg-[#fff7eb] px-4 pb-14 pt-28 sm:px-5 sm:pb-16 sm:pt-32 lg:px-8 lg:pb-20">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,170,45,0.2),transparent_38%)]" />
+    <section className={`page-hero ${variantClassName} ${className}`}>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(214,163,91,.22),transparent_38%)]" />
+      <motion.span
+        aria-hidden="true"
+        className="pointer-events-none absolute end-[12%] top-[22%] hidden h-32 w-32 rounded-full border border-[var(--color-border-strong)] lg:block"
+        animate={shouldReduceMotion ? undefined : { y: [0, -12, 0], scale: [1, 1.04, 1], opacity: [0.35, 0.55, 0.35] }}
+        transition={{ duration: 11, ease: "easeInOut", repeat: Infinity }}
+      />
+      <img
+        aria-hidden="true"
+        alt=""
+        className={`pointer-events-none absolute -bottom-20 end-[5%] h-72 w-auto object-contain opacity-[0.045] sm:h-96 ${utility ? "brightness-[4]" : ""}`}
+        src="/kadina-logo3.webp"
+      />
       <motion.div
         animate="visible"
-        className="relative mx-auto max-w-7xl"
-        initial="hidden"
-        variants={fadeUp}
+        className="ds-container relative"
+        initial={shouldReduceMotion ? false : "hidden"}
+        variants={staggerFast}
       >
-        <Breadcrumbs
-          items={breadcrumbItems || [{ label: breadcrumbLabel || title }]}
-        />
-        <p className="mt-8 text-sm font-black tracking-wide text-[#cf7d11]">
-          {eyebrow}
-        </p>
-        <h1 className="mt-3 max-w-4xl text-3xl font-black leading-tight text-[#4c2c00] sm:text-4xl lg:text-5xl">
-          {title}
-        </h1>
-        {description && (
-          <p className="mt-5 max-w-3xl text-base font-medium leading-8 text-[#4c2c00]/72 sm:text-lg">
-            {description}
-          </p>
-        )}
+        <motion.div variants={textReveal}>
+          <Breadcrumbs
+            items={breadcrumbItems || [{ label: breadcrumbLabel || title }]}
+          />
+        </motion.div>
+        <div className={detail && hasVisual ? "page-hero-detail-grid" : ""}>
+          <div>
+            <motion.p className="page-hero-eyebrow mt-7 lg:mt-10" variants={textReveal}>
+              {eyebrow}
+            </motion.p>
+            <motion.h1 className="page-hero-title break-words" variants={textReveal}>
+              {title}
+            </motion.h1>
+            {secondaryTitle && (
+              <motion.p
+                className="page-hero-secondary-title"
+                dir={secondaryTitleDir}
+                variants={textReveal}
+              >
+                {secondaryTitle}
+              </motion.p>
+            )}
+            {description && (
+              <motion.p className="page-hero-description" variants={textReveal}>
+                {description}
+              </motion.p>
+            )}
+            {children && <motion.div variants={textReveal}>{children}</motion.div>}
+          </div>
+          {detail && hasVisual && (
+            <motion.div
+              className="page-hero-detail-visual"
+              variants={textReveal}
+            >
+              {visual ? (
+                <img
+                  alt={visual.alt}
+                  className={visual.className || "h-full w-full object-contain"}
+                  decoding="async"
+                  fetchPriority="high"
+                  src={visual.src}
+                />
+              ) : (
+                visualFallback
+              )}
+            </motion.div>
+          )}
+        </div>
       </motion.div>
     </section>
   );

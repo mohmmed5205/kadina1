@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import clsx from "clsx";
 import { FaWhatsapp } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
@@ -10,6 +10,11 @@ import { createWhatsappUrl } from "../utils/whatsapp";
 export default function Navbar({ t, lang, onLanguageToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [scrollingDown, setScrollingDown] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+  const lastScrollY = useRef(0);
+  const menuButtonRef = useRef(null);
+  const menuPanelRef = useRef(null);
   const location = useLocation();
   const whatsappUrl = createWhatsappUrl(t.contact.whatsappCta);
   const navigationItems = getPrimaryNavigation(lang);
@@ -18,28 +23,70 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
       return location.pathname === "/" && !location.hash;
     }
 
-    return location.pathname === "/" && location.hash === to.slice(1);
+    return (
+      location.pathname === to ||
+      (to !== "/" && location.pathname.startsWith(`${to}/`))
+    );
   };
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 18);
+    const onScroll = () => {
+      const nextScrollY = window.scrollY;
+      setScrolled(nextScrollY > 18);
+      setScrollingDown(
+        nextScrollY > 150 && nextScrollY > lastScrollY.current + 4,
+      );
+      lastScrollY.current = nextScrollY;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setIsOpen(false));
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.pathname, location.search, location.hash]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    const previousOverscroll = document.body.style.overscrollBehavior;
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.overscrollBehavior = previousOverscroll;
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const frame = window.requestAnimationFrame(() => {
+      menuPanelRef.current?.querySelector("[data-mobile-nav-link]")?.focus();
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [isOpen]);
+
+  useEffect(() => {
     const onKeyDown = (event) => {
-      if (event.key === "Escape") setIsOpen(false);
+      if (event.key === "Escape" && isOpen) {
+        setIsOpen(false);
+        window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+      }
     };
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [isOpen]);
 
   const handleLanguageToggle = () => {
     setIsOpen(false);
     onLanguageToggle();
+    window.requestAnimationFrame(() => menuButtonRef.current?.focus());
   };
 
   const navLabel = lang === "ar" ? "القائمة الرئيسية" : "Main navigation";
@@ -52,15 +99,21 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
       : "Open menu";
 
   return (
-    <header
+    <motion.header
+      initial={shouldReduceMotion ? false : { opacity: 0, y: -18 }}
+      animate={{
+        opacity: 1,
+        y: shouldReduceMotion ? 0 : scrollingDown && !isOpen ? -14 : 0,
+      }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: smoothEase }}
       className={clsx(
-        "fixed left-0 top-0 z-50 w-full border-b transition-all duration-300",
+        "fixed inset-x-0 top-0 z-[70] isolate w-full border-b pt-[env(safe-area-inset-top)] transition-all duration-300",
         scrolled
-          ? "border-[#f8aa2d]/20 bg-[#fff7eb]/96 shadow-[0_18px_48px_rgba(0,0,0,0.2)] backdrop-blur-2xl"
-          : "border-[#f8aa2d]/15 bg-[#fff7eb]/88 backdrop-blur-xl"
+          ? "border-[var(--color-border)] bg-[var(--color-glass)] shadow-[var(--shadow-card)] backdrop-blur-2xl"
+          : "border-[var(--color-border)] bg-[var(--color-glass)] backdrop-blur-xl"
       )}
     >
-      <div className="mx-auto flex h-[var(--nav-h,4.25rem)] max-w-7xl items-center justify-between px-4 sm:px-5 lg:px-8">
+      <div className={clsx("ds-container flex items-center justify-between transition-[height] duration-300", scrolled ? "h-[4rem] lg:h-[4.5rem]" : "h-[var(--nav-h,4.25rem)]")}>
         <motion.div
           className="shrink-0"
           whileHover={{ y: -2 }}
@@ -77,7 +130,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
               decoding="async"
               height="284"
               width="284"
-              className="h-20 w-auto object-contain lg:h-20"
+              className="h-14 w-auto object-contain sm:h-16 lg:h-20"
               onError={(event) => {
                 event.currentTarget.onerror = null;
                 event.currentTarget.src = "/kadina-logo.webp";
@@ -88,7 +141,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
 
         <nav
           aria-label={navLabel}
-          className="hidden items-center gap-1 rounded-full border border-[#4c2c00]/10 bg-white/45 px-2 py-2 shadow-[0_14px_34px_rgba(0,0,0,0.12)] backdrop-blur-xl xl:flex"
+          className="hidden items-center gap-1 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-raised)]/65 px-2 py-2 backdrop-blur-xl xl:flex"
         >
           {navigationItems.map((link) => (
             <motion.div
@@ -100,12 +153,20 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
                 className={clsx(
                   "relative block rounded-full px-2 py-2 text-[0.72rem] font-bold transition-all duration-200 2xl:px-3 2xl:text-[0.82rem]",
                   isCurrentLink(link.to)
-                    ? "bg-[#f8aa2d]/18 text-[#cf7d11] shadow-inner"
-                    : "text-[#4c2c00]/75 hover:bg-white/8 hover:text-[#f8aa2d]",
+                    ? "text-[var(--color-accent-strong)]"
+                    : "text-[var(--color-text-muted)] hover:bg-[rgba(214,163,91,0.1)] hover:text-[var(--color-accent-strong)]",
                 )}
                 to={link.to}
               >
-                {link.title}
+                {isCurrentLink(link.to) && (
+                  <motion.span
+                    aria-hidden="true"
+                    className="absolute inset-0 -z-10 rounded-full bg-[rgba(214,163,91,0.14)]"
+                    layoutId="desktop-nav-active"
+                    transition={{ duration: 0.32, ease: smoothEase }}
+                  />
+                )}
+                <span className="relative">{link.title}</span>
               </Link>
             </motion.div>
           ))}
@@ -115,7 +176,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
           <motion.button
             type="button"
             onClick={handleLanguageToggle}
-            className="rounded-full border border-[#4c2c00]/15 bg-white/55 px-4 py-2.5 text-sm font-black text-[#4c2c00] shadow-sm backdrop-blur transition-all duration-200 hover:border-[#f8aa2d]/45 hover:bg-[#f8aa2d]/15 hover:text-[#f8aa2d]"
+            className="ds-button ds-button-secondary min-h-11 px-4 py-2 text-sm backdrop-blur"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -127,7 +188,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
             aria-label={`${lang === "ar" ? "تواصل معنا" : "Contact us"} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-[#f8aa2d] px-5 py-2.5 text-sm font-black text-[#2b1b08] shadow-[0_12px_30px_rgba(207,125,17,0.32)] transition-all duration-200 hover:bg-[#cf7d11] hover:text-white"
+            className="ds-button ds-button-primary min-h-11 px-5 py-2 text-sm"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -137,8 +198,9 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
         </div>
 
         <button
+          ref={menuButtonRef}
           type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-[#4c2c00]/15 bg-white/55 text-[#4c2c00] shadow-sm backdrop-blur transition hover:border-[#f8aa2d]/40 hover:bg-[#f8aa2d]/18 xl:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface-raised)]/65 text-[var(--color-heading)] backdrop-blur transition hover:border-[var(--color-accent)] hover:bg-[rgba(214,163,91,0.12)] xl:hidden"
           onClick={() => setIsOpen((current) => !current)}
           aria-expanded={isOpen}
           aria-label={menuLabel}
@@ -146,19 +208,19 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
           <span className="relative h-5 w-5" aria-hidden="true">
             <span
               className={clsx(
-                "absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
+                "absolute start-0 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
                 isOpen ? "top-1/2 rotate-45" : "top-1"
               )}
             />
             <span
               className={clsx(
-                "absolute left-0 top-1/2 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
+                "absolute start-0 top-1/2 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
                 isOpen ? "opacity-0" : "opacity-100"
               )}
             />
             <span
               className={clsx(
-                "absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
+                "absolute start-0 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
                 isOpen ? "top-1/2 -rotate-45" : "top-4"
               )}
             />
@@ -169,17 +231,19 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: smoothEase }}
-            className="overflow-hidden border-t border-[#f8aa2d]/15 bg-[#fff7eb]/98 shadow-[0_22px_50px_rgba(0,0,0,0.22)] backdrop-blur-2xl xl:hidden"
+            ref={menuPanelRef}
+            data-mobile-menu
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 18 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: smoothEase }}
+            className="absolute inset-x-0 top-full z-[80] h-[calc(100dvh-var(--nav-h,4.25rem)-env(safe-area-inset-top))] overflow-y-auto overscroll-contain border-t border-[var(--color-border)] bg-[var(--color-surface)]/[0.985] pb-[env(safe-area-inset-bottom)] shadow-[var(--shadow-floating)] backdrop-blur-2xl xl:hidden"
           >
             <motion.div
-              initial="hidden"
+              initial={shouldReduceMotion ? false : "hidden"}
               animate="visible"
               variants={staggerContainer}
-              className="mx-auto flex max-w-7xl flex-col gap-1 p-4"
+              className="mx-auto flex min-h-full max-w-2xl flex-col gap-1 px-5 py-6 sm:px-8"
             >
               {navigationItems.map((link) => (
                 <motion.div
@@ -188,11 +252,12 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
                   variants={cardItem}
                 >
                   <Link
+                    data-mobile-nav-link
                     className={clsx(
-                      "flex items-center rounded-2xl border px-4 py-3 text-base font-bold transition-all duration-200 hover:border-[#f8aa2d]/35 hover:bg-[#f8aa2d]/12 hover:text-[#cf7d11]",
+                      "flex min-h-12 items-center rounded-[var(--radius-md)] border px-4 py-3 text-lg font-bold transition-all duration-200 hover:border-[var(--color-accent)] hover:bg-[rgba(214,163,91,0.1)] hover:text-[var(--color-accent-strong)]",
                       isCurrentLink(link.to)
-                        ? "border-[#f8aa2d]/30 bg-[#f8aa2d]/15 text-[#cf7d11]"
-                        : "border-transparent text-[#4c2c00]",
+                        ? "border-[var(--color-accent)] bg-[rgba(214,163,91,0.12)] text-[var(--color-accent-strong)]"
+                        : "border-transparent text-[var(--color-text)]",
                     )}
                     to={link.to}
                   >
@@ -201,11 +266,11 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
                 </motion.div>
               ))}
 
-              <div className="mt-3 grid gap-3 border-t border-[#4c2c00]/10 pt-4 sm:grid-cols-2">
+              <div className="mt-auto grid gap-3 border-t border-[var(--color-border)] pt-5 sm:grid-cols-2">
                 <button
                   type="button"
                   onClick={handleLanguageToggle}
-                  className="rounded-2xl border border-[#4c2c00]/15 bg-white/55 px-4 py-3 text-center font-black text-[#4c2c00] transition hover:border-[#f8aa2d]/40 hover:bg-[#f8aa2d]/12"
+                  className="ds-button ds-button-secondary w-full"
                 >
                   {t.langLabel}
                 </button>
@@ -216,7 +281,7 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsOpen(false)}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#f8aa2d] px-4 py-3 text-center font-black text-[#2b1b08] shadow-[0_12px_28px_rgba(207,125,17,0.28)] transition hover:bg-[#cf7d11] hover:text-white"
+                  className="ds-button ds-button-primary w-full"
                 >
                   <FaWhatsapp aria-hidden="true" />
                   <span>{t.contact.whatsappCta}</span>
@@ -226,6 +291,6 @@ export default function Navbar({ t, lang, onLanguageToggle }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 }

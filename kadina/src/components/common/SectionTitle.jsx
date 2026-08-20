@@ -1,30 +1,55 @@
-import { motion } from "framer-motion";
-import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  staggerFast,
+  textReveal,
+  viewportOnce,
+} from "../../componetts/motionPresets";
 
 export default function SectionTitle({ eyebrow, title, description, align = "start" }) {
+  const shouldReduceMotion = useReducedMotion();
   const alignment =
-    align === "center" ? "mx-auto items-center text-center" : "items-start";
+    align === "center" ? "section-title-center" : "";
 
   return (
     <motion.div
-      className={`flex max-w-3xl flex-col ${alignment}`}
-      initial="hidden"
-      variants={fadeUp}
+      className={`section-title ${alignment}`}
+      initial={shouldReduceMotion ? false : "hidden"}
+      variants={staggerFast}
       viewport={viewportOnce}
       whileInView="visible"
     >
       {eyebrow && (
-        <p className="text-sm font-black tracking-wide text-[#cf7d11]">
+        <motion.p
+          className="section-title-eyebrow"
+          variants={textReveal}
+        >
           {eyebrow}
-        </p>
+        </motion.p>
       )}
-      <h2 className="mt-2 text-2xl font-black leading-tight text-[#4c2c00] sm:text-3xl">
+      <motion.span
+        aria-hidden="true"
+        className="section-title-rule"
+        variants={{
+          hidden: { scaleX: 0 },
+          visible: {
+            scaleX: 1,
+            transition: { duration: 0.62, ease: [0.22, 1, 0.36, 1] },
+          },
+        }}
+      />
+      <motion.h2
+        className="section-title-heading"
+        variants={textReveal}
+      >
         {title}
-      </h2>
+      </motion.h2>
       {description && (
-        <p className="mt-4 text-base font-medium leading-8 text-[#4c2c00]/68">
+        <motion.p
+          className="section-title-description"
+          variants={textReveal}
+        >
           {description}
-        </p>
+        </motion.p>
       )}
     </motion.div>
   );

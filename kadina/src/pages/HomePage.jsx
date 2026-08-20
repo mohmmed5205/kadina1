@@ -19,7 +19,7 @@ const HomeDoctorsSection = lazy(
 const BeforeAfter = lazy(() => import("../componetts/BeforAfter"));
 
 const sectionFallback = (
-  <div className="min-h-96 bg-[#f8ead8]" aria-hidden="true" />
+  <div className="min-h-96 bg-[var(--color-surface-muted)]" aria-hidden="true" />
 );
 
 export default function HomePage() {
@@ -52,8 +52,8 @@ export default function HomePage() {
       <Suspense fallback={sectionFallback}>
         <BeforeAfter t={t} />
       </Suspense>
-      <HomeFinalCta />
       <HomeContactSection />
+      <HomeFinalCta />
     </>
   );
 }

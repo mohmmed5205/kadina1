@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Link, useOutletContext } from "react-router-dom";
 import PageHero from "../components/common/PageHero";
-import SectionTitle from "../components/common/SectionTitle";
 import Seo from "../components/seo/Seo";
 import {
   createBreadcrumbSchema,
@@ -9,6 +8,8 @@ import {
 } from "../components/seo/seoUtils";
 import { getDoctorDetails } from "../data/doctors";
 import { createWhatsappUrl } from "../utils/whatsapp";
+import RevealImage from "../components/motion/RevealImage";
+import MagneticButton from "../components/motion/MagneticButton";
 import {
   cardItem,
   fadeUp,
@@ -21,14 +22,20 @@ export default function DoctorsPage() {
   const en = lang === "en";
   const doctorDetails = getDoctorDetails(lang);
   const whatsappUrl = createWhatsappUrl(
-    en ? "Hello, I would like to book a consultation with a Kadina doctor." : "مرحبًا، أرغب في حجز استشارة مع أحد أطباء كادينا.",
+    en
+      ? "Hello, I would like to book a consultation with a Kadina doctor."
+      : "مرحبًا، أرغب في حجز استشارة مع أحد أطباء كادينا.",
   );
 
   return (
     <div>
       <Seo
         canonicalPath="/doctors"
-        description={en ? "Meet Kadina's consultants in dermatology, laser, cosmetic injectables, plastic surgery and hair transplantation." : "تعرّف على فريق استشاريي كادينا في الجلدية والليزر والحقن التجميلي وجراحة التجميل وزراعة الشعر."}
+        description={
+          en
+            ? "Meet Kadina's consultants in dermatology, laser, cosmetic injectables, plastic surgery and hair transplantation."
+            : "تعرّف على فريق استشاريي كادينا في الجلدية والليزر والحقن التجميلي وجراحة التجميل وزراعة الشعر."
+        }
         jsonLd={[
           createBreadcrumbSchema([
             { name: en ? "Home" : "الرئيسية", path: "/" },
@@ -37,105 +44,158 @@ export default function DoctorsPage() {
           createWebPageSchema({
             type: "MedicalWebPage",
             name: en ? "Kadina Consultants" : "أطباء كادينا الاستشاريون",
-            description: en ? "Kadina's consultant team in dermatology, laser, aesthetics and hair transplantation." : "فريق استشاريي كادينا في الجلدية والليزر والتجميل وزراعة الشعر.",
+            description: en
+              ? "Kadina's consultant team in dermatology, laser, aesthetics and hair transplantation."
+              : "فريق استشاريي كادينا في الجلدية والليزر والتجميل وزراعة الشعر.",
             path: "/doctors",
           }),
         ]}
         title={en ? "Kadina Consultants" : "أطباء كادينا الاستشاريون"}
       />
+
       <PageHero
         breadcrumbLabel={en ? "Doctors" : "الأطباء"}
+        description={
+          en
+            ? "At Kadina, your case is seen by a consultant specializing in your needs. Meet the team, choose your doctor and book directly."
+            : "في كادينا لا يقابلك «طبيب مناوب»، بل استشاري متخصص في حالتك تحديدًا. تعرّف على الفريق، واختر طبيبك، واحجز معه مباشرة."
+        }
         eyebrow={en ? "Kadina Team" : "فريق كادينا"}
-        title={en ? "Leading consultants under one roof" : "نخبة الاستشاريين... تحت سقف واحد"}
-        description={en ? "At Kadina, your case is seen by a consultant specializing in your needs. Meet the team, choose your doctor and book directly." : "في كادينا لا يقابلك «طبيب مناوب»، بل استشاري متخصص في حالتك تحديدًا. تعرّف على الفريق، واختر طبيبك، واحجز معه مباشرة."}
+        title={
+          en
+            ? "Leading consultants under one roof"
+            : "نخبة الاستشاريين... تحت سقف واحد"
+        }
+        variant="editorial"
       />
 
-      <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
-        <div className="mx-auto max-w-7xl">
-          <SectionTitle
-            eyebrow={en ? "Consultant Team" : "فريق الاستشاريين"}
-            title={en ? "Meet Kadina's Doctors" : "تعرّف على أطباء كادينا"}
-          />
+      <section className="ds-section">
+        <div className="ds-container">
           <motion.div
-            key={lang}
-            className="mt-9 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
             initial="hidden"
+            variants={fadeUp}
+            viewport={viewportOnce}
+            whileInView="visible"
+          >
+            <p className="section-title-eyebrow">
+              {en ? "Consultant Team" : "فريق الاستشاريين"}
+            </p>
+            <h2 className="mt-4 max-w-3xl text-3xl font-black leading-tight text-[var(--color-heading)] sm:text-4xl lg:text-5xl">
+              {en ? "Meet Kadina's Doctors" : "تعرّف على أطباء كادينا"}
+            </h2>
+          </motion.div>
+
+          <motion.div
             animate="visible"
+            aria-label={en ? "Kadina doctors" : "أطباء كادينا"}
+            className="mt-12 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 lg:gap-x-12 lg:gap-y-20"
+            id="doctors-gallery"
+            initial="hidden"
+            role="list"
             variants={staggerContainer}
           >
-            {doctorDetails.map((doctor) => (
-              <motion.article
-                className="overflow-hidden rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] shadow-[0_18px_45px_rgba(76,44,0,0.08)]"
+            {doctorDetails.map((doctor, index) => (
+              <div
+                className={index % 2 === 1 ? "md:pt-12" : ""}
                 key={doctor.slug}
-                variants={cardItem}
+                role="listitem"
               >
-                <div className="flex aspect-[4/5] min-h-[220px] w-full items-center justify-center overflow-hidden bg-[linear-gradient(135deg,rgba(248,170,45,0.24),rgba(255,247,235,0.85))] md:min-h-[260px]">
-                  {doctor.image ? (
-                    <img
-                      alt={doctor.name}
-                      className="h-full w-full object-cover object-top"
-                      decoding="async"
-                      height="1440"
-                      loading="lazy"
-                      src={doctor.image}
-                      width="1080"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center p-6">
-                      <span className="max-w-52 text-center text-2xl font-black leading-relaxed text-[#4c2c00]">
-                        {doctor.name}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-black text-[#4c2c00]">
-                    {doctor.name}
-                  </h3>
-                  <p className="mt-3 min-h-20 leading-7 text-[#4c2c00]/70">
-                    {doctor.specialty}
-                  </p>
-                  {doctor.yearsOfExperience !== null && (
-                    <p className="mt-4 text-sm font-black text-[#cf7d11]">
-                      {en ? "Experience" : "الخبرة"}: {doctor.yearsOfExperience} {en ? "years" : "سنة"}
-                    </p>
-                  )}
+                <motion.article
+                  className="doctor-gallery-item group"
+                  variants={cardItem}
+                >
                   <Link
-                    className="mt-5 inline-block font-black text-[#cf7d11]"
+                    aria-label={`${en ? "View profile for" : "عرض الملف التعريفي للطبيب"} ${doctor.name}`}
+                    className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent-strong)]"
                     to={`/doctors/${doctor.slug}`}
                   >
-                    {en ? "Profile" : "الملف التعريفي"}
+                    <RevealImage
+                      className="aspect-[4/5] w-full bg-[var(--color-surface-muted)]"
+                      rtl={lang === "ar"}
+                    >
+                      {doctor.image ? (
+                        <img
+                          alt={doctor.name}
+                          className="doctor-portrait-image h-full w-full object-cover object-top"
+                          decoding="async"
+                          fetchPriority={index < 2 ? "high" : "auto"}
+                          height="1440"
+                          loading={index < 2 ? "eager" : "lazy"}
+                          src={doctor.image}
+                          width="1080"
+                        />
+                      ) : (
+                        <div
+                          aria-label={
+                            en
+                              ? `Portrait placeholder for ${doctor.name}`
+                              : `صورة تعريفية بديلة للطبيبة ${doctor.name}`
+                          }
+                          className="doctor-portrait-placeholder flex h-full w-full items-center justify-center p-8 text-center"
+                          role="img"
+                        >
+                          <span className="max-w-xs text-3xl font-black leading-relaxed text-[var(--color-heading)] sm:text-4xl">
+                            {doctor.name}
+                          </span>
+                        </div>
+                      )}
+                    </RevealImage>
+
+                    <div className="doctor-gallery-meta relative border-b border-[var(--color-border)] py-6 sm:py-7">
+                      <h3 className="text-2xl font-black leading-tight text-[var(--color-heading)] sm:text-3xl">
+                        {doctor.name}
+                      </h3>
+                      <p className="mt-3 max-w-xl font-bold leading-8 text-[var(--color-text-muted)]">
+                        {doctor.specialty}
+                      </p>
+                      <span className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-black text-[var(--color-accent-strong)]">
+                        {en ? "View Profile" : "الملف التعريفي"}
+                        <span aria-hidden="true" className="editorial-arrow">
+                          {en ? "→" : "←"}
+                        </span>
+                      </span>
+                    </div>
                   </Link>
-                </div>
-              </motion.article>
+                </motion.article>
+              </div>
             ))}
           </motion.div>
         </div>
       </section>
 
       <motion.section
-        className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
+        className="ds-section-compact bg-[var(--color-surface-dark)]"
         initial="hidden"
         variants={fadeUp}
         viewport={viewportOnce}
         whileInView="visible"
       >
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
-          <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
+        <div className="ds-container text-center">
+          <h2 className="text-3xl font-black !text-[var(--color-text-on-dark)] sm:text-4xl">
             {en ? "Choose Your Doctor and Book" : "اختر طبيبك واحجز معه"}
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#fff7eb]/75">
-            {en ? "A consultant specializing in your specific needs." : "استشاري متخصص في حالتك تحديدًا."}
+          <p className="mx-auto mt-4 max-w-2xl leading-8 text-[var(--color-text-on-dark-muted)]">
+            {en
+              ? "A consultant specializing in your specific needs."
+              : "استشاري متخصص في حالتك تحديدًا."}
           </p>
-          <a
-            aria-label={en ? "Book your consultation on WhatsApp (opens in a new window)" : "احجز استشارتك عبر واتساب (يفتح في نافذة جديدة)"}
-            className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
-            href={whatsappUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {en ? "Contact Us on WhatsApp" : "تواصل عبر واتساب"}
-          </a>
+          <div className="mt-7">
+            <MagneticButton className="w-full sm:w-auto">
+              <a
+                aria-label={
+                  en
+                    ? "Book your consultation on WhatsApp (opens in a new window)"
+                    : "احجز استشارتك عبر واتساب (يفتح في نافذة جديدة)"
+                }
+                className="ds-button ds-button-primary w-full sm:w-auto"
+                href={whatsappUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {en ? "Contact Us on WhatsApp" : "تواصل عبر واتساب"}
+              </a>
+            </MagneticButton>
+          </div>
         </div>
       </motion.section>
     </div>

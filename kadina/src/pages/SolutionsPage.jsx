@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
@@ -10,6 +10,7 @@ import {
 } from "../components/seo/seoUtils";
 import { getSolutionDetails } from "../data/solutions";
 import { createWhatsappUrl } from "../utils/whatsapp";
+import { getLocalizedText } from "../utils/i18n";
 import {
   cardItem,
   fadeUp,
@@ -93,12 +94,13 @@ export default function SolutionsPage() {
         eyebrow={en ? "Problems & Solutions" : "المشكلات والحلول"}
         title={en ? "Your concern has a solution" : "مشكلتك لها حل.. ونعرفه بالاسم"}
         description={en ? "You do not need to know the name of a device or procedure. Choose what concerns you and see how Kadina approaches it, which technology may be used and what to expect." : "قد لا تعرف اسم الجهاز أو الإجراء — ولا يلزمك ذلك. اختر ما يزعجك، وسنريك كيف نعالجه في كادينا: بأي تقنية، وبيد أي استشاري، وماذا تتوقع."}
+        variant="editorial"
       />
 
-      <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
-        <div className="mx-auto max-w-7xl">
+      <section className="ds-section solutions-index">
+        <div className="ds-container">
           <motion.p
-            className="max-w-3xl text-lg font-bold leading-9 text-[#4c2c00]/72 sm:text-xl"
+            className="max-w-3xl text-lg font-bold leading-9 text-[var(--color-text-muted)] sm:text-xl"
             initial="hidden"
             variants={fadeUp}
             viewport={viewportOnce}
@@ -107,10 +109,11 @@ export default function SolutionsPage() {
             {en ? "Start with the name of your concern and browse solutions for the face, body, hair and skin." : "ابدأ من اسم المشكلة، وتصفّح الحلول حسب الوجه، الجسم، الشعر، والبشرة."}
           </motion.p>
 
-          <div className="mt-8 border-y border-[#f8aa2d]/20 py-5">
+          <div className="mt-9 border-y border-[var(--color-border)] py-4">
+            <LayoutGroup id="solution-filters">
             <div
               aria-label={en ? "Filter solutions by area" : "تصفية الحلول حسب المنطقة"}
-              className="flex gap-3 overflow-x-auto pb-2"
+              className="mobile-strip flex gap-1 overflow-x-auto"
               role="group"
             >
               {areaFilters.map((filter) => {
@@ -120,66 +123,81 @@ export default function SolutionsPage() {
                   <button
                     aria-controls="solutions-results"
                     aria-pressed={isActive}
-                    className={`shrink-0 rounded-full border px-5 py-2.5 font-black transition focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#cf7d11] ${
+                    className={`relative isolate min-h-11 shrink-0 overflow-hidden px-5 py-2.5 text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)] ${
                       isActive
-                        ? "border-[#f8aa2d] bg-[#f8aa2d] text-[#2b1b08] shadow-[0_10px_26px_rgba(207,125,17,0.25)]"
-                        : "border-[#4c2c00]/15 bg-[#fff7eb] text-[#4c2c00] hover:border-[#f8aa2d]/60 hover:text-[#cf7d11]"
+                        ? "text-[var(--color-heading)]"
+                        : "text-[var(--color-text-muted)] hover:text-[var(--color-heading)]"
                     }`}
                     key={filter.slug}
                     onClick={() => selectFilter(filter.slug)}
                     type="button"
                   >
-                    {filter.label[lang]}
+                    {isActive && (
+                      <motion.span
+                        aria-hidden="true"
+                        className="absolute inset-x-3 bottom-0 -z-10 h-0.5 bg-[var(--color-accent)]"
+                        layoutId="solution-filter-active"
+                      />
+                    )}
+                    <span className="relative">
+                      {getLocalizedText(filter.label, lang)}
+                    </span>
                   </button>
                 );
               })}
             </div>
+            </LayoutGroup>
           </div>
 
           <p
             aria-live="polite"
-            className="mt-6 font-black text-[#4c2c00]"
+            className="mt-7 text-sm font-black text-[var(--color-text-muted)]"
             role="status"
           >
             {getResultsLabel(filteredSolutions.length, lang)}
           </p>
 
+          <AnimatePresence initial={false} mode="wait">
           {filteredSolutions.length > 0 ? (
             <motion.div
               key={activeFilter.slug}
               animate="visible"
-              className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              className="mt-8 grid grid-cols-1 gap-px overflow-hidden border border-[var(--color-border)] bg-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3"
               id="solutions-results"
               initial="hidden"
               variants={staggerContainer}
             >
               {filteredSolutions.map((solution) => (
                 <MotionLink
-                  className="group flex min-h-[260px] flex-col rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fffaf3] p-7 shadow-[0_18px_45px_rgba(76,44,0,0.07)] transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
+                  className="solution-index-card group flex flex-col bg-[var(--color-surface-raised)] p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[var(--color-accent-strong)] sm:p-8"
                   key={solution.slug}
+                  layout
                   to={`/solutions/${solution.slug}`}
                   variants={cardItem}
                 >
                   <img
                     alt=""
                     aria-hidden="true"
-                    className="h-10 w-auto self-start object-contain"
+                    className="h-7 w-auto self-start object-contain"
                     decoding="async"
                     src="/logo.webp"
                   />
 
-                  <h2 className="mt-8 text-xl font-black leading-8 text-[#4c2c00] line-clamp-3">
+                  <h2 className="mt-7 text-xl font-black leading-8 text-[var(--color-heading)] line-clamp-3 sm:text-2xl">
                     {solution.painHeadline ||
                       solution.shortTitle ||
                       solution.title}
                   </h2>
 
-                  <p className="mt-4 text-sm font-bold text-[#4c2c00]/65">
+                  <p className="mt-3 text-sm font-bold text-[var(--color-text-muted)]">
                     {solution.title}
                   </p>
 
-                  <span className="mt-auto pt-8 font-black text-[#cf7d11]">
+                  <span className="mt-auto inline-flex min-h-11 items-end gap-2 pt-6 font-black text-[var(--color-accent-strong)]">
                     {en ? "Discover the Solution" : "اعرف الحل"}
+                    <span aria-hidden="true" className="editorial-arrow">
+                      {en ? "→" : "←"}
+                    </span>
                   </span>
                 </MotionLink>
               ))}
@@ -214,6 +232,7 @@ export default function SolutionsPage() {
               </a>
             </motion.div>
           )}
+          </AnimatePresence>
         </div>
       </section>
 

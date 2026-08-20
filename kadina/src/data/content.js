@@ -200,6 +200,21 @@ export const content = {
         }
       ]
     },
+    location: {
+      eyebrow: "موقعنا",
+      title: "موقع مركز كادينا الطبي",
+      description:
+        "يسعدنا استقبالكم في مركز كادينا الطبي. افتح الموقع عبر خرائط Google للوصول بسهولة.",
+      addressLabel: "العنوان",
+      address: "المملكة العربية السعودية - الرياض - الطريق الدائري الشمالي",
+      hoursLabel: "ساعات العمل",
+      hours: "السبت - الخميس | 10 صباحًا - 10 مساءً",
+      bookingLabel: "الحجز",
+      booking: "للحجز والاستفسار",
+      button: "افتح الموقع في خرائط Google",
+      mapUrl:
+        "https://maps.app.goo.gl/5RMSXMden4ex7MTD7?g_st=com.google.maps.preview.copy",
+    },
     // location: {
     //   eyebrow: "موقعنا",
     //   title: "موقع المركز",
@@ -369,6 +384,8 @@ export const content = {
       locationLabel: "Location",
       hoursLabel: "Working hours",
       hoursValue: "Saturday - Thursday | 10 AM - 10 PM",
+      mapUrl:
+        "https://maps.app.goo.gl/5RMSXMden4ex7MTD7?g_st=com.google.maps.preview.copy",
       socialLabel: "Follow us on social media",
       socialDiscription: "Stay close to Kadina’s latest offers, updates, and care tips.",
       socials:[

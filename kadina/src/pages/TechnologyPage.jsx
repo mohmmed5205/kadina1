@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
@@ -10,9 +10,11 @@ import {
 } from "../components/seo/seoUtils";
 import { getDeviceSummaries } from "../data/devices";
 import { createWhatsappUrl } from "../utils/whatsapp";
+import { getLocalizedText } from "../utils/i18n";
 import {
   cardItem,
   fadeUp,
+  imageReveal,
   staggerContainer,
   viewportOnce,
 } from "../componetts/motionPresets";
@@ -21,26 +23,10 @@ const MotionLink = motion.create(Link);
 
 const categoryFilters = [
   { slug: "all", label: { ar: "الكل", en: "All" }, category: null },
-  {
-    slug: "laser",
-    label: { ar: "إزالة الشعر بالليزر", en: "Laser Hair Removal" },
-    category: "إزالة الشعر بالليزر",
-  },
-  {
-    slug: "skin-renewal",
-    label: { ar: "تجديد البشرة", en: "Skin Renewal" },
-    category: "تجديد البشرة وعلاج آثارها",
-  },
-  {
-    slug: "skincare",
-    label: { ar: "العناية والنضارة", en: "Skin Care & Radiance" },
-    category: "العناية والنضارة",
-  },
-  {
-    slug: "lifting-contouring",
-    label: { ar: "الشد والنحت", en: "Lifting & Contouring" },
-    category: "الشد والنحت غير الجراحي",
-  },
+  { slug: "laser", label: { ar: "إزالة الشعر بالليزر", en: "Laser Hair Removal" }, category: "إزالة الشعر بالليزر" },
+  { slug: "skin-renewal", label: { ar: "تجديد البشرة", en: "Skin Renewal" }, category: "تجديد البشرة وعلاج آثارها" },
+  { slug: "skincare", label: { ar: "العناية والنضارة", en: "Skin Care & Radiance" }, category: "العناية والنضارة" },
+  { slug: "lifting-contouring", label: { ar: "الشد والنحت", en: "Lifting & Contouring" }, category: "الشد والنحت غير الجراحي" },
   { slug: "hair", label: { ar: "علاج الشعر", en: "Hair Treatment" }, category: "علاج الشعر" },
 ];
 
@@ -98,137 +84,101 @@ export default function TechnologyPage() {
         ]}
         title={en ? "Kadina Medical Technology & Devices" : "أجهزة وتقنيات كادينا الطبية"}
       />
+
       <PageHero
         breadcrumbLabel={en ? "Technology & Devices" : "التقنيات والأجهزة"}
         eyebrow={en ? "Technology & Devices" : "التقنيات والأجهزة"}
         title={en ? "Kadina's technology: 13+ world-class devices" : "ترسانة كادينا التقنية: 13+ جهازًا من الطراز العالمي الأول"}
         description={en ? "A device alone does not create the result. The right device, in the right consultant's hands, with the right settings for your skin—that is the Kadina formula." : "الجهاز وحده لا يصنع النتيجة، لكن الجهاز الصحيح، بيد الاستشاري الصحيح، وبالإعداد الصحيح لبشرتك، هو معادلة كادينا."}
+        variant="editorial"
       />
 
-      <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
-        <div className="mx-auto max-w-7xl">
-          <motion.p
-            className="max-w-3xl text-lg font-bold leading-9 text-[#4c2c00]/72 sm:text-xl"
-            initial="hidden"
-            variants={fadeUp}
-            viewport={viewportOnce}
-            whileInView="visible"
-          >
+      <section className="ds-section bg-[var(--color-surface)]">
+        <div className="ds-container">
+          <motion.p className="max-w-3xl text-lg font-bold leading-9 text-[var(--color-text-muted)] sm:text-xl" initial="hidden" variants={fadeUp} viewport={viewportOnce} whileInView="visible">
             {en ? "Browse our devices and learn what each one does and who it suits." : "تصفح أجهزتنا، واعرف ماذا يفعل كل جهاز، ولمن يناسب."}
           </motion.p>
 
-          <div className="mt-8 border-y border-[#f8aa2d]/20 py-5">
-            <div
-              aria-label={en ? "Filter devices by area" : "تصفية الأجهزة حسب المجال"}
-              className="flex gap-3 overflow-x-auto pb-2"
-              role="group"
-            >
-              {categoryFilters.map((filter) => {
-                const isActive = activeFilter.slug === filter.slug;
-
-                return (
-                  <button
-                    aria-controls="technology-results"
-                    aria-pressed={isActive}
-                    className={`shrink-0 rounded-full border px-5 py-2.5 font-black transition focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#cf7d11] ${
-                      isActive
-                        ? "border-[#f8aa2d] bg-[#f8aa2d] text-[#2b1b08] shadow-[0_10px_26px_rgba(207,125,17,0.25)]"
-                        : "border-[#4c2c00]/15 bg-[#fff7eb] text-[#4c2c00] hover:border-[#f8aa2d]/60 hover:text-[#cf7d11]"
-                    }`}
-                    key={filter.slug}
-                    onClick={() => selectFilter(filter.slug)}
-                    type="button"
-                  >
-                    {filter.label[lang]}
-                  </button>
-                );
-              })}
-            </div>
+          <div className="mt-9 border-y border-[var(--color-border-strong)] py-3 sm:py-4">
+            <LayoutGroup id="technology-filters">
+              <div aria-label={en ? "Filter devices by area" : "تصفية الأجهزة حسب المجال"} className="mobile-strip flex gap-1 overflow-x-auto" role="group">
+                {categoryFilters.map((filter) => {
+                  const isActive = activeFilter.slug === filter.slug;
+                  return (
+                    <button
+                      aria-controls="technology-results"
+                      aria-pressed={isActive}
+                      className={`technology-filter relative isolate min-h-11 shrink-0 overflow-hidden px-4 py-2.5 text-sm font-black transition-colors focus-visible:outline-none sm:px-5 ${isActive ? "text-[var(--color-heading)]" : "text-[var(--color-text-muted)] hover:text-[var(--color-accent-strong)]"}`}
+                      key={filter.slug}
+                      onClick={() => selectFilter(filter.slug)}
+                      type="button"
+                    >
+                      <span className="relative">{getLocalizedText(filter.label, lang)}</span>
+                      {isActive && (
+                        <motion.span aria-hidden="true" className="absolute inset-x-4 bottom-0 h-px bg-[var(--color-accent-strong)] sm:inset-x-5" layoutId="technology-filter-active" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </LayoutGroup>
           </div>
 
-          <p
-            aria-live="polite"
-            className="mt-6 font-black text-[#4c2c00]"
-            role="status"
-          >
-            {getResultsLabel(filteredDevices.length, lang)}
-          </p>
+          <div className="mt-8 flex items-end justify-between gap-6 border-b border-[var(--color-border)] pb-5">
+            <p aria-live="polite" className="text-sm font-black text-[var(--color-heading)]" role="status">
+              {getResultsLabel(filteredDevices.length, lang)}
+            </p>
+            <span aria-hidden="true" className="h-px w-16 bg-[var(--color-accent)]" />
+          </div>
 
-          {filteredDevices.length > 0 ? (
-          <motion.div
-             key={activeFilter.slug}
-             className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-               id="technology-results"
-                 variants={staggerContainer}
-                   initial="hidden"
-                  animate="visible"
-                  >
-              {filteredDevices.map((device) => (
-                <MotionLink
-                  className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] shadow-[0_18px_45px_rgba(76,44,0,0.07)] transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
-                  key={device.slug}
-                  to={`/technology/${device.slug}`}
-                  variants={cardItem}
-                >
-                  <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-white/75 p-5">
-                    <img
-                      alt={device.displayName}
-                      className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
-                      decoding="async"
-                      loading="lazy"
-                      src={device.image}
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <h2 className="text-xl font-black text-[#4c2c00]">
-                      {device.displayName}
-                    </h2>
-                    {device.englishName && (
-                      <p
-                        className="mt-2 text-sm font-bold text-[#cf7d11]"
-                        dir="ltr"
-                      >
-                        {device.englishName}
-                      </p>
-                    )}
-                    <p className="mt-3 line-clamp-2 leading-7 text-[#4c2c00]/68">
-                      {device.cardDescription}
-                    </p>
-                    <span className="mt-5 inline-block font-black text-[#cf7d11]">
-                      {en ? "Details" : "التفاصيل"}
-                    </span>
-                  </div>
-                </MotionLink>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              aria-live="polite"
-              className="mt-7 rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center"
-              id="technology-results"
-              initial="hidden"
-              role="status"
-              variants={fadeUp}
-              viewport={viewportOnce}
-              whileInView="visible"
-            >
-              <h2 className="text-2xl font-black text-[#4c2c00]">
-                {en ? "No devices match this category." : "لم نجد أجهزة مطابقة لهذا التصنيف."}
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#4c2c00]/70">
-                {en ? "Contact us and we will help you find the most suitable technology for your case." : "تواصل معنا وسنساعدك في الوصول إلى التقنية الأنسب لحالتك."}
-              </p>
-              <a
-                aria-label={en ? "Ask us on WhatsApp (opens in a new window)" : "اسألنا عبر واتساب (يفتح في نافذة جديدة)"}
-                className="mt-6 inline-flex rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
-                href={emptyStateWhatsappUrl}
-                rel="noopener noreferrer"
-                target="_blank"
+          <AnimatePresence initial={false} mode="wait">
+            {filteredDevices.length > 0 ? (
+              <motion.div
+                animate="visible"
+                className="technology-results"
+                id="technology-results"
+                initial="hidden"
+                key={activeFilter.slug}
+                variants={staggerContainer}
               >
-                {en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}
-              </a>
-            </motion.div>
-          )}
+                {filteredDevices.map((device, index) => {
+                  const primaryName = en ? device.englishName || device.arabicName : device.arabicName;
+                  const secondaryName = en ? device.arabicName : device.englishName;
+                  return (
+                    <MotionLink
+                      className={`technology-result-row group grid min-w-0 gap-7 border-b border-[var(--color-border-strong)] py-9 focus-visible:outline-none md:items-center md:gap-12 lg:py-14 ${index % 2 === 0 ? "technology-result-standard" : "technology-result-reverse"}`}
+                      key={device.slug}
+                      layout
+                      to={`/technology/${device.slug}`}
+                      variants={cardItem}
+                    >
+                      <motion.div className="technology-result-image flex aspect-[4/3] min-w-0 items-center justify-center overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-5 sm:p-8" variants={imageReveal}>
+                        <img alt={device.displayName} className="h-full max-h-[26rem] w-full object-contain" decoding="async" loading="lazy" src={device.image} />
+                      </motion.div>
+                      <div className="technology-result-content min-w-0 py-1">
+                        <span className="text-xs font-black tracking-[0.12em] text-[var(--color-accent-strong)]">{String(index + 1).padStart(2, "0")}</span>
+                        <h2 className="mt-5 break-words text-[clamp(2rem,5vw,4rem)] font-black leading-[1.08] text-[var(--color-heading)]">{primaryName}</h2>
+                        {secondaryName && (
+                          <p className="mt-3 break-words text-base font-black text-[var(--color-accent-strong)] sm:text-lg" dir={en ? "rtl" : "ltr"}>{secondaryName}</p>
+                        )}
+                        <p className="mt-6 max-w-xl text-base leading-8 text-[var(--color-text-muted)] sm:text-lg">{device.cardDescription}</p>
+                        <span className="mt-7 inline-flex min-h-11 items-center gap-2 border-b border-[var(--color-border-strong)] pb-1 text-sm font-black text-[var(--color-accent-strong)]">
+                          {en ? "Details" : "التفاصيل"}
+                          <span aria-hidden="true" className="editorial-arrow">{en ? "→" : "←"}</span>
+                        </span>
+                      </div>
+                    </MotionLink>
+                  );
+                })}
+              </motion.div>
+            ) : (
+              <motion.div aria-live="polite" animate="visible" className="mt-10 border-y border-[var(--color-border-strong)] py-12 text-center" exit="hidden" id="technology-results" initial="hidden" role="status" variants={fadeUp}>
+                <h2 className="text-2xl font-black text-[var(--color-heading)]">{en ? "No devices match this category." : "لم نجد أجهزة مطابقة لهذا التصنيف."}</h2>
+                <p className="mx-auto mt-4 max-w-2xl leading-8 text-[var(--color-text-muted)]">{en ? "Contact us and we will help you find the most suitable technology for your case." : "تواصل معنا وسنساعدك في الوصول إلى التقنية الأنسب لحالتك."}</p>
+                <a aria-label={en ? "Ask us on WhatsApp (opens in a new window)" : "اسألنا عبر واتساب (يفتح في نافذة جديدة)"} className="ds-button ds-button-primary mt-7" href={emptyStateWhatsappUrl} rel="noopener noreferrer" target="_blank">{en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}</a>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 

@@ -1,13 +1,38 @@
-import { lazy, Suspense, useState } from "react";
-import { motion } from "framer-motion";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { Link } from "react-router-dom";
-import { fadeUp, staggerContainer } from "./motionPresets";
+import { fadeUp, heroSequence, heroWord, staggerFast } from "./motionPresets";
 import { createWhatsappUrl } from "../utils/whatsapp";
+import MagneticButton from "../components/motion/MagneticButton";
 
 const OffersModal = lazy(() => import("./OffersModal"));
 const MotionLink = motion.create(Link);
 export default function Hero({ t, lang = "ar" }) {
   const [isOffersOpen, setIsOffersOpen] = useState(false);
+  const [canParallax, setCanParallax] = useState(false);
+  const heroRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "7%"]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.28, 0.38]);
+  const indicatorOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+  const titleWords = t.hero.title.trim().split(/\s+/);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px) and (pointer: fine)");
+    const update = () => setCanParallax(media.matches && !shouldReduceMotion);
+    update();
+    media.addEventListener?.("change", update);
+    return () => media.removeEventListener?.("change", update);
+  }, [shouldReduceMotion]);
   const whatsappUrl = createWhatsappUrl(
     lang === "ar"
       ? "مرحبًا، أرغب في حجز استشارة في مركز كادينا."
@@ -17,20 +42,31 @@ export default function Hero({ t, lang = "ar" }) {
   return (
     <>
       <section
+        ref={heroRef}
         id="home"
-        className="relative min-h-[84vh] overflow-hidden bg-cover bg-center bg-no-repeat pt-[var(--nav-h,4.25rem)] lg:min-h-[92vh]"
-        style={{ backgroundImage: "url('/homeBG.webp')" }}
+        className="relative min-h-[88svh] overflow-hidden bg-[var(--color-surface-dark)] pt-[calc(var(--nav-h,4.25rem)+env(safe-area-inset-top))] sm:min-h-[92svh] lg:min-h-screen"
       >
-        <div className="absolute inset-0 bg-[#2b1b08]/28" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#2b1b08]/14 via-[#2b1b08]/8 to-[#2b1b08]/46" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#f8ead8] to-transparent lg:h-40" />
+        <motion.div
+          aria-hidden="true"
+          className="absolute -inset-y-[7%] inset-x-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/homeBG.webp')",
+            y: canParallax ? backgroundY : 0,
+          }}
+        />
+        <motion.div
+          className="absolute inset-0 bg-[var(--color-surface-dark)]"
+          style={{ opacity: shouldReduceMotion ? 0.28 : overlayOpacity }}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(48,32,18,.82)_0%,rgba(48,32,18,.48)_44%,rgba(48,32,18,.12)_78%,rgba(48,32,18,.18)_100%)] rtl:bg-[linear-gradient(270deg,rgba(48,32,18,.82)_0%,rgba(48,32,18,.48)_44%,rgba(48,32,18,.12)_78%,rgba(48,32,18,.18)_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[var(--color-surface-dark)]/70 to-transparent" />
 
-        <div className="relative z-10 mx-auto flex min-h-[calc(84vh-var(--nav-h,4.25rem))] max-w-7xl items-center px-4 py-10 sm:px-6 lg:min-h-[calc(92vh-var(--nav-h,5rem))] lg:px-8 lg:py-24">
+        <div className="ds-container relative z-10 flex min-h-[calc(88svh-var(--nav-h,4.25rem))] items-end pb-10 pt-16 sm:min-h-[calc(92svh-var(--nav-h,4.25rem))] sm:pb-16 lg:min-h-[calc(100vh-var(--nav-h,5rem))] lg:items-end lg:pb-20 lg:pt-28">
           <motion.div
-            initial="hidden"
+            initial={shouldReduceMotion ? false : "hidden"}
             animate="visible"
-            variants={staggerContainer}
-            className="mx-auto max-w-3xl pt-40 text-center sm:pt-40 lg:mx-0 lg:pt-0 lg:text-start"
+            variants={heroSequence}
+            className="w-full min-w-0 max-w-[52rem] text-start"
           >
             <motion.img
               variants={fadeUp}
@@ -39,10 +75,10 @@ export default function Hero({ t, lang = "ar" }) {
               decoding="async"
               height="284"
               width="284"
-              className="mx-auto mb-5 hidden h-28 w-auto object-contain sm:h-32 lg:mx-0 lg:block lg:h-40"
+              className="mb-8 hidden h-24 w-auto object-contain sm:block lg:h-28"
               style={{
                 filter:
-                  "drop-shadow(0 0 10px rgba(255,247,235,0.65)) drop-shadow(0 10px 24px rgba(0,0,0,0.45))",
+                  "drop-shadow(0 6px 16px rgba(48,32,18,0.24))",
               }}
               onError={(event) => {
                 event.currentTarget.onerror = null;
@@ -53,23 +89,34 @@ export default function Hero({ t, lang = "ar" }) {
             {/* Eyebrow */}
             <motion.div
               variants={fadeUp}
-              className="inline-flex items-center rounded-full border border-[#f8aa2d]/40 bg-[#2b1b08]/40 px-4 py-2 text-sm font-semibold text-[#fff7eb] backdrop-blur-md"
+              className="inline-flex items-center border-s border-[var(--color-accent)] ps-3 text-xs font-bold tracking-[0.08em] text-[var(--color-text-on-dark-muted)] sm:text-sm"
             >
               {t.hero.eyebrow}
             </motion.div>
 
             {/* Title */}
             <motion.h1
-              variants={fadeUp}
-              className="mt-5 text-3xl font-black leading-tight text-white drop-shadow-[0_4px_18px_rgba(43,27,8,0.48)] sm:text-4xl md:text-6xl lg:mt-7"
+              aria-label={t.hero.title}
+              className="on-dark-heading mt-5 max-w-full break-words text-[clamp(2.65rem,10vw,6.5rem)] font-black leading-[1.02] tracking-[-0.045em] drop-shadow-[0_3px_14px_rgba(43,27,8,0.4)] lg:mt-7"
+              variants={staggerFast}
             >
-              {t.hero.title}
+              <span aria-hidden="true" className="flex flex-wrap gap-x-[0.22em]">
+                {titleWords.map((word, index) => (
+                  <motion.span
+                    className="inline-block"
+                    key={`hero-word-${index}`}
+                    variants={heroWord}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </span>
             </motion.h1>
 
             {/* Highlight */}
             <motion.p
               variants={fadeUp}
-              className="mt-4 text-lg font-bold text-[#f8aa2d] drop-shadow-[0_3px_12px_rgba(43,27,8,0.45)] md:text-2xl"
+              className="mt-4 text-base font-bold leading-7 text-[var(--color-accent)] drop-shadow-[0_2px_8px_rgba(43,27,8,0.35)] sm:text-lg md:text-xl"
             >
               {t.hero.highlight}
             </motion.p>
@@ -77,49 +124,45 @@ export default function Hero({ t, lang = "ar" }) {
             {/* Description */}
             <motion.p
               variants={fadeUp}
-              className="mx-auto mt-4 max-w-2xl text-base leading-8 text-[#fff7eb]/92 drop-shadow-[0_3px_14px_rgba(43,27,8,0.35)] md:text-lg lg:mx-0 lg:mt-6"
+              className="mt-4 line-clamp-3 max-w-xl text-base leading-7 text-[var(--color-text-on-dark-muted)] drop-shadow-[0_2px_8px_rgba(43,27,8,0.3)] sm:mt-5 sm:line-clamp-none md:text-lg lg:mt-6"
             >
               {t.hero.description}
             </motion.p>
 
             {/* Buttons */}
             <motion.div
-              variants={fadeUp}
-              className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap lg:mt-10 lg:justify-start"
+              variants={staggerFast}
+              className="mt-6 flex w-full flex-col items-stretch gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center lg:mt-9"
             >
-              <motion.a
-                href={whatsappUrl}
-                aria-label={`${t.hero.primaryCta} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full max-w-xs rounded-full bg-[#f8aa2d] px-6 py-3.5 text-center font-bold text-[#2b1b08] shadow-[0_16px_38px_rgba(207,125,17,0.36)] transition-colors duration-300 hover:bg-[#cf7d11] hover:text-white sm:w-auto lg:px-8 lg:py-4"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {t.hero.primaryCta}
-              </motion.a>
-
-              <MotionLink
-                to="/#services"
-                className="w-full max-w-xs rounded-full border border-[#f8aa2d]/55 bg-[#fff7eb]/14 px-6 py-3.5 text-center font-bold text-white shadow-[0_12px_32px_rgba(43,27,8,0.2)] backdrop-blur-md transition-colors duration-300 hover:border-[#f8aa2d] hover:bg-[#f8aa2d] hover:text-[#2b1b08] sm:w-auto lg:px-8 lg:py-4"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {t.hero.secondaryCta}
-              </MotionLink>
-
-              <motion.button
-                type="button"
-                onClick={() => setIsOffersOpen(true)}
-                className="w-full max-w-xs rounded-full border border-white/28 bg-white px-6 py-3.5 text-center font-bold text-[#2b1b08] shadow-[0_12px_32px_rgba(43,27,8,0.2)] transition-colors duration-300 hover:border-[#f8aa2d] hover:bg-[#f8aa2d] sm:w-auto lg:px-8 lg:py-4"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {t.hero.offersCta}
-              </motion.button>
+              <motion.div className="w-full sm:w-auto" variants={fadeUp}>
+                <MagneticButton className="w-full sm:w-auto">
+                  <motion.a href={whatsappUrl} aria-label={`${t.hero.primaryCta} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`} target="_blank" rel="noopener noreferrer" className="ds-button ds-button-primary w-full px-6 py-3.5 sm:w-auto lg:px-8 lg:py-4" whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>{t.hero.primaryCta}</motion.a>
+                </MagneticButton>
+              </motion.div>
+              <motion.div className="flex w-full sm:w-auto" variants={fadeUp}>
+                <MotionLink to="/#services" className="ds-button ds-button-on-dark w-full bg-[rgba(255,250,242,0.1)] px-6 py-3.5 backdrop-blur-md sm:w-auto lg:px-8 lg:py-4" whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>{t.hero.secondaryCta}</MotionLink>
+              </motion.div>
+              <motion.div className="flex w-full sm:w-auto" variants={fadeUp}>
+                <motion.button type="button" onClick={() => setIsOffersOpen(true)} className="inline-flex min-h-12 w-full items-center justify-center px-4 py-3 text-center text-sm font-bold text-[var(--color-text-on-dark-muted)] underline decoration-[var(--color-accent)]/60 underline-offset-8 transition-colors hover:text-[var(--color-text-on-dark)] sm:w-auto" whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>{t.hero.offersCta}</motion.button>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
+        {!shouldReduceMotion && canParallax && (
+          <motion.div
+            aria-hidden="true"
+            className="absolute bottom-7 start-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 text-[#fff7eb] rtl:translate-x-1/2"
+            style={{ opacity: indicatorOpacity }}
+          >
+            <span className="h-8 w-px overflow-hidden bg-white/30">
+              <motion.span
+                className="block h-3 w-px bg-[#f8aa2d]"
+                animate={{ y: [0, 22] }}
+                transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
+              />
+            </span>
+          </motion.div>
+        )}
       </section>
 
       {isOffersOpen && (
