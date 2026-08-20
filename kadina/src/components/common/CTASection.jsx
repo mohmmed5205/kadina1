@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link, useOutletContext } from "react-router-dom";
 import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
 import { createWhatsappUrl } from "../../utils/whatsapp";
+import MagneticButton from "../motion/MagneticButton";
 
 export default function CTASection({
   title,
@@ -21,46 +22,50 @@ export default function CTASection({
 
   return (
     <motion.section
-      className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
+      className="ds-section-compact"
       initial="hidden"
       variants={fadeUp}
       viewport={viewportOnce}
       whileInView="visible"
     >
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
-        <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
-          {resolvedTitle}
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#fff7eb]/75">
-          {resolvedDescription}
-        </p>
-        <div className="mt-7 flex flex-wrap justify-center gap-3">
-          {primaryTo ? (
-            <Link
-              className="rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
-              to={primaryTo}
-            >
-              {resolvedPrimaryLabel}
-            </Link>
-          ) : (
-            <a
-              aria-label={`${resolvedPrimaryLabel} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
-              className="rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
-              href={whatsappUrl}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {resolvedPrimaryLabel}
-            </a>
-          )}
-          {secondaryLabel && secondaryTo && (
-            <Link
-              className="rounded-full border border-[#fff7eb]/25 px-6 py-3 font-black text-[#fff7eb] transition hover:border-[#f8aa2d] hover:text-[#f8aa2d]"
-              to={secondaryTo}
-            >
-              {secondaryLabel}
-            </Link>
-          )}
+      <div className="ds-container">
+        <div className="cta-panel">
+          <h2>{resolvedTitle}</h2>
+          <p className="mx-auto mt-4 max-w-2xl leading-8">
+            {resolvedDescription}
+          </p>
+          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+            {primaryTo ? (
+              <MagneticButton className="w-full sm:w-auto">
+                <Link
+                  className="ds-button ds-button-primary w-full sm:w-auto"
+                  to={primaryTo}
+                >
+                  {resolvedPrimaryLabel}
+                </Link>
+              </MagneticButton>
+            ) : (
+              <MagneticButton className="w-full sm:w-auto">
+                <a
+                  aria-label={`${resolvedPrimaryLabel} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
+                  className="ds-button ds-button-primary w-full sm:w-auto"
+                  href={whatsappUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {resolvedPrimaryLabel}
+                </a>
+              </MagneticButton>
+            )}
+            {secondaryLabel && secondaryTo && (
+              <Link
+                className="ds-button ds-button-on-dark w-full sm:w-auto"
+                to={secondaryTo}
+              >
+                {secondaryLabel}
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </motion.section>

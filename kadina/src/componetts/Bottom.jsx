@@ -1,78 +1,97 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { getPrimaryNavigation } from "../data/navigation";
 import { createWhatsappUrl } from "../utils/whatsapp";
-import { fadeUp, staggerContainer, viewportOnce } from "./motionPresets";
+import { fadeUp, viewportOnce } from "./motionPresets";
 
 export default function Bottom({ t, lang }) {
+  const shouldReduceMotion = useReducedMotion();
+  const en = lang === "en";
   const currentYear = new Date().getFullYear();
-  const navigationItems = getPrimaryNavigation(lang).filter(
+  const primaryItems = getPrimaryNavigation(lang).filter(
     (item) => item.to !== "/",
   );
+  const blogItem = { to: "/blog", title: en ? "Blog" : "المدونة" };
+  const navigationItems = primaryItems.some((item) => item.to === "/blog")
+    ? primaryItems
+    : primaryItems.flatMap((item) =>
+        item.to === "/contact" ? [blogItem, item] : [item],
+      );
   const whatsappUrl = createWhatsappUrl(t.contact.whatsappCta);
 
   return (
-    <footer className="relative overflow-hidden bg-[#fff7eb]">
-      <div className="h-1 w-full bg-gradient-to-r from-transparent via-[#f8aa2d]/60 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(248,170,45,0.11),transparent_42%,rgba(255,247,235,0.05))]" />
+    <footer className="relative overflow-hidden bg-[var(--color-surface-dark)] text-[var(--color-text-on-dark)]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(214,163,91,.13),transparent_34%)]" />
 
       <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
+        className="ds-container relative py-14 lg:py-18"
+        initial={shouldReduceMotion ? false : "hidden"}
+        variants={fadeUp}
         viewport={viewportOnce}
-        className="relative mx-auto max-w-7xl px-4 py-10 sm:px-5 lg:px-8 lg:py-12"
+        whileInView="visible"
       >
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_1.8fr_1fr] lg:items-center">
-          <motion.div
-            variants={fadeUp}
-            className="mx-auto w-fit lg:mx-0"
-            whileHover={{ y: -3 }}
-            whileTap={{ scale: 0.98 }}
-          >
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_1.35fr_.9fr] lg:gap-16">
+          <div>
             <Link
               aria-label={t.center.name}
-              className="flex items-center justify-center"
+              className="inline-flex min-h-24 items-center rounded-[var(--radius-md)] bg-[var(--color-surface-raised)] px-6 py-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]"
               to="/"
             >
               <img
-                src="/kadina-logo.webp"
                 alt={t.center.name}
-                className="h-16 w-auto object-contain lg:h-30"
+                className="h-20 w-auto object-contain"
                 decoding="async"
                 height="284"
                 loading="lazy"
+                src="/kadina-logo.webp"
                 width="284"
-                onError={(event) => {
-                  event.currentTarget.onerror = null;
-                  event.currentTarget.src = "/kadina-logo.webp";
-                }}
               />
             </Link>
-          </motion.div>
-
-          <motion.div variants={fadeUp} className="text-center">
-            <p className="font-black tracking-wide text-[#f8aa2d]">
+            <p className="mt-6 text-lg font-black text-[var(--color-accent)]">
               {t.footer.note}
             </p>
-            <nav className="mt-5 flex flex-col justify-center gap-2 sm:flex-row sm:flex-wrap" aria-label="Footer navigation">
+          </div>
+
+          <nav aria-label={en ? "Footer navigation" : "روابط تذييل الموقع"}>
+            <h2 className="text-sm font-black !text-[var(--color-accent)]">
+              {en ? "Navigation" : "روابط الموقع"}
+            </h2>
+            <div className="mt-5 grid grid-cols-1 gap-x-7 sm:grid-cols-2">
               {navigationItems.map((link) => (
                 <Link
+                  className="flex min-h-11 items-center border-b border-white/12 py-2 text-sm font-bold text-[var(--color-text-on-dark-muted)] transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]"
                   key={link.to}
-                  className="rounded-full border border-[#4c2c00]/10 px-4 py-2 text-sm font-bold text-[#4c2c00]/72 transition hover:border-[#f8aa2d]/35 hover:bg-white/8 hover:text-[#f8aa2d]"
                   to={link.to}
                 >
                   {link.title}
                 </Link>
               ))}
-            </nav>
-          </motion.div>
+            </div>
+          </nav>
 
-          <motion.div variants={fadeUp} className="text-center lg:text-end">
+          <div>
+            <h2 className="text-sm font-black !text-[var(--color-accent)]">
+              {t.contact.socialLabel}
+            </h2>
+            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+              {t.contact.socials.map((social) => (
+                <a
+                  aria-label={`${social.label} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
+                  className="inline-flex min-h-11 min-w-11 items-center justify-center border-b border-white/15 px-1 text-sm font-bold text-[var(--color-text-on-dark-muted)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:justify-start"
+                  href={social.url}
+                  key={social.key}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {social.label}
+                </a>
+              ))}
+            </div>
+
             <a
-              aria-label={`${t.contact.whatsappCta} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
-              className="inline-flex items-center gap-2 rounded-full bg-[#f8aa2d] px-5 py-2.5 text-sm font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
+              aria-label={`${t.contact.whatsappCta} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
+              className="ds-button ds-button-primary mt-7 w-full sm:w-auto"
               href={whatsappUrl}
               rel="noopener noreferrer"
               target="_blank"
@@ -80,10 +99,13 @@ export default function Bottom({ t, lang }) {
               <FaWhatsapp aria-hidden="true" />
               <span>{t.contact.whatsappCta}</span>
             </a>
-            <p className="mt-4 text-sm leading-7 text-[#4c2c00]/55">
-              {currentYear} &copy; {t.footer.rights}
-            </p>
-          </motion.div>
+          </div>
+        </div>
+
+        <div className="mt-12 border-t border-white/15 pt-6">
+          <p className="text-sm leading-7 text-[var(--color-text-on-dark-muted)]">
+            {currentYear} &copy; {t.footer.rights}
+          </p>
         </div>
       </motion.div>
     </footer>

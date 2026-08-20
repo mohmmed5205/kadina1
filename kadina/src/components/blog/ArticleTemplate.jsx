@@ -176,7 +176,7 @@ export default function ArticleTemplate({ article: rawArticle }) {
           >
             {article.sections.map((section, index) => (
               <motion.section
-                key={section.heading || index}
+                key={`article-section-${index}`}
                 variants={cardItem}
               >
                 {section.heading && <SectionTitle title={section.heading} />}

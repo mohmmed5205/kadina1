@@ -7,10 +7,9 @@ import {
   Stethoscope,
   Syringe,
 } from "lucide-react";
-import CardGrid from "../common/CardGrid";
 import SectionTitle from "../common/SectionTitle";
-import { cardItem } from "../../componetts/motionPresets";
-import { servicePages } from "../../data/services";
+import { cardItem, viewportOnce } from "../../componetts/motionPresets";
+import { getServicePages } from "../../data/services";
 
 const MotionLink = motion.create(Link);
 
@@ -22,61 +21,98 @@ const serviceIcons = {
   injectables: Syringe,
 };
 
-const englishServices = {
-  dermatology: ["Dermatology", "Consultant-led diagnosis and treatment plans for skin conditions."],
-  laser: ["Laser", "Advanced laser hair removal with technologies suited to different skin types."],
-  "plastic-surgery": ["Plastic Surgery", "Specialized surgical procedures planned around natural, considered results."],
-  hair: ["Hair", "Diagnosis and treatment options for hair loss and scalp concerns."],
-  injectables: ["Cosmetic Injectables", "Botox, fillers and plasma treatments with a balanced, natural approach."],
-};
+const bentoPlacement = [
+  "lg:col-span-7 lg:row-span-3",
+  "lg:col-span-5 lg:row-span-2",
+  "lg:col-span-5 lg:row-span-1",
+  "lg:col-span-6 lg:row-span-1",
+  "lg:col-span-6 lg:row-span-1",
+];
 
 export default function HomeServicesSection() {
   const { lang } = useOutletContext();
+  const services = getServicePages(lang);
+
   return (
     <section
-      className="scroll-mt-24 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
+      className="ds-section scroll-mt-24 bg-[var(--color-surface)]"
       id="services"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="ds-container">
         <SectionTitle
           eyebrow={lang === "ar" ? "خدماتنا" : "Our Services"}
           title={lang === "ar" ? "الخدمات" : "Services"}
         />
-        <CardGrid className="mt-9">
-          {servicePages.map((service) => {
+
+        <motion.div
+          className="mt-10 grid grid-flow-dense grid-cols-1 gap-4 md:grid-cols-2 lg:mt-14 lg:grid-cols-12 lg:auto-rows-[10rem]"
+          initial="hidden"
+          viewport={viewportOnce}
+          whileInView="visible"
+        >
+          {services.map((service, index) => {
             const ServiceIcon = serviceIcons[service.slug];
+            const visual = service.relatedDevices?.[0]?.image;
+            const featured = index === 0;
 
             return (
               <MotionLink
-                className="group rounded-[1.75rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-6 shadow-[0_18px_45px_rgba(76,44,0,0.07)] transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
+                className={`service-bento-item group relative isolate flex min-h-56 flex-col justify-end overflow-hidden border p-6 sm:min-h-64 sm:p-8 lg:p-9 ${bentoPlacement[index]} ${featured ? "border-[var(--color-border-on-dark)] bg-[var(--color-surface-dark)] text-[var(--color-text-on-dark)]" : index === 1 ? "border-[var(--color-border)] bg-[var(--color-warm-beige-strong)]" : "border-[var(--color-border)] bg-[var(--color-surface-raised)]"}`}
                 key={service.slug}
                 to={`/services/${service.slug}`}
                 variants={cardItem}
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f8aa2d]/16 text-[#cf7d11]">
-                  <ServiceIcon aria-hidden="true" size={24} strokeWidth={2} />
+                {visual && index < 2 ? (
+                  <img
+                    alt=""
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute end-0 top-0 -z-10 h-[58%] w-[62%] object-contain p-5 transition-transform duration-500 group-hover:scale-[1.02] ${featured ? "opacity-25 brightness-[1.8]" : "opacity-35"}`}
+                    decoding="async"
+                    loading="lazy"
+                    src={visual}
+                  />
+                ) : null}
+
+                <span
+                  className={`absolute end-6 top-6 flex h-12 w-12 items-center justify-center rounded-full border ${featured ? "border-[var(--color-border-on-dark)] text-[var(--color-accent)]" : "border-[var(--color-border-strong)] text-[var(--color-accent-strong)]"}`}
+                >
+                  <ServiceIcon aria-hidden="true" size={23} strokeWidth={1.7} />
                 </span>
-                <h3 className="mt-5 text-xl font-black text-[#4c2c00]">
-                  {lang === "ar" ? service.title : englishServices[service.slug][0]}
-                </h3>
-                <p className="mt-3 leading-8 text-[#4c2c00]/68">
-                  {lang === "ar" ? service.subtitle : englishServices[service.slug][1]}
+
+                <p
+                  className={`text-xs font-black tracking-[0.12em] ${featured ? "text-[var(--color-accent)]" : "text-[var(--color-accent-strong)]"}`}
+                >
+                  {String(index + 1).padStart(2, "0")}
                 </p>
-                <span className="mt-5 inline-block font-black text-[#cf7d11]">
+                <h3
+                  className={`mt-3 font-black leading-[1.12] ${featured ? "on-dark-heading max-w-2xl text-[clamp(2.5rem,6vw,5rem)]" : index === 1 ? "text-3xl text-[var(--color-heading)] sm:text-4xl" : "text-2xl text-[var(--color-heading)]"}`}
+                >
+                  {service.title}
+                </h3>
+                <p
+                  className={`mt-3 max-w-xl leading-8 ${featured ? "text-[var(--color-text-on-dark-muted)] lg:text-lg" : "text-[var(--color-text-muted)]"}`}
+                >
+                  {service.subtitle}
+                </p>
+                <span
+                  className={`mt-5 inline-flex items-center gap-3 font-black ${featured ? "text-[var(--color-accent)]" : "text-[var(--color-accent-strong)]"}`}
+                >
                   {lang === "ar" ? "التفاصيل" : "Details"}
+                  <span aria-hidden="true" className="editorial-arrow">
+                    {lang === "ar" ? "←" : "→"}
+                  </span>
                 </span>
               </MotionLink>
             );
           })}
-        </CardGrid>
-        <div className="mt-8 text-center">
-          <Link
-            className="inline-block font-black text-[#cf7d11] underline decoration-[#f8aa2d]/40 underline-offset-8"
-            to="/services"
-          >
-            {lang === "ar" ? "عرض جميع الخدمات" : "View All Services"}
-          </Link>
-        </div>
+        </motion.div>
+
+        <Link
+          className="mt-9 inline-flex min-h-11 items-center font-black text-[var(--color-accent-strong)] underline decoration-[var(--color-accent)]/45 underline-offset-8"
+          to="/services"
+        >
+          {lang === "ar" ? "عرض جميع الخدمات" : "View All Services"}
+        </Link>
       </div>
     </section>
   );

@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import { Link, useLocation, useOutletContext } from "react-router-dom";
-import Breadcrumbs from "../common/Breadcrumbs";
-import SectionTitle from "../common/SectionTitle";
+import PageHero from "../common/PageHero";
 import Seo from "../seo/Seo";
 import {
   absoluteUrl,
   createBreadcrumbSchema,
   createWebPageSchema,
 } from "../seo/seoUtils";
-import { getDoctorDetail, getDoctorDetails } from "../../data/doctors";
+import { getDoctorDetail } from "../../data/doctors";
 import { createWhatsappUrl } from "../../utils/whatsapp";
 import {
   cardItem,
@@ -17,26 +16,36 @@ import {
   viewportOnce,
 } from "../../componetts/motionPresets";
 
-const MotionLink = motion.create(Link);
+function EditorialLinks({ items, en }) {
+  if (!items?.length) return null;
 
-function LinkCards({ items }) {
   return (
     <motion.div
-      className="mt-6 grid gap-4 sm:grid-cols-2"
+      className="mt-6 border-t border-[var(--color-border)]"
       initial="hidden"
       variants={staggerContainer}
       viewport={viewportOnce}
       whileInView="visible"
     >
       {items.map((item) => (
-        <MotionLink
-          className="rounded-[1.5rem] border border-[#f8aa2d]/25 bg-white/70 p-5 font-black leading-7 text-[#4c2c00] transition hover:-translate-y-1 hover:border-[#f8aa2d]/55 hover:text-[#cf7d11]"
+        <motion.div
+          className="border-b border-[var(--color-border)]"
           key={item.to}
-          to={item.to}
           variants={cardItem}
         >
-          {item.title}
-        </MotionLink>
+          <Link
+            className="group flex min-h-16 items-center justify-between gap-6 py-4 font-black leading-7 text-[var(--color-heading)] transition-colors hover:text-[var(--color-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent-strong)]"
+            to={item.to}
+          >
+            <span>{item.title}</span>
+            <span
+              aria-hidden="true"
+              className="editorial-arrow shrink-0 text-[var(--color-accent-strong)]"
+            >
+              {en ? "→" : "←"}
+            </span>
+          </Link>
+        </motion.div>
       ))}
     </motion.div>
   );
@@ -53,13 +62,15 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
       <>
         <Seo
           canonicalPath={location.pathname}
-          description={en ? "The requested doctor page could not be found." : "تعذر العثور على صفحة الطبيب المطلوبة."}
+          description={
+            en
+              ? "The requested doctor page could not be found."
+              : "تعذر العثور على صفحة الطبيب المطلوبة."
+          }
           noindex
           title={en ? "Doctor Not Found" : "الطبيب غير موجود"}
         />
-        <section
-          className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8"
-        >
+        <section className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8">
           <motion.div
             animate="visible"
             className="mx-auto max-w-3xl rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-12"
@@ -70,7 +81,9 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
               {en ? "Doctor Not Found" : "الطبيب غير موجود"}
             </h1>
             <p className="mt-4 leading-8 text-[#4c2c00]/68">
-              {en ? "We could not find the requested doctor." : "لم نتمكن من العثور على الطبيب المطلوب."}
+              {en
+                ? "We could not find the requested doctor."
+                : "لم نتمكن من العثور على الطبيب المطلوب."}
             </p>
             <Link
               className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
@@ -94,22 +107,28 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
     ...(doctor.specialty && { medicalSpecialty: doctor.specialty }),
     ...(doctor.image && { image: absoluteUrl(doctor.image) }),
   };
-  const doctorServicePaths = new Set(doctor.services.map((item) => item.to));
-  const relatedDoctors = getDoctorDetails(lang)
-    .filter(
-      (candidate) =>
-        candidate.slug !== doctor.slug &&
-        candidate.services.some((service) =>
-          doctorServicePaths.has(service.to),
-        ),
-    )
-    .slice(0, 3);
   const focusAreas = [
     ...doctor.services.map((item) => item.title),
     ...doctor.devices.map((item) => item.title),
     ...doctor.solutions.map((item) => item.title),
   ];
   const whatsappUrl = createWhatsappUrl(doctor.whatsappMessage);
+
+  const portraitFallback = (
+    <div
+      aria-label={
+        en
+          ? `Portrait placeholder for ${doctor.name}`
+          : `صورة تعريفية بديلة للطبيبة ${doctor.name}`
+      }
+      className="doctor-portrait-placeholder flex h-full w-full items-center justify-center p-8 text-center"
+      role="img"
+    >
+      <span className="text-3xl font-black leading-relaxed text-[var(--color-heading)] sm:text-4xl">
+        {doctor.name}
+      </span>
+    </div>
+  );
 
   return (
     <div>
@@ -133,214 +152,160 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
         ]}
         title={`${doctor.name} — ${doctor.specialty || doctor.title}`}
       />
-      <section className="relative overflow-hidden border-b border-[#f8aa2d]/20 bg-[#fff7eb] px-4 pb-14 pt-28 sm:px-5 sm:pb-16 sm:pt-32 lg:px-8 lg:pb-20">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,170,45,0.2),transparent_38%)]" />
-        <div className="relative mx-auto max-w-7xl">
-          <Breadcrumbs
-            items={[
-              { label: en ? "Doctors" : "الأطباء", to: "/doctors" },
-              { label: doctor.name },
-            ]}
-          />
 
-          <motion.div
-            animate="visible"
-            className="mt-10 grid items-center gap-10 lg:grid-cols-2"
-            initial="hidden"
-            variants={fadeUp}
-          >
-            <div className="flex aspect-[4/5] min-h-96 w-full items-center justify-center overflow-hidden rounded-[2rem] border border-[#f8aa2d]/25 bg-white/65 shadow-[0_20px_55px_rgba(76,44,0,0.08)] sm:min-h-[30rem] lg:min-h-[34rem]">
-              {doctor.image ? (
-                <img
-                  alt={doctor.name}
-                  className="h-full w-full object-cover object-top"
-                  decoding="async"
-                  height="1440"
-                  src={doctor.image}
-                  width="1080"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,rgba(248,170,45,0.2),rgba(255,247,235,0.9))] p-8 text-center text-3xl font-black leading-relaxed text-[#4c2c00]">
-                  {doctor.name}
-                </div>
-              )}
-            </div>
+      <PageHero
+        breadcrumbItems={[
+          { label: en ? "Doctors" : "الأطباء", to: "/doctors" },
+          { label: doctor.name },
+        ]}
+        className="doctor-detail-hero"
+        description={doctor.shortBio}
+        eyebrow={doctor.title}
+        secondaryTitle={doctor.specialty}
+        title={doctor.name}
+        variant="detail"
+        visual={
+          doctor.image
+            ? {
+                alt: doctor.name,
+                className: "h-full w-full object-cover object-top",
+                src: doctor.image,
+              }
+            : undefined
+        }
+        visualFallback={!doctor.image ? portraitFallback : undefined}
+      >
+        {doctor.yearsOfExperience !== null && (
+          <p className="mt-6 border-s-2 border-[var(--color-accent)] ps-4 text-sm font-black text-[var(--color-heading)]">
+            {en ? "Experience" : "الخبرة"}: {doctor.yearsOfExperience}{" "}
+            {en ? "years" : "سنة"}
+          </p>
+        )}
 
-            <div>
-              {doctor.title && (
-                <p className="text-sm font-black tracking-wide text-[#cf7d11]">
-                  {doctor.title}
-                </p>
-              )}
-              <h1 className="mt-3 text-3xl font-black leading-tight text-[#4c2c00] sm:text-4xl lg:text-5xl">
-                {doctor.name}
-              </h1>
-              {doctor.specialty && (
-                <p className="mt-5 max-w-3xl text-base font-bold leading-8 text-[#4c2c00]/72 sm:text-lg">
-                  {doctor.specialty}
-                </p>
-              )}
-              {doctor.shortBio && (
-                <p className="mt-5 max-w-3xl font-medium leading-8 text-[#4c2c00]/68">
-                  {doctor.shortBio}
-                </p>
-              )}
-              {doctor.yearsOfExperience !== null && (
-                <div className="mt-7 inline-flex rounded-full border border-[#f8aa2d]/30 bg-[#f8aa2d]/12 px-5 py-3 font-black text-[#4c2c00]">
-                  {en ? "Experience" : "الخبرة"}: {doctor.yearsOfExperience} {en ? "years" : "سنة"}
-                </div>
-              )}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {focusAreas.length > 0 && (
-        <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle eyebrow={doctor.name} title={en ? "Areas of Expertise" : "مجالات التميز"} />
-            <motion.ul
-              className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-              initial="hidden"
-              variants={staggerContainer}
-              viewport={viewportOnce}
-              whileInView="visible"
-            >
-              {focusAreas.map((area) => (
-                <motion.li
-                  className="flex gap-3 rounded-2xl border border-[#4c2c00]/10 bg-[#fff7eb] p-4 font-bold leading-7 text-[#4c2c00]/72"
-                  key={area}
-                  variants={cardItem}
-                >
+        {focusAreas.length > 0 && (
+          <div className="mt-7">
+            <p className="text-xs font-black text-[var(--color-accent-strong)]">
+              {en ? "Areas of Expertise" : "مجالات التميز"}
+            </p>
+            <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold text-[var(--color-text-muted)]">
+              {focusAreas.map((area, index) => (
+                <li className="inline-flex items-center gap-2" key={`hero-focus-${index}`}>
                   <span
                     aria-hidden="true"
-                    className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#f8aa2d]"
+                    className="h-1 w-1 rounded-full bg-[var(--color-accent-strong)]"
                   />
-                  <span>{area}</span>
-                </motion.li>
+                  {area}
+                </li>
               ))}
-            </motion.ul>
+            </ul>
           </div>
-        </section>
-      )}
+        )}
+
+        <a
+          aria-label={
+            en
+              ? `Book with ${doctor.name} on WhatsApp (opens in a new window)`
+              : `احجز مع ${doctor.name} عبر واتساب (يفتح في نافذة جديدة)`
+          }
+          className="ds-button ds-button-primary mt-8 w-full sm:w-auto"
+          href={whatsappUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {en
+            ? "Book Your Consultation on WhatsApp"
+            : "احجز استشارتك عبر واتساب"}
+        </a>
+      </PageHero>
 
       {(doctor.services.length > 0 ||
         doctor.devices.length > 0 ||
         doctor.solutions.length > 0) && (
-        <section className="bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-3">
+        <section className="ds-section">
+          <div className="ds-container grid gap-x-12 gap-y-14 lg:grid-cols-3">
             {doctor.services.length > 0 && (
-              <div>
-                <SectionTitle title={en ? "Related Services" : "الخدمات المرتبطة"} />
-                <LinkCards items={doctor.services} />
-              </div>
+              <motion.div
+                initial="hidden"
+                variants={fadeUp}
+                viewport={viewportOnce}
+                whileInView="visible"
+              >
+                <p className="section-title-eyebrow">
+                  {en ? "Specialty" : "التخصص"}
+                </p>
+                <h2 className="mt-4 text-2xl font-black text-[var(--color-heading)] sm:text-3xl">
+                  {en ? "Related Services" : "الخدمات المرتبطة"}
+                </h2>
+                <EditorialLinks en={en} items={doctor.services} />
+              </motion.div>
             )}
+
             {doctor.devices.length > 0 && (
-              <div>
-                <SectionTitle title={en ? "Related Devices" : "الأجهزة المرتبطة"} />
-                <LinkCards items={doctor.devices} />
-              </div>
+              <motion.div
+                initial="hidden"
+                variants={fadeUp}
+                viewport={viewportOnce}
+                whileInView="visible"
+              >
+                <p className="section-title-eyebrow">
+                  {en ? "Technology" : "التقنيات"}
+                </p>
+                <h2 className="mt-4 text-2xl font-black text-[var(--color-heading)] sm:text-3xl">
+                  {en ? "Related Devices" : "الأجهزة المرتبطة"}
+                </h2>
+                <EditorialLinks en={en} items={doctor.devices} />
+              </motion.div>
             )}
+
             {doctor.solutions.length > 0 && (
-              <div>
-                <SectionTitle title={en ? "Related Solutions" : "الحلول المرتبطة"} />
-                <LinkCards items={doctor.solutions} />
-              </div>
+              <motion.div
+                initial="hidden"
+                variants={fadeUp}
+                viewport={viewportOnce}
+                whileInView="visible"
+              >
+                <p className="section-title-eyebrow">
+                  {en ? "Concerns" : "المشكلات"}
+                </p>
+                <h2 className="mt-4 text-2xl font-black text-[var(--color-heading)] sm:text-3xl">
+                  {en ? "Related Solutions" : "الحلول المرتبطة"}
+                </h2>
+                <EditorialLinks en={en} items={doctor.solutions} />
+              </motion.div>
             )}
           </div>
         </section>
       )}
 
       {doctor.socialLinks.length > 0 && (
-        <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle title={en ? "Doctor's Accounts" : "حسابات الطبيب"} />
-            <motion.div
-              className="mt-6 flex flex-wrap gap-3"
-              initial="hidden"
-              variants={staggerContainer}
-              viewport={viewportOnce}
-              whileInView="visible"
-            >
+        <motion.section
+          className="border-t border-[var(--color-border)]"
+          initial="hidden"
+          variants={fadeUp}
+          viewport={viewportOnce}
+          whileInView="visible"
+        >
+          <div className="ds-container ds-section-compact">
+            <h2 className="text-2xl font-black text-[var(--color-heading)] sm:text-3xl">
+              {en ? "Doctor's Accounts" : "حسابات الطبيب"}
+            </h2>
+            <div className="mt-6 flex flex-wrap gap-3">
               {doctor.socialLinks.map((socialLink) => (
-                <motion.a
+                <a
                   aria-label={`${socialLink.label} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
-                  className="rounded-full border border-[#f8aa2d]/30 bg-[#fff7eb] px-5 py-3 font-black text-[#4c2c00]"
+                  className="ds-button ds-button-secondary"
                   href={socialLink.url}
                   key={socialLink.url}
                   rel="noopener noreferrer"
                   target="_blank"
-                  variants={cardItem}
                 >
                   {socialLink.label}
-                </motion.a>
+                </a>
               ))}
-            </motion.div>
+            </div>
           </div>
-        </section>
+        </motion.section>
       )}
-
-      {relatedDoctors.length > 0 && (
-        <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle title={en ? "Doctors with Related Specialties" : "أطباء ذوو تخصص قريب"} />
-            <motion.div
-              className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-              initial="hidden"
-              variants={staggerContainer}
-              viewport={viewportOnce}
-              whileInView="visible"
-            >
-              {relatedDoctors.map((relatedDoctor) => (
-                <MotionLink
-                  className="rounded-[1.5rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-5 transition hover:-translate-y-1 hover:border-[#f8aa2d]/55"
-                  key={relatedDoctor.slug}
-                  to={`/doctors/${relatedDoctor.slug}`}
-                  variants={cardItem}
-                >
-                  <h3 className="text-lg font-black text-[#4c2c00]">
-                    {relatedDoctor.name}
-                  </h3>
-                  <p className="mt-3 text-sm font-bold leading-7 text-[#4c2c00]/60">
-                    {relatedDoctor.specialty}
-                  </p>
-                </MotionLink>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-      )}
-
-      <motion.section
-        className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
-        initial="hidden"
-        variants={fadeUp}
-        viewport={viewportOnce}
-        whileInView="visible"
-      >
-        <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#f8aa2d]/30 bg-[#4c2c00] px-6 py-10 text-center shadow-[0_24px_70px_rgba(76,44,0,0.2)] sm:px-10 sm:py-12">
-          <h2 className="text-2xl font-black text-[#fff7eb] sm:text-3xl">
-            {en ? "Book with" : "احجز مع"} {doctor.name}
-          </h2>
-          <a
-            aria-label={en ? "Book your consultation on WhatsApp (opens in a new window)" : "احجز استشارتك عبر واتساب (يفتح في نافذة جديدة)"}
-            className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
-            href={whatsappUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {en ? "Book Your Consultation on WhatsApp" : "احجز استشارتك عبر واتساب"}
-          </a>
-          <div>
-            <Link
-              className="mt-6 inline-block font-black text-[#fff7eb]/75 underline decoration-[#f8aa2d]/45 underline-offset-8 transition hover:text-[#f8aa2d]"
-              to="/doctors"
-            >
-              {en ? "Back to All Doctors" : "العودة إلى جميع الأطباء"}
-            </Link>
-          </div>
-        </div>
-      </motion.section>
     </div>
   );
 }

@@ -63,10 +63,10 @@ export default function BlogPage() {
             viewport={viewportOnce}
             whileInView="visible"
           >
-            {localizedCategories.map((category) => (
+            {localizedCategories.map((category, index) => (
               <motion.span
                 className="rounded-full border border-[#f8aa2d]/30 bg-[#fff7eb] px-4 py-2 text-sm font-black text-[#4c2c00]"
-                key={category}
+                key={`article-category-${index}`}
                 variants={cardItem}
               >
                 {category}

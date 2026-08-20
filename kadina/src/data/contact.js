@@ -1,7 +1,7 @@
 import { createWhatsappUrl } from "../utils/whatsapp";
 
 export const contactPhone = "0114555444";
-export const contactEmail = "info@kadina.com.sa";
+export const contactEmail = "info@kadina.sa";
 export const contactAddress = "الرياض   —  الحي المروج  -  مخرج 5   ";
 export const contactHours = {
   days: "السبت – الخميس",
@@ -10,9 +10,6 @@ export const contactHours = {
 export const contactMapUrl =
   "https://maps.app.goo.gl/cLeVtBdTjNd71GrPA?g_st=ic";
 
-// TODO: Confirm contact data before publishing. The PDF email differs from the
-// current project data, and it mentions WhatsApp without a separate number.
-// These values intentionally preserve the current ContactPage content.
 export const contactItems = [
   {
     title: "الهاتف",

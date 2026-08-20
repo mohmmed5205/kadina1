@@ -8,6 +8,7 @@ import Seo from "../components/seo/Seo";
 import { getDoctorDetails } from "../data/doctors";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import { fadeUp, viewportOnce } from "../componetts/motionPresets";
+import { getLocalizedValue } from "../utils/i18n";
 
 const serviceOptions = {
   ar: ["الجلدية", "الليزر", "جراحة التجميل", "الشعر", "الحقن التجميلية", "جلسات العناية"],
@@ -26,6 +27,8 @@ export default function BookingPage() {
   const { lang } = useOutletContext();
   const en = lang === "en";
   const doctors = getDoctorDetails(lang);
+  const localizedServiceOptions =
+    getLocalizedValue(serviceOptions, lang) ?? serviceOptions.ar;
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
 
@@ -155,8 +158,8 @@ export default function BookingPage() {
                   value={form.service}
                 >
                   <option value="">{en ? "Choose a Service" : "اختر الخدمة"}</option>
-                  {serviceOptions[lang].map((service) => (
-                    <option key={service} value={service}>
+                  {localizedServiceOptions.map((service, index) => (
+                    <option key={`service-option-${index}`} value={service}>
                       {service}
                     </option>
                   ))}
@@ -194,13 +197,13 @@ export default function BookingPage() {
                 {en ? "Preferred Time" : "الوقت المفضل"}
               </legend>
               <div className="mt-3 flex flex-wrap gap-3">
-                {(en ? ["Morning", "Evening"] : ["صباحي", "مسائي"]).map((time) => (
+                {(en ? ["Morning", "Evening"] : ["صباحي", "مسائي"]).map((time, index) => (
                   <label
                     className="cursor-pointer rounded-full border border-[#4c2c00]/15 bg-white/70 px-5 py-3 font-bold"
-                    key={time}
+                    key={`preferred-time-${index}`}
                   >
                     <input
-                      className="ml-2 accent-[#cf7d11]"
+                      className="me-2 accent-[#cf7d11]"
                       name="preferredTime"
                       onChange={updateField}
                       type="radio"
@@ -227,14 +230,14 @@ export default function BookingPage() {
             <div className="mt-5 flex flex-wrap justify-center gap-4 text-sm font-black">
               <a
                 aria-label={en ? "Direct WhatsApp (opens in a new window)" : "واتساب مباشر (يفتح في نافذة جديدة)"}
-                className="text-[#cf7d11]"
+                className="inline-flex min-h-11 items-center px-1 text-[#cf7d11]"
                 href={createWhatsappUrl(en ? "Hello, I would like to book or ask about Kadina services." : "للحجز والاستفسار")}
                 rel="noopener noreferrer"
                 target="_blank"
               >
                 {en ? "Direct WhatsApp" : "واتساب مباشر"}
               </a>
-              <a className="text-[#cf7d11]" href="tel:0114555444">
+              <a className="inline-flex min-h-11 items-center px-1 text-[#cf7d11]" href="tel:0114555444">
                 {en ? "Call" : "اتصال"}: 0114555444
               </a>
             </div>

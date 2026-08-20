@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
@@ -11,6 +11,7 @@ import {
 } from "../components/seo/seoUtils";
 import {
   cardItem,
+  fadeUp,
   staggerContainer,
   viewportOnce,
 } from "../componetts/motionPresets";
@@ -56,6 +57,7 @@ export default function FaqPage() {
   const en = lang === "en";
   const localizedFaqItems = en ? faqItemsEn : faqItems;
   const [openIndex, setOpenIndex] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <div>
@@ -81,12 +83,34 @@ export default function FaqPage() {
         eyebrow={en ? "FAQ" : "الأسئلة الشائعة"}
         title={en ? "Frequently Asked Questions" : "الأسئلة الشائعة"}
         description={en ? "Clear answers to the questions most often asked before making a decision." : "إجابات واضحة عن أكثر الأسئلة التي تسبق قرارك."}
+        variant="utility"
       />
 
-      <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
-        <div className="mx-auto max-w-4xl">
+      <section className="ds-section bg-[var(--color-surface)]">
+        <div className="ds-container grid gap-12 lg:grid-cols-[minmax(0,.75fr)_minmax(0,1.25fr)] lg:gap-20">
           <motion.div
-            className="space-y-4"
+            className="lg:sticky lg:top-28 lg:self-start"
+            initial="hidden"
+            variants={fadeUp}
+            viewport={viewportOnce}
+            whileInView="visible"
+          >
+            <p className="section-title-eyebrow">
+              {en ? "FAQ" : "الأسئلة الشائعة"}
+            </p>
+            <h2 className="mt-4 text-3xl font-black leading-tight text-[var(--color-heading)] sm:text-4xl lg:text-5xl">
+              {en ? "Frequently Asked Questions" : "الأسئلة الشائعة"}
+            </h2>
+            <p className="mt-6 max-w-md text-lg font-medium leading-9 text-[var(--color-text-muted)]">
+              {en
+                ? "Clear answers to the questions most often asked before making a decision."
+                : "إجابات واضحة عن أكثر الأسئلة التي تسبق قرارك."}
+            </p>
+            <div className="mt-8 h-px w-16 bg-[var(--color-accent)]" />
+          </motion.div>
+
+          <motion.div
+            className="border-t border-[var(--color-border)]"
             initial="hidden"
             variants={staggerContainer}
             viewport={viewportOnce}
@@ -99,15 +123,16 @@ export default function FaqPage() {
 
               return (
                 <motion.article
-                  className="overflow-hidden rounded-[1.5rem] border border-[#f8aa2d]/25 bg-[#fff7eb]"
-                  key={faq.question}
+                  className="overflow-hidden border-b border-[var(--color-border)] bg-transparent"
+                  key={`faq-${index}`}
+                  layout={!shouldReduceMotion}
                   variants={cardItem}
                 >
-                  <h2>
+                  <h3>
                     <button
                       aria-controls={panelId}
                       aria-expanded={isOpen}
-                      className="flex w-full items-center justify-between gap-5 px-5 py-5 text-start text-base font-black text-[#4c2c00] outline-none transition hover:bg-[#f8aa2d]/10 focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#f8aa2d]/35 sm:px-6 sm:text-lg"
+                      className="flex min-h-[3.25rem] w-full items-center justify-between gap-5 py-5 text-start text-lg font-black leading-8 text-[var(--color-heading)] outline-none transition-colors hover:text-[var(--color-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent-strong)] sm:gap-8 sm:py-7 sm:text-2xl"
                       id={buttonId}
                       onClick={() =>
                         setOpenIndex((current) =>
@@ -117,24 +142,35 @@ export default function FaqPage() {
                       type="button"
                     >
                       <span>{faq.question}</span>
-                      <span
+                      <motion.span
                         aria-hidden="true"
-                        className="shrink-0 text-2xl text-[#cf7d11]"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center text-3xl font-medium text-[var(--color-accent-strong)]"
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: shouldReduceMotion ? 0 : 0.22 }}
                       >
-                        {isOpen ? "−" : "+"}
-                      </span>
+                        {isOpen ? "×" : "+"}
+                      </motion.span>
                     </button>
-                  </h2>
-                  <div
+                  </h3>
+                  <motion.div
                     aria-labelledby={buttonId}
-                    hidden={!isOpen}
+                    aria-hidden={!isOpen}
+                    animate={{
+                      height: isOpen ? "auto" : 0,
+                      opacity: isOpen ? 1 : 0,
+                    }}
                     id={panelId}
+                    initial={false}
                     role="region"
+                    transition={{
+                      duration: shouldReduceMotion ? 0 : 0.3,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
-                    <p className="border-t border-[#f8aa2d]/15 px-5 py-5 font-medium leading-8 text-[#4c2c00]/70 sm:px-6">
+                    <p className="max-w-3xl pb-7 pe-12 text-base font-medium leading-8 text-[var(--color-text-muted)] sm:pe-16 sm:text-lg">
                       {faq.answer}
                     </p>
-                  </div>
+                  </motion.div>
                 </motion.article>
               );
             })}

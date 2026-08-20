@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
-import CardGrid from "../common/CardGrid";
 import SectionTitle from "../common/SectionTitle";
 import {
   cardItem,
@@ -16,90 +15,118 @@ import {
 
 export default function HomeContactSection() {
   const { lang } = useOutletContext();
-  const localizedItems = contactItems.map((item, index) => lang === "ar" ? item : ({
-    ...item,
-    title: ["Phone", "WhatsApp", "Email"][index],
-    value: index === 1 ? "Instant chat" : item.value,
-    label: ["Call Now", "Start Chat", "Send Email"][index],
-    href: index === 1 ? item.href.replace(encodeURIComponent("للحجز والاستفسار"), encodeURIComponent("Hello, I would like to book or ask about Kadina services.")) : item.href,
-  }));
+  const localizedItems = contactItems.map((item, index) =>
+    lang === "ar"
+      ? item
+      : {
+          ...item,
+          title: ["Phone", "WhatsApp", "Email"][index],
+          value: index === 1 ? "Instant chat" : item.value,
+          label: ["Call Now", "Start Chat", "Send Email"][index],
+          href:
+            index === 1
+              ? item.href.replace(
+                  encodeURIComponent("للحجز والاستفسار"),
+                  encodeURIComponent(
+                    "Hello, I would like to book or ask about Kadina services.",
+                  ),
+                )
+              : item.href,
+        },
+  );
+
   return (
     <section
-      className="scroll-mt-24 bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20"
+      className="ds-section scroll-mt-24 bg-[var(--color-surface-muted)]"
       id="contact"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="ds-container">
         <SectionTitle
           eyebrow={lang === "ar" ? "تواصل معنا" : "Contact Us"}
-          title={lang === "ar" ? "نسمعك قبل أن نعالجك" : "We listen before we treat"}
-          description={lang === "ar" ? "تواصل مع مركز كادينا في الرياض عبر الهاتف أو واتساب أو البريد." : "Contact Kadina Center in Riyadh by phone, WhatsApp or email."}
+          title={
+            lang === "ar" ? "نسمعك قبل أن نعالجك" : "We listen before we treat"
+          }
+          description={
+            lang === "ar"
+              ? "تواصل مع مركز كادينا في الرياض عبر الهاتف أو واتساب أو البريد."
+              : "Contact Kadina Center in Riyadh by phone, WhatsApp or email."
+          }
         />
-        <CardGrid className="mt-9">
-          {localizedItems.map((item) => (
-            <motion.article
-              className="rounded-[1.75rem] border border-[#f8aa2d]/25 bg-white/75 p-6 shadow-[0_18px_45px_rgba(76,44,0,0.08)]"
-              key={item.href}
-              variants={cardItem}
-            >
-              <h3 className="text-lg font-black text-[#4c2c00]">
-                {item.title}
-              </h3>
-              <p className="mt-3 break-words text-lg font-bold text-[#4c2c00]/68">
-                {item.value}
-              </p>
-              <a
-                aria-label={
-                  item.external
-                    ? `${item.label} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`
-                    : undefined
-                }
-                className="mt-6 inline-block font-black text-[#cf7d11]"
-                href={item.href}
-                rel={item.external ? "noopener noreferrer" : undefined}
-                target={item.external ? "_blank" : undefined}
-              >
-                {item.label}
-              </a>
-            </motion.article>
-          ))}
-        </CardGrid>
 
         <motion.div
-          className="mt-8 grid gap-5 lg:grid-cols-2"
+          className="mt-10 grid border-t border-[var(--color-border-strong)] lg:mt-14 lg:grid-cols-[1.25fr_.75fr]"
           initial="hidden"
           variants={staggerContainer}
           viewport={viewportOnce}
           whileInView="visible"
         >
-          <motion.article
-            className="rounded-[1.75rem] border border-[#4c2c00]/10 bg-white/75 p-6"
-            variants={cardItem}
-          >
-            <h3 className="text-xl font-black text-[#4c2c00]">{lang === "ar" ? "الموقع" : "Location"}</h3>
-            <p className="mt-3 leading-8 text-[#4c2c00]/68">
-              {lang === "ar" ? contactAddress : "Riyadh — Al-Murooj-Exit 5"}
-            </p>
-            <a
-              aria-label={lang === "ar" ? "افتح الخريطة (يفتح في نافذة جديدة)" : "Open map (opens in a new window)"}
-              className="mt-5 inline-block font-black text-[#cf7d11]"
-              href={contactMapUrl}
-              rel="noopener noreferrer"
-              target="_blank"
+          <div className="lg:pe-12">
+            {localizedItems.map((item) => (
+              <motion.article
+                className="grid gap-3 border-b border-[var(--color-border)] py-7 sm:grid-cols-[10rem_1fr_auto] sm:items-center sm:gap-6"
+                key={item.href}
+                variants={cardItem}
+              >
+                <h3 className="text-sm font-black text-[var(--color-accent-strong)]">
+                  {item.title}
+                </h3>
+                <p className="break-words text-lg font-bold text-[var(--color-heading)]">
+                  {item.value}
+                </p>
+                <a
+                  aria-label={
+                    item.external
+                      ? `${item.label} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`
+                      : undefined
+                  }
+                  className="inline-flex min-h-11 items-center font-black text-[var(--color-accent-strong)] underline decoration-[var(--color-accent)]/45 underline-offset-8"
+                  href={item.href}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                  target={item.external ? "_blank" : undefined}
+                >
+                  {item.label}
+                </a>
+              </motion.article>
+            ))}
+          </div>
+
+          <div className="border-[var(--color-border-strong)] lg:border-s lg:ps-12">
+            <motion.article
+              className="border-b border-[var(--color-border)] py-7"
+              variants={cardItem}
             >
-              {lang === "ar" ? "افتح الخريطة" : "Open Map"}
-            </a>
-          </motion.article>
-          <motion.article
-            className="rounded-[1.75rem] border border-[#4c2c00]/10 bg-white/75 p-6"
-            variants={cardItem}
-          >
-            <h3 className="text-xl font-black text-[#4c2c00]">{lang === "ar" ? "المواعيد" : "Hours"}</h3>
-            <p className="mt-3 leading-8 text-[#4c2c00]/68">
-              {lang === "ar" ? contactHours.days : "Saturday – Thursday"}
-              <br />
-              {lang === "ar" ? contactHours.time : "9:00 AM – 10:00 PM"}
-            </p>
-          </motion.article>
+              <h3 className="text-sm font-black text-[var(--color-accent-strong)]">
+                {lang === "ar" ? "الموقع" : "Location"}
+              </h3>
+              <p className="mt-3 text-lg font-bold leading-8 text-[var(--color-heading)]">
+                {lang === "ar" ? contactAddress : "Riyadh — Al-Murooj-Exit 5"}
+              </p>
+              <a
+                aria-label={
+                  lang === "ar"
+                    ? "افتح الخريطة (يفتح في نافذة جديدة)"
+                    : "Open map (opens in a new window)"
+                }
+                className="mt-5 inline-flex min-h-11 items-center font-black text-[var(--color-accent-strong)] underline decoration-[var(--color-accent)]/45 underline-offset-8"
+                href={contactMapUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {lang === "ar" ? "افتح الخريطة" : "Open Map"}
+              </a>
+            </motion.article>
+
+            <motion.article className="py-7" variants={cardItem}>
+              <h3 className="text-sm font-black text-[var(--color-accent-strong)]">
+                {lang === "ar" ? "المواعيد" : "Hours"}
+              </h3>
+              <p className="mt-3 text-lg font-bold leading-8 text-[var(--color-heading)]">
+                {lang === "ar" ? contactHours.days : "Saturday – Thursday"}
+                <br />
+                {lang === "ar" ? contactHours.time : "9:00 AM – 10:00 PM"}
+              </p>
+            </motion.article>
+          </div>
         </motion.div>
       </div>
     </section>
