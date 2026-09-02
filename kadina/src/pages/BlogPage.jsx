@@ -28,7 +28,7 @@ export default function BlogPage() {
     <div>
       <Seo
         canonicalPath="/blog"
-        description={en ? "Kadina Medical Blog: articles written and reviewed by Kadina consultants without exaggeration or disguised marketing." : "مدونة كادينا الطبية: مقالات يكتبها ويراجعها استشاريو كادينا بلا مبالغة ولا تسويق مقنّع."}
+        description={en ? "Kadina Medical Blog. Medical articles appear here only after their content and review data are approved." : "مدونة كادينا الطبية. لا تظهر المقالات الطبية هنا إلا بعد اعتماد محتواها وبيانات مراجعتها."}
         jsonLd={[
           createBreadcrumbSchema([
             { name: en ? "Home" : "الرئيسية", path: "/" },
@@ -36,7 +36,7 @@ export default function BlogPage() {
           ]),
           createWebPageSchema({
             name: en ? "Kadina Medical Blog" : "مدونة كادينا الطبية",
-            description: en ? "Articles written and reviewed by Kadina consultants before any aesthetic decision." : "مقالات يكتبها ويراجعها استشاريو كادينا قبل أي قرار تجميلي.",
+            description: en ? "Approved medical articles from Kadina Medical Center." : "مقالات طبية معتمدة من مركز كادينا الطبي.",
             path: "/blog",
           }),
         ]}
@@ -46,7 +46,7 @@ export default function BlogPage() {
         breadcrumbLabel={en ? "Blog" : "المدونة"}
         eyebrow={en ? "Kadina Blog" : "مدونة كادينا"}
         title={en ? "Your medical guide before an aesthetic decision" : "دليلك الطبي... قبل أي قرار تجميلي"}
-        description={en ? "Articles written and reviewed by Kadina consultants without exaggeration or disguised marketing. Read, understand, then decide." : "مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا تسويق مقنّع. اقرأ، افهم، ثم قرر."}
+        description={en ? "Useful medical content will appear here after its material and review data are approved." : "سيظهر هنا المحتوى الطبي المفيد بعد اعتماد مادته وبيانات مراجعته."}
       />
 
       <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
@@ -110,7 +110,7 @@ export default function BlogPage() {
                 {en ? "Articles Coming Soon" : "المقالات قريبًا"}
               </h2>
               <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#4c2c00]/68">
-                {en ? "Articles written and reviewed by Kadina consultants, without exaggeration or disguised marketing." : "مقالات يكتبها ويراجعها استشاريو كادينا، بلا مبالغة ولا تسويق مقنّع."}
+                {en ? "No medical article has completed the approval and review workflow yet." : "لا يوجد حتى الآن مقال طبي أكمل مسار الاعتماد والمراجعة."}
               </p>
             </motion.div>
           )}

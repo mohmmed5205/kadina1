@@ -1,1 +1,6 @@
-/* /index.html 200
+/ar /ar/ 301
+/en /en/ 301
+/ar/* /index.html 200
+/en/* /index.html 200
+/ /ar/ 302
+/* /ar/:splat 302

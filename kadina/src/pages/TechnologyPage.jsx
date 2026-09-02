@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import { Link, useOutletContext, useSearchParams } from "react-router-dom";
+import { useOutletContext, useSearchParams } from "react-router-dom";
+import Link from "../components/routing/LocalizedLink";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import Seo from "../components/seo/Seo";
@@ -11,6 +12,12 @@ import {
 import { getDeviceSummaries } from "../data/devices";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import { getLocalizedText } from "../utils/i18n";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  trackContactAction,
+  trackEvent,
+} from "../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -62,6 +69,12 @@ export default function TechnologyPage() {
   );
 
   const selectFilter = (slug) => {
+    if (slug === activeFilter.slug) return;
+    trackEvent(ANALYTICS_EVENTS.FILTER_CHANGE, {
+      filter_type: "technology_category",
+      language: lang,
+      value: slug,
+    });
     setSearchParams(slug === "all" ? {} : { cat: slug });
   };
 
@@ -88,16 +101,21 @@ export default function TechnologyPage() {
       <PageHero
         breadcrumbLabel={en ? "Technology & Devices" : "التقنيات والأجهزة"}
         eyebrow={en ? "Technology & Devices" : "التقنيات والأجهزة"}
-        title={en ? "Kadina's technology: 13+ world-class devices" : "ترسانة كادينا التقنية: 13+ جهازًا من الطراز العالمي الأول"}
-        description={en ? "A device alone does not create the result. The right device, in the right consultant's hands, with the right settings for your skin—that is the Kadina formula." : "الجهاز وحده لا يصنع النتيجة، لكن الجهاز الصحيح، بيد الاستشاري الصحيح، وبالإعداد الصحيح لبشرتك، هو معادلة كادينا."}
+        title={en ? "13 technologies across Kadina's care journey" : "13 تقنية وجهازًا ضمن رحلة العناية في كادينا"}
+        description={en ? "Explore the role of each device and the service it supports. The appropriate technology and settings are selected after assessing your case." : "تعرّف على دور كل جهاز والخدمة التي يدعمها، ويُحدّد الجهاز والإعداد المناسبان بعد تقييم حالتك."}
         variant="editorial"
       />
 
       <section className="ds-section bg-[var(--color-surface)]">
         <div className="ds-container">
-          <motion.p className="max-w-3xl text-lg font-bold leading-9 text-[var(--color-text-muted)] sm:text-xl" initial="hidden" variants={fadeUp} viewport={viewportOnce} whileInView="visible">
-            {en ? "Browse our devices and learn what each one does and who it suits." : "تصفح أجهزتنا، واعرف ماذا يفعل كل جهاز، ولمن يناسب."}
-          </motion.p>
+          <motion.div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end" initial="hidden" variants={fadeUp} viewport={viewportOnce} whileInView="visible">
+            <p className="max-w-3xl text-lg font-bold leading-9 text-[var(--color-text-muted)] sm:text-xl">
+              {en ? "Browse our devices and learn what each one does and who it suits." : "تصفح أجهزتنا، واعرف ماذا يفعل كل جهاز، ولمن يناسب."}
+            </p>
+            <p className="text-xs font-black tracking-[.12em] text-[var(--color-accent-strong)]">
+              {en ? "DEVICE DIRECTORY" : "دليل الأجهزة"}
+            </p>
+          </motion.div>
 
           <div className="mt-9 border-y border-[var(--color-border-strong)] py-3 sm:py-4">
             <LayoutGroup id="technology-filters">
@@ -152,11 +170,15 @@ export default function TechnologyPage() {
                       to={`/technology/${device.slug}`}
                       variants={cardItem}
                     >
-                      <motion.div className="technology-result-image flex aspect-[4/3] min-w-0 items-center justify-center overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-5 sm:p-8" variants={imageReveal}>
-                        <img alt={device.displayName} className="h-full max-h-[26rem] w-full object-contain" decoding="async" loading="lazy" src={device.image} />
+                      <motion.div className="technology-result-image flex aspect-[5/4] min-w-0 items-center justify-center overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface-muted)] p-3 sm:p-5" variants={imageReveal}>
+                        <img alt={device.displayName} className="h-[94%] max-h-[29rem] w-[96%] object-contain transition-transform duration-500 group-hover:scale-[1.015]" decoding="async" loading="lazy" src={device.image} />
                       </motion.div>
                       <div className="technology-result-content min-w-0 py-1">
-                        <span className="text-xs font-black tracking-[0.12em] text-[var(--color-accent-strong)]">{String(index + 1).padStart(2, "0")}</span>
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-black tracking-[0.1em] text-[var(--color-accent-strong)]">
+                          <span>{String(index + 1).padStart(2, "0")}</span>
+                          <span aria-hidden="true" className="h-px w-8 bg-[var(--color-border-strong)]" />
+                          <span>{device.category}</span>
+                        </div>
                         <h2 className="mt-5 break-words text-[clamp(2rem,5vw,4rem)] font-black leading-[1.08] text-[var(--color-heading)]">{primaryName}</h2>
                         {secondaryName && (
                           <p className="mt-3 break-words text-base font-black text-[var(--color-accent-strong)] sm:text-lg" dir={en ? "rtl" : "ltr"}>{secondaryName}</p>
@@ -175,7 +197,7 @@ export default function TechnologyPage() {
               <motion.div aria-live="polite" animate="visible" className="mt-10 border-y border-[var(--color-border-strong)] py-12 text-center" exit="hidden" id="technology-results" initial="hidden" role="status" variants={fadeUp}>
                 <h2 className="text-2xl font-black text-[var(--color-heading)]">{en ? "No devices match this category." : "لم نجد أجهزة مطابقة لهذا التصنيف."}</h2>
                 <p className="mx-auto mt-4 max-w-2xl leading-8 text-[var(--color-text-muted)]">{en ? "Contact us and we will help you find the most suitable technology for your case." : "تواصل معنا وسنساعدك في الوصول إلى التقنية الأنسب لحالتك."}</p>
-                <a aria-label={en ? "Ask us on WhatsApp (opens in a new window)" : "اسألنا عبر واتساب (يفتح في نافذة جديدة)"} className="ds-button ds-button-primary mt-7" href={emptyStateWhatsappUrl} rel="noopener noreferrer" target="_blank">{en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}</a>
+                <a aria-label={en ? "Ask us on WhatsApp (opens in a new window)" : "اسألنا عبر واتساب (يفتح في نافذة جديدة)"} className="ds-button ds-button-primary mt-7" href={emptyStateWhatsappUrl} onClick={() => trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, { language: lang, page_type: "technology", source_section: SOURCE_SECTIONS.TECHNOLOGY })} rel="noopener noreferrer" target="_blank">{en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}</a>
               </motion.div>
             )}
           </AnimatePresence>
@@ -183,6 +205,8 @@ export default function TechnologyPage() {
       </section>
 
       <CTASection
+        pageType="technology"
+        sourceSection={SOURCE_SECTIONS.TECHNOLOGY}
         title={en ? "Not sure which device is right for your case?" : "لست متأكدًا أي جهاز يناسب حالتك؟"}
         description={en ? "Begin with a consultation and a Kadina consultant will help select the most suitable technology." : "ابدأ باستشارة، وسيساعدك استشاري كادينا في اختيار التقنية الأنسب."}
         primaryLabel={en ? "Consult Us on WhatsApp" : "استشرنا عبر واتساب"}

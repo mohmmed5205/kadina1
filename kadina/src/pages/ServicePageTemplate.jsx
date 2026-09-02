@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
-import { Link, useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
+import Link from "../components/routing/LocalizedLink";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
+import DirectAnswer from "../components/content/DirectAnswer";
 import RevealImage from "../components/motion/RevealImage";
 import Seo from "../components/seo/Seo";
 import {
@@ -11,6 +13,13 @@ import {
   createWebPageSchema,
 } from "../components/seo/seoUtils";
 import { getServicePage } from "../data/services";
+import { getPublishedProceduresByService } from "../data/procedures";
+import { useTrackedView } from "../hooks/useAnalytics";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  getCurrentPath,
+} from "../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -21,11 +30,23 @@ import {
 const MotionLink = motion.create(Link);
 
 export default function ServicePageTemplate({ slug }) {
+  const location = useLocation();
   const { lang } = useOutletContext();
   const en = lang === "en";
   const service = getServicePage(slug, lang);
+  useTrackedView(
+    ANALYTICS_EVENTS.SERVICE_VIEW,
+    {
+      language: lang,
+      path: getCurrentPath(location),
+      service_slug: slug,
+    },
+    Boolean(service),
+  );
 
   if (!service) return null;
+
+  const publishedProcedures = getPublishedProceduresByService(slug, lang);
 
   return (
     <div>
@@ -45,7 +66,7 @@ export default function ServicePageTemplate({ slug }) {
           }),
           createFaqSchema(service.seoFaq),
         ]}
-        title={`${service.title} — ${service.seoSubtitle}`}
+        title={service.seoTitle}
       />
 
       <PageHero
@@ -63,6 +84,12 @@ export default function ServicePageTemplate({ slug }) {
         } : undefined}
       />
 
+      <DirectAnswer
+        answer={service.directAnswer?.answer}
+        lang={lang}
+        question={service.directAnswer?.question}
+      />
+
       <motion.section className="ds-section bg-[var(--color-surface)]" initial="hidden" variants={fadeUp} viewport={viewportOnce} whileInView="visible">
         <div className="ds-container grid gap-8 lg:grid-cols-[minmax(12rem,.42fr)_minmax(0,1fr)] lg:gap-20">
           <div>
@@ -78,6 +105,30 @@ export default function ServicePageTemplate({ slug }) {
           </div>
         </div>
       </motion.section>
+
+      {publishedProcedures.length > 0 && (
+        <section className="ds-section border-y border-[var(--color-border)] bg-[var(--color-surface-raised)]">
+          <div className="ds-container grid gap-8 lg:grid-cols-[minmax(0,.65fr)_minmax(0,1.35fr)] lg:gap-20">
+            <div>
+              <p className="section-title-eyebrow">
+                {en ? "Procedures" : "الإجراءات"}
+              </p>
+              <h2 className="mt-4 text-3xl font-black text-[var(--color-heading)] sm:text-4xl">
+                {en ? "Procedures in This Service" : "إجراءات هذا القسم"}
+              </h2>
+            </div>
+            <motion.div className="border-t border-[var(--color-border-strong)]" initial="hidden" variants={staggerContainer} viewport={viewportOnce} whileInView="visible">
+              {publishedProcedures.map((procedure, index) => (
+                <MotionLink className="group grid min-h-24 grid-cols-[3rem_1fr_auto] items-center gap-3 border-b border-[var(--color-border)] py-5 sm:grid-cols-[5rem_1fr_auto]" key={procedure.slug} to={`/procedures/${procedure.slug}`} variants={cardItem}>
+                  <span className="text-xs font-black text-[var(--color-accent-strong)]">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="text-xl font-black text-[var(--color-heading)] sm:text-2xl">{procedure.title}</span>
+                  <span aria-hidden="true" className="editorial-arrow text-[var(--color-accent-strong)]">{en ? "→" : "←"}</span>
+                </MotionLink>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {service.treatments.length > 0 && (
         <section className="ds-section border-y border-[var(--color-border)] bg-[var(--color-surface-muted)]">
@@ -137,7 +188,7 @@ export default function ServicePageTemplate({ slug }) {
         </section>
       )}
 
-      <CTASection title={service.subtitle} description={service.intro} primaryLabel={service.ctaLabel} whatsappMessage={service.whatsappMessage} />
+      <CTASection title={service.subtitle} description={service.intro} primaryLabel={service.ctaLabel} whatsappMessage={service.whatsappMessage} pageType="service" slug={service.slug} sourceSection={SOURCE_SECTIONS.SERVICE_DETAIL} />
     </div>
   );
 }

@@ -1,3 +1,9 @@
+import { businessContact, businessSocialLinks } from "./business";
+
+const socialUrlByKey = Object.fromEntries(
+  businessSocialLinks.map((item) => [item.key, item.url]),
+);
+
 export const content = {
   ar: {
     dir: "rtl",
@@ -6,9 +12,9 @@ export const content = {
       name: "كادينا",
       englishName: "KADINA",
       tagline: "جلدية | تجميل | ليزر",
-      whatsapp: "966114555444",
-      phone: "+966 114555444",
-      email: "info@kadina.sa",
+      whatsapp: businessContact.whatsapp.number,
+      phone: businessContact.phone.internationalDisplay,
+      email: businessContact.email.value,
       address: " المملكة العربية السعودية -الرياض-طريق الدائري الشمالي",
     },
     hero: {
@@ -184,19 +190,19 @@ export const content = {
         {
           key: "snapchat",
           label: "سناب شات",
-          url: "https://www.snapchat.com/add/kadina_center",
+          url: socialUrlByKey.snapchat,
 
         },
         {
           key: "instagram",
           label: "إنستغرام",
-          url: "https://www.instagram.com/kadina_center",
+          url: socialUrlByKey.instagram,
 
         },
         {
           key: "tiktok",
           label: "تيك توك",
-          url: "https://www.tiktok.com/@kadina_center",
+          url: socialUrlByKey.tiktok,
         }
       ]
     },
@@ -240,9 +246,9 @@ export const content = {
       name: "Kadina",
       englishName: "KADINA",
       tagline: "Dermatology | Beauty | Laser",
-      whatsapp: "966114555444",
-      phone: "+966 114555444",
-      email: "info@kadina.sa",
+      whatsapp: businessContact.whatsapp.number,
+      phone: businessContact.phone.internationalDisplay,
+      email: businessContact.email.value,
       address: "Saudi Arabia - Riyadh - Northern Ring Road",
     },
     hero: {
@@ -392,19 +398,19 @@ export const content = {
         {
           key: "snapchat",
           label: "Snapchat",
-          url: "https://www.snapchat.com/add/kadina_center",
+          url: socialUrlByKey.snapchat,
 
         },
         {
           key: "instagram",
           label: "Instagram",
-          url: "https://www.instagram.com/kadina_center",
+          url: socialUrlByKey.instagram,
 
         },
         {
           key: "tiktok",
           label: "TikTok",
-          url: "https://www.tiktok.com/@kadina_center",
+          url: socialUrlByKey.tiktok,
         }
       ]
     },

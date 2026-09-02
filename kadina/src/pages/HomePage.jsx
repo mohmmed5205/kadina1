@@ -7,6 +7,7 @@ import HomeServicesSection from "../components/home/HomeServicesSection";
 import HomeJourneySection from "../components/home/HomeJourneySection";
 import HomeFinalCta from "../components/home/HomeFinalCta";
 import HomeContactSection from "../components/home/HomeContactSection";
+import HomeReviewsSection from "../components/home/HomeReviewsSection";
 import Seo from "../components/seo/Seo";
 import { createWebPageSchema } from "../components/seo/seoUtils";
 
@@ -48,6 +49,7 @@ export default function HomePage() {
       <Suspense fallback={sectionFallback}>
         <HomeDoctorsSection />
       </Suspense>
+      <HomeReviewsSection />
       <HomeJourneySection />
       <Suspense fallback={sectionFallback}>
         <BeforeAfter t={t} />

@@ -1,66 +1,41 @@
 import { useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Link, useOutletContext } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 import SectionTitle from "../common/SectionTitle";
 import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
 import { getDeviceSummaries } from "../../data/devices";
 
-const SWIPE_THRESHOLD = 50;
-
 export default function HomeTechnologySection() {
-  const { lang } = useOutletContext();
-  const devices = getDeviceSummaries(lang).slice(0, 6);
+  const { lang, t } = useOutletContext();
+  const devices = getDeviceSummaries(lang);
+  const swiperRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const touchStartX = useRef(null);
-  const touchCurrentX = useRef(null);
-  const active = devices[activeIndex] || devices[0];
+  const [edgeState, setEdgeState] = useState({ beginning: true, end: false });
   const shouldReduceMotion = useReducedMotion();
-  const switchTransition = {
-    duration: shouldReduceMotion ? 0 : 0.36,
-    ease: [0.22, 1, 0.36, 1],
+  const en = lang === "en";
+
+  const syncSwiperState = (swiper) => {
+    setActiveIndex(swiper.activeIndex);
+    setEdgeState({ beginning: swiper.isBeginning, end: swiper.isEnd });
   };
 
-  const getRelativeIndex = (current, direction) =>
-    (current + direction + devices.length) % devices.length;
-
-  const goNext = () => {
-    setActiveIndex((current) => getRelativeIndex(current, 1));
-  };
-
-  const goPrevious = () => {
-    setActiveIndex((current) => getRelativeIndex(current, -1));
-  };
-
+  // Describe the panel's visual position independently of document direction.
+  // Native Swiper dragging remains physically tied to the user's finger.
   const goVisualLeft = () => {
-    if (lang === "ar") goNext();
-    else goPrevious();
+    if (en) swiperRef.current?.slidePrev();
+    else swiperRef.current?.slideNext();
   };
 
   const goVisualRight = () => {
-    if (lang === "ar") goPrevious();
-    else goNext();
+    if (en) swiperRef.current?.slideNext();
+    else swiperRef.current?.slidePrev();
   };
 
-  const handleTouchEnd = () => {
-    if (touchStartX.current === null || touchCurrentX.current === null) return;
-    const deltaX = touchCurrentX.current - touchStartX.current;
-    touchStartX.current = null;
-    touchCurrentX.current = null;
-    if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
-    if (deltaX > 0) goVisualLeft();
-    else goVisualRight();
-  };
-
-  const handleSelectorKeyDown = (event, index) => {
-    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-
-    event.preventDefault();
-    const visualDirection =
-      event.key === "ArrowRight" ? (lang === "ar" ? -1 : 1) : lang === "ar" ? 1 : -1;
-    const nextIndex = getRelativeIndex(index, visualDirection);
-    setActiveIndex(nextIndex);
-    event.currentTarget.parentElement?.children[nextIndex]?.focus();
-  };
+  const leftDisabled = en ? edgeState.beginning : edgeState.end;
+  const rightDisabled = en ? edgeState.end : edgeState.beginning;
 
   return (
     <section
@@ -68,158 +43,159 @@ export default function HomeTechnologySection() {
       id="technology"
     >
       <div className="ds-container">
-        <SectionTitle
-          eyebrow={lang === "ar" ? "الأجهزة والتقنيات" : "Technology & Devices"}
-          title={
-            lang === "ar"
-              ? "التقنية ليست ديكورًا.. بل جزء من القرار الطبي"
-              : "Technology is not decoration. It is part of the clinical decision"
-          }
-          description={
-            lang === "ar"
-              ? "الجهاز الصحيح بيد الاستشاري الصحيح يصنع كل الفرق."
-              : "The right device in the right consultant's hands makes all the difference."
-          }
-        />
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
+            <SectionTitle
+              eyebrow={en ? "Technology & Devices" : "الأجهزة والتقنيات"}
+              title={
+                en
+                  ? "Technology, considered as part of every care decision"
+                  : "التقنية جزء من قرار العناية"
+              }
+            />
+          </div>
+          <p className="max-w-md text-base leading-8 text-[var(--color-text-muted)] lg:col-span-4 lg:justify-self-end lg:text-lg">
+            {en
+              ? "Explore each device, its role and the service journey it supports."
+              : "تعرّف على كل جهاز، ودوره، ورحلة الخدمة التي يدعمها."}
+          </p>
+        </div>
 
         <motion.div
-          className="mt-10 touch-pan-y overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border-on-dark)] bg-[var(--color-surface-dark)] lg:mt-14"
+          className="mt-10 lg:mt-16"
           initial={shouldReduceMotion ? false : "hidden"}
           variants={fadeUp}
           viewport={viewportOnce}
           whileInView="visible"
-          onTouchStart={(event) => {
-            touchStartX.current = event.touches[0].clientX;
-            touchCurrentX.current = event.touches[0].clientX;
-          }}
-          onTouchMove={(event) => {
-            touchCurrentX.current = event.touches[0].clientX;
-          }}
-          onTouchEnd={handleTouchEnd}
-          onTouchCancel={() => {
-            touchStartX.current = null;
-            touchCurrentX.current = null;
-          }}
         >
-          <div className="technology-showcase-grid">
-            <div className="technology-showcase-heading p-6 pb-5 sm:p-10 lg:p-14 lg:pb-3">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`heading-${active?.slug}`}
-                  animate={{ opacity: 1, y: 0 }}
-                  initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={switchTransition}
-                >
-                  <p className="text-xs font-black tracking-[0.12em] text-[var(--color-accent)]">
-                    {active?.category}
-                  </p>
-                  <h3 className="on-dark-heading mt-4 text-[clamp(2.25rem,6vw,4.75rem)] font-black leading-[1.05]">
-                    {lang === "ar" ? active?.arabicName : active?.englishName}
-                  </h3>
-                  <p
-                    className="mt-3 text-base font-bold text-[var(--color-accent)] sm:text-lg"
-                    dir={lang === "ar" ? "ltr" : "rtl"}
-                  >
-                    {lang === "ar" ? active?.englishName : active?.arabicName}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <div
-              className="technology-showcase-image relative flex aspect-[5/4] min-h-0 items-center justify-center overflow-hidden bg-[var(--color-surface)] p-3 sm:aspect-[4/3] sm:p-6 lg:aspect-auto lg:min-h-[36rem] lg:p-8"
-              id="home-featured-device"
-              role="tabpanel"
-            >
-              <span
-                aria-hidden="true"
-                className="absolute bottom-5 start-6 text-7xl font-black tracking-[-0.06em] text-[var(--color-heading)]/[0.06] sm:text-9xl"
-              >
-                {String(activeIndex + 1).padStart(2, "0")}
-              </span>
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={active?.slug}
-                  alt={`${active?.arabicName} — ${active?.englishName}`}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="relative z-10 h-[82%] max-h-[18rem] w-[88%] object-contain sm:max-h-[25rem] lg:h-[90%] lg:max-h-[32rem] lg:w-[84%]"
-                  decoding="async"
-                  exit={{ opacity: 0, scale: 0.99 }}
-                  height="1600"
-                  initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98 }}
-                  loading="lazy"
-                  src={active?.image}
-                  transition={switchTransition}
-                  width="1600"
-                />
-              </AnimatePresence>
-            </div>
-
-            <div className="technology-showcase-details flex flex-col justify-start p-6 pt-5 sm:p-10 lg:p-14 lg:pt-3">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={`description-${active?.slug}`}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="max-w-xl leading-8 text-[var(--color-text-on-dark-muted)]"
-                  initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  transition={{ ...switchTransition, delay: shouldReduceMotion ? 0 : 0.05 }}
-                >
-                  {active?.cardDescription}
-                </motion.p>
-              </AnimatePresence>
-              <Link
-                className="ds-button ds-button-on-dark mt-7 w-full sm:w-fit"
-                to={`/technology/${active?.slug}`}
-              >
-                {lang === "ar" ? "اكتشف الجهاز" : "Explore device"}
-                <span aria-hidden="true" className="editorial-arrow">
-                  {lang === "ar" ? "←" : "→"}
-                </span>
-              </Link>
-            </div>
-          </div>
-
-          <div
-            className="mobile-strip flex snap-x gap-2 overflow-x-auto border-t border-[var(--color-border-on-dark)] p-4 sm:p-5"
-            role="tablist"
-            aria-label={lang === "ar" ? "اختر جهازًا" : "Choose a device"}
+          <Swiper
+            aria-label={en ? "Kadina devices" : "أجهزة كادينا"}
+            breakpoints={{
+              640: { slidesPerView: 1.55, spaceBetween: 20 },
+              768: { slidesPerView: 1.8, spaceBetween: 22 },
+              1024: { slidesPerView: 2.45, spaceBetween: 26 },
+              1440: { slidesPerView: 3, spaceBetween: 30 },
+            }}
+            className="!overflow-visible"
+            dir={t.dir}
+            grabCursor
+            key={`home-technology-${lang}`}
+            onSlideChange={syncSwiperState}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+              syncSwiperState(swiper);
+            }}
+            resistanceRatio={0.72}
+            slidesPerView={1.15}
+            spaceBetween={16}
+            speed={shouldReduceMotion ? 0 : 620}
           >
-            {devices.map((device, index) => (
+            {devices.map((device, index) => {
+              const primaryName = en ? device.englishName : device.arabicName;
+              const secondaryName = en ? device.arabicName : device.englishName;
+
+              return (
+                <SwiperSlide key={device.slug}>
+                  <article className="group flex h-full flex-col bg-[var(--color-surface)] transition-colors duration-300 hover:bg-[var(--color-surface-raised)]">
+                    <Link
+                      aria-label={`${en ? "View device" : "عرض جهاز"} ${primaryName}`}
+                      className="flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent-strong)]"
+                      to={`/technology/${device.slug}`}
+                    >
+                      <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface-muted)] p-3 sm:p-4 lg:aspect-[5/6]">
+                        <span
+                          aria-hidden="true"
+                          className="absolute start-5 top-4 text-xs font-black tracking-[.12em] text-[var(--color-accent-strong)]"
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <img
+                          alt={`${device.arabicName} — ${device.englishName}`}
+                          className="h-[92%] w-[94%] object-contain transition-transform duration-500 group-hover:scale-[1.015]"
+                          decoding="async"
+                          height="1000"
+                          loading="lazy"
+                          src={device.image}
+                          width="800"
+                        />
+                      </div>
+                      <div className="relative flex flex-1 flex-col border-b border-[var(--color-border-strong)] px-1 py-6 transition-[border-color] duration-300 group-hover:border-[var(--color-accent-strong)]">
+                        <p className="text-xs font-black tracking-[.1em] text-[var(--color-accent-strong)]">
+                          {device.category}
+                        </p>
+                        <h3 className="mt-3 text-[clamp(1.6rem,2.4vw,2.35rem)] font-black leading-tight text-[var(--color-heading)]">
+                          {primaryName}
+                        </h3>
+                        {secondaryName ? (
+                          <p
+                            className="mt-2 text-sm font-bold text-[var(--color-text-muted)]"
+                            dir={en ? "rtl" : "ltr"}
+                          >
+                            {secondaryName}
+                          </p>
+                        ) : null}
+                        <span className="mt-auto inline-flex min-h-11 items-end gap-3 pt-5 text-sm font-black text-[var(--color-accent-strong)]">
+                          {en ? "Details" : "التفاصيل"}
+                          <span aria-hidden="true" className="editorial-arrow">
+                            {en ? "→" : "←"}
+                          </span>
+                        </span>
+                      </div>
+                    </Link>
+                  </article>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+
+          <div className="mt-8 flex items-center gap-4 border-t border-[var(--color-border-strong)] pt-5 sm:gap-5">
+            <p
+              aria-live="polite"
+              className="min-w-[4.5rem] text-sm font-black tracking-[.1em] text-[var(--color-heading)]"
+            >
+              {String(activeIndex + 1).padStart(2, "0")} / {String(devices.length).padStart(2, "0")}
+            </p>
+            <div
+              aria-hidden="true"
+              className="h-px flex-1 overflow-hidden bg-[var(--color-border-strong)]"
+            >
+              <motion.span
+                animate={{ scaleX: (activeIndex + 1) / devices.length }}
+                className="block h-full w-full origin-left bg-[var(--color-accent-strong)] rtl:origin-right"
+                transition={{ duration: shouldReduceMotion ? 0 : 0.35 }}
+              />
+            </div>
+            <div className="flex gap-2">
               <button
-                key={device.slug}
+                aria-label={en ? "Show the device on the left" : "إظهار الجهاز الموجود يسارًا"}
+                className="flex h-11 w-11 items-center justify-center border border-[var(--color-border-strong)] text-lg text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent-strong)] hover:text-[var(--color-accent-strong)] disabled:cursor-not-allowed disabled:opacity-35"
+                disabled={leftDisabled}
+                onClick={goVisualLeft}
                 type="button"
-                role="tab"
-                aria-controls="home-featured-device"
-                aria-selected={index === activeIndex}
-                onClick={() => setActiveIndex(index)}
-                onKeyDown={(event) => handleSelectorKeyDown(event, index)}
-                tabIndex={index === activeIndex ? 0 : -1}
-                className={`relative isolate min-h-12 min-w-40 snap-start overflow-hidden rounded-full border px-4 py-3 text-start text-sm font-black transition-colors sm:flex-1 ${index === activeIndex ? "border-[var(--color-accent)] text-[var(--color-heading)]" : "border-[var(--color-border-on-dark)] text-[var(--color-text-on-dark-muted)] hover:border-[var(--color-accent)]"}`}
               >
-                {index === activeIndex ? (
-                  <motion.span
-                    aria-hidden="true"
-                    className="absolute inset-0 -z-10 bg-[var(--color-accent)]"
-                    layoutId="home-device-active"
-                    transition={switchTransition}
-                  />
-                ) : null}
-                <span className="me-2 opacity-55">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                {device.displayName}
+                <span aria-hidden="true">←</span>
               </button>
-            ))}
+              <button
+                aria-label={en ? "Show the device on the right" : "إظهار الجهاز الموجود يمينًا"}
+                className="flex h-11 w-11 items-center justify-center border border-[var(--color-border-strong)] text-lg text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent-strong)] hover:text-[var(--color-accent-strong)] disabled:cursor-not-allowed disabled:opacity-35"
+                disabled={rightDisabled}
+                onClick={goVisualRight}
+                type="button"
+              >
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
           </div>
         </motion.div>
 
         <Link
-          className="mt-9 inline-flex min-h-11 items-center font-black text-[var(--color-accent-strong)] underline decoration-[var(--color-accent-strong)]/35 underline-offset-8"
+          className="group mt-9 inline-flex min-h-12 items-center gap-4 border-b border-[var(--color-accent-strong)] pb-2 font-black text-[var(--color-heading)]"
           to="/technology"
         >
-          {lang === "ar" ? "عرض جميع الأجهزة" : "View All Devices"}
+          <span>{en ? "View all devices" : "عرض جميع الأجهزة"}</span>
+          <span aria-hidden="true" className="editorial-arrow">
+            {en ? "→" : "←"}
+          </span>
         </Link>
       </div>
     </section>

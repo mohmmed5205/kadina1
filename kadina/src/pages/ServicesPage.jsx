@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Link, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
+import Link from "../components/routing/LocalizedLink";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
@@ -9,6 +10,7 @@ import {
   createWebPageSchema,
 } from "../components/seo/seoUtils";
 import { getServicePages } from "../data/services";
+import { SOURCE_SECTIONS } from "../utils/analytics";
 import {
   cardItem,
   staggerContainer,
@@ -131,6 +133,8 @@ export default function ServicesPage() {
       </section>
 
       <CTASection
+        pageType="services"
+        sourceSection={SOURCE_SECTIONS.SERVICES}
         title={en ? "Not sure which service is right for you?" : "لست متأكدًا أي خدمة تناسبك؟"}
         description={en ? "Contact us on WhatsApp and the Kadina team will help direct you to the right department." : "تواصل معنا عبر واتساب، وسيساعدك فريق كادينا في الوصول إلى القسم المناسب."}
         primaryLabel={en ? "Consult Us on WhatsApp" : "استشرنا عبر واتساب"}

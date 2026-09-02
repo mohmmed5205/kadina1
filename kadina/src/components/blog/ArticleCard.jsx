@@ -1,4 +1,5 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
 
 export default function ArticleCard({ article }) {
   const { lang } = useOutletContext();

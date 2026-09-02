@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
-import { Link, useLocation, useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
 import PageHero from "../common/PageHero";
+import DirectAnswer from "../content/DirectAnswer";
+import MedicalReviewBy from "../content/MedicalReviewBy";
 import Seo from "../seo/Seo";
 import {
   createBreadcrumbSchema,
@@ -8,6 +11,13 @@ import {
 } from "../seo/seoUtils";
 import { createWhatsappUrl } from "../../utils/whatsapp";
 import { getSolutionDetail } from "../../data/solutions";
+import { useTrackedView } from "../../hooks/useAnalytics";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  getCurrentPath,
+  trackContactAction,
+} from "../../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -80,6 +90,48 @@ function RelatedLinks({ items, en }) {
   );
 }
 
+function FutureFaq({ items, en }) {
+  if (!items?.length) return null;
+
+  return (
+    <section className="border-t border-[var(--color-border)]">
+      <div className="ds-container ds-section">
+        <motion.h2
+          className="text-3xl font-black text-[var(--color-heading)] sm:text-4xl"
+          initial="hidden"
+          variants={fadeUp}
+          viewport={viewportOnce}
+          whileInView="visible"
+        >
+          {en ? "Frequently Asked Questions" : "الأسئلة الشائعة"}
+        </motion.h2>
+        <motion.div
+          className="mt-8 border-t border-[var(--color-border)]"
+          initial="hidden"
+          variants={staggerContainer}
+          viewport={viewportOnce}
+          whileInView="visible"
+        >
+          {items.map((item, index) => (
+            <motion.div
+              className="grid gap-3 border-b border-[var(--color-border)] py-6 lg:grid-cols-[minmax(0,.8fr)_minmax(0,1.2fr)] lg:gap-16"
+              key={`${item.question}-${index}`}
+              variants={cardItem}
+            >
+              <h3 className="text-lg font-black text-[var(--color-heading)]">
+                {item.question}
+              </h3>
+              <p className="font-bold leading-8 text-[var(--color-text)]">
+                {item.answer}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 export default function SolutionPageTemplate({ solution: rawSolution }) {
   const location = useLocation();
   const { lang } = useOutletContext();
@@ -87,6 +139,16 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
   const solution = rawSolution
     ? getSolutionDetail(rawSolution.slug, lang)
     : null;
+  useTrackedView(
+    ANALYTICS_EVENTS.SOLUTION_VIEW,
+    {
+      area: rawSolution?.category,
+      language: lang,
+      path: getCurrentPath(location),
+      solution_slug: rawSolution?.slug,
+    },
+    Boolean(solution),
+  );
 
   if (!solution) {
     return (
@@ -167,9 +229,16 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
           { label: solution.shortTitle },
         ]}
         description={solution.intro}
-        eyebrow={solution.title}
+        eyebrow={en ? "Problems & Solutions" : "المشكلات والحلول"}
+        secondaryTitle={solution.title}
         title={solution.painHeadline}
         variant="detail"
+      />
+
+      <DirectAnswer
+        answer={solution.directAnswer?.answer}
+        lang={lang}
+        question={solution.directAnswer?.question}
       />
 
       {!solution.compact && solution.isThisYou && (
@@ -275,6 +344,14 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
                     <RelatedLinks en={en} items={[solution.relatedDoctor]} />
                   </div>
                 )}
+                {solution.relatedProcedures?.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-black !text-[var(--color-accent)]">
+                      {en ? "Related Procedures" : "الإجراءات المرتبطة"}
+                    </h3>
+                    <RelatedLinks en={en} items={solution.relatedProcedures} />
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
@@ -316,6 +393,22 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
         </motion.section>
       )}
 
+      <FutureFaq en={en} items={solution.faq} />
+
+      <MedicalReviewBy
+        lang={lang}
+        review={
+          solution.medicalReviewBy
+            ? {
+                ...solution.medicalReviewBy,
+                lastReviewedDate:
+                  solution.lastReviewedDate ||
+                  solution.medicalReviewBy.lastReviewedDate,
+              }
+            : null
+        }
+      />
+
       <motion.section
         className="ds-section-compact"
         initial="hidden"
@@ -328,6 +421,14 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
             aria-label={`${solution.ctaLabel} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
             className="ds-button ds-button-primary w-full sm:w-auto"
             href={whatsappUrl}
+            onClick={() =>
+              trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                language: lang,
+                page_type: "solution",
+                slug: solution.slug,
+                source_section: SOURCE_SECTIONS.SOLUTION_DETAIL,
+              })
+            }
             rel="noopener noreferrer"
             target="_blank"
           >

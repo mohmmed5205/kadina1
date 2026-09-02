@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import { Link, useOutletContext, useSearchParams } from "react-router-dom";
+import { useOutletContext, useSearchParams } from "react-router-dom";
+import Link from "../components/routing/LocalizedLink";
 import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import Seo from "../components/seo/Seo";
@@ -11,6 +12,12 @@ import {
 import { getSolutionDetails } from "../data/solutions";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import { getLocalizedText } from "../utils/i18n";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  trackContactAction,
+  trackEvent,
+} from "../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -66,6 +73,12 @@ export default function SolutionsPage() {
   );
 
   const selectFilter = (slug) => {
+    if (slug === activeFilter.slug) return;
+    trackEvent(ANALYTICS_EVENTS.FILTER_CHANGE, {
+      filter_type: "solution_area",
+      language: lang,
+      value: slug,
+    });
     setSearchParams(slug === "all" ? {} : { area: slug });
   };
 
@@ -162,16 +175,16 @@ export default function SolutionsPage() {
             <motion.div
               key={activeFilter.slug}
               animate="visible"
-              className="mt-8 grid grid-cols-1 gap-px overflow-hidden border border-[var(--color-border)] bg-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3"
+              className="mt-8 grid grid-cols-1 gap-px border border-[var(--color-border)] bg-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3"
               id="solutions-results"
               initial="hidden"
               variants={staggerContainer}
             >
               {filteredSolutions.map((solution) => (
                 <MotionLink
-                  className="solution-index-card group flex flex-col bg-[var(--color-surface-raised)] p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[var(--color-accent-strong)] sm:p-8"
+                  className="solution-index-card group relative flex flex-col bg-[var(--color-surface-raised)] p-6 outline outline-1 outline-transparent transition-[background-color,outline-color] hover:z-10 hover:outline-[var(--color-accent)] focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent-strong)] sm:p-8"
                   key={solution.slug}
-                  layout
+                  layout="position"
                   to={`/solutions/${solution.slug}`}
                   variants={cardItem}
                 >
@@ -183,7 +196,7 @@ export default function SolutionsPage() {
                     src="/logo.webp"
                   />
 
-                  <h2 className="mt-7 text-xl font-black leading-8 text-[var(--color-heading)] line-clamp-3 sm:text-2xl">
+                  <h2 className="mt-7 line-clamp-3 text-[clamp(1.35rem,2.2vw,1.75rem)] font-black leading-[1.45] text-[var(--color-heading)]">
                     {solution.painHeadline ||
                       solution.shortTitle ||
                       solution.title}
@@ -225,6 +238,13 @@ export default function SolutionsPage() {
                 aria-label={en ? "Ask us on WhatsApp (opens in a new window)" : "اسألنا عبر واتساب (يفتح في نافذة جديدة)"}
                 className="mt-6 inline-flex rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
                 href={emptyStateWhatsappUrl}
+                onClick={() =>
+                  trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                    language: lang,
+                    page_type: "solutions",
+                    source_section: SOURCE_SECTIONS.SOLUTIONS,
+                  })
+                }
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -237,6 +257,8 @@ export default function SolutionsPage() {
       </section>
 
       <CTASection
+        pageType="solutions"
+        sourceSection={SOURCE_SECTIONS.SOLUTIONS}
         title={en ? "Not sure what your concern is called?" : "غير متأكد من اسم المشكلة؟"}
         description={en ? "Describe what concerns you on WhatsApp and we will direct you to the appropriate service or technology." : "صف لنا ما يزعجك عبر واتساب، وسنوجهك إلى الخدمة أو التقنية المناسبة."}
         primaryLabel={en ? "Consult Us on WhatsApp" : "استشرنا عبر واتساب"}

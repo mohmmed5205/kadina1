@@ -1,14 +1,24 @@
 import { createWhatsappUrl } from "../utils/whatsapp";
+import {
+  businessAddress,
+  businessContact,
+  businessHours,
+  businessMaps,
+} from "./business";
 
-export const contactPhone = "0114555444";
-export const contactEmail = "info@kadina.sa";
-export const contactAddress = "الرياض   —  الحي المروج  -  مخرج 5   ";
-export const contactHours = {
-  days: "السبت – الخميس",
-  time: "9:00 ص – 10:00 م",
-};
-export const contactMapUrl =
-  "https://maps.app.goo.gl/cLeVtBdTjNd71GrPA?g_st=ic";
+export const contactPhone = businessContact.phone.local;
+export const contactEmail = businessContact.email.value;
+export const contactAddress = businessAddress.activeDisplayCandidate.ar;
+export const contactHours = businessHours.activeDisplayCandidate.ar;
+export const contactMapUrl = businessMaps.activeDisplayCandidate;
+
+export function getContactAddress(lang = "ar") {
+  return businessAddress.activeDisplayCandidate[lang] || contactAddress;
+}
+
+export function getContactHours(lang = "ar") {
+  return businessHours.activeDisplayCandidate[lang] || contactHours;
+}
 
 export const contactItems = [
   {
@@ -31,3 +41,20 @@ export const contactItems = [
     label: "أرسل بريدًا",
   },
 ];
+
+export function getContactItems(lang = "ar") {
+  if (lang !== "en") return contactItems;
+
+  return contactItems.map((item, index) => ({
+    ...item,
+    title: ["Phone", "WhatsApp", "Email"][index],
+    value: index === 1 ? "Instant chat" : item.value,
+    label: ["Call Now", "Start Chat", "Send Email"][index],
+    href:
+      index === 1
+        ? createWhatsappUrl(
+            "Hello, I would like to book or ask about Kadina services.",
+          )
+        : item.href,
+  }));
+}

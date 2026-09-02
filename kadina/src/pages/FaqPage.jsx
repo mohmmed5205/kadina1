@@ -15,6 +15,7 @@ import {
   staggerContainer,
   viewportOnce,
 } from "../componetts/motionPresets";
+import { SOURCE_SECTIONS } from "../utils/analytics";
 
 const faqItems = [
   {
@@ -179,6 +180,8 @@ export default function FaqPage() {
       </section>
 
       <CTASection
+        pageType="faq"
+        sourceSection={SOURCE_SECTIONS.FAQ}
         title={en ? "Did Not Find Your Answer?" : "ما لقيت إجابة لسؤالك؟"}
         description={en ? "Contact us on WhatsApp and we will help you find the answer or the appropriate department." : "تواصل معنا عبر واتساب، وسنساعدك في الوصول إلى الإجابة أو القسم المناسب."}
         primaryLabel={en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}

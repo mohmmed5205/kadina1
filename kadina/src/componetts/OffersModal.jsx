@@ -6,6 +6,11 @@ import OfferSlider from "./OfferSlider";
 import { smoothEase } from "./motionPresets";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import { MODAL_EVENT } from "../components/motion/SmoothScroll";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  trackContactAction,
+} from "../utils/analytics";
 
 const labels = {
   ar: {
@@ -160,6 +165,13 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
                 <div className="border-t border-[var(--color-border)] pt-7 text-center">
                   <motion.a
                     href={whatsappUrl}
+                    onClick={() =>
+                      trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                        language: lang,
+                        page_type: "home",
+                        source_section: SOURCE_SECTIONS.OFFERS,
+                      })
+                    }
                     aria-label={`${text.bookCta} (${isRtl ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
                     target="_blank"
                     rel="noopener noreferrer"

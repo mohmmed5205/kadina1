@@ -1,11 +1,19 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Link from "../components/routing/LocalizedLink";
 import { getPrimaryNavigation } from "../data/navigation";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import { fadeUp, viewportOnce } from "./motionPresets";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  getPageType,
+  trackContactAction,
+} from "../utils/analytics";
 
 export default function Bottom({ t, lang }) {
+  const location = useLocation();
   const shouldReduceMotion = useReducedMotion();
   const en = lang === "en";
   const currentYear = new Date().getFullYear();
@@ -93,6 +101,13 @@ export default function Bottom({ t, lang }) {
               aria-label={`${t.contact.whatsappCta} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
               className="ds-button ds-button-primary mt-7 w-full sm:w-auto"
               href={whatsappUrl}
+              onClick={() =>
+                trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                  language: lang,
+                  page_type: getPageType(location.pathname),
+                  source_section: SOURCE_SECTIONS.FOOTER,
+                })
+              }
               rel="noopener noreferrer"
               target="_blank"
             >

@@ -1,5 +1,7 @@
-import { motion } from "framer-motion";
-import { Link, useOutletContext } from "react-router-dom";
+import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
+import Link from "../components/routing/LocalizedLink";
 import PageHero from "../components/common/PageHero";
 import Seo from "../components/seo/Seo";
 import {
@@ -7,7 +9,13 @@ import {
   createWebPageSchema,
 } from "../components/seo/seoUtils";
 import { getDoctorDetails } from "../data/doctors";
+import { getServicePages } from "../data/services";
 import { createWhatsappUrl } from "../utils/whatsapp";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  trackContactAction,
+} from "../utils/analytics";
 import RevealImage from "../components/motion/RevealImage";
 import MagneticButton from "../components/motion/MagneticButton";
 import {
@@ -21,6 +29,19 @@ export default function DoctorsPage() {
   const { lang } = useOutletContext();
   const en = lang === "en";
   const doctorDetails = getDoctorDetails(lang);
+  const serviceCategories = getServicePages(lang).filter((service) =>
+    doctorDetails.some((doctor) =>
+      doctor.services.some((item) => item.to === `/services/${service.slug}`),
+    ),
+  );
+  const [activeFilter, setActiveFilter] = useState("all");
+  const shouldReduceMotion = useReducedMotion();
+  const visibleDoctors =
+    activeFilter === "all"
+      ? doctorDetails
+      : doctorDetails.filter((doctor) =>
+          doctor.services.some((item) => item.to === activeFilter),
+        );
   const whatsappUrl = createWhatsappUrl(
     en
       ? "Hello, I would like to book a consultation with a Kadina doctor."
@@ -86,22 +107,64 @@ export default function DoctorsPage() {
           </motion.div>
 
           <motion.div
+            aria-label={en ? "Filter doctors by service" : "تصفية الأطباء حسب الخدمة"}
+            className="mt-8 flex snap-x gap-2 overflow-x-auto border-y border-[var(--color-border)] py-4"
+            initial="hidden"
+            role="group"
+            variants={fadeUp}
+            viewport={viewportOnce}
+            whileInView="visible"
+          >
+            {[
+              { title: en ? "All" : "الكل", to: "all" },
+              ...serviceCategories.map((service) => ({
+                title: service.title,
+                to: `/services/${service.slug}`,
+              })),
+            ].map((category) => (
+              <button
+                aria-pressed={activeFilter === category.to}
+                className={`min-h-11 shrink-0 snap-start border px-5 py-2 text-sm font-black transition-colors ${
+                  activeFilter === category.to
+                    ? "border-[var(--color-heading)] bg-[var(--color-heading)] text-[var(--color-text-on-dark)]"
+                    : "border-[var(--color-border-strong)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-strong)] hover:text-[var(--color-heading)]"
+                }`}
+                key={category.to}
+                onClick={() => setActiveFilter(category.to)}
+                type="button"
+              >
+                {category.title}
+              </button>
+            ))}
+          </motion.div>
+
+          <p className="mt-5 text-sm font-bold text-[var(--color-text-muted)]" aria-live="polite">
+            {en
+              ? `${visibleDoctors.length} consultants`
+              : `${visibleDoctors.length} من الاستشاريين`}
+          </p>
+
+          <motion.div
             animate="visible"
             aria-label={en ? "Kadina doctors" : "أطباء كادينا"}
-            className="mt-12 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 lg:gap-x-12 lg:gap-y-20"
+            className="mt-8 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 lg:gap-x-12 lg:gap-y-20"
             id="doctors-gallery"
             initial="hidden"
+            key={activeFilter}
             role="list"
             variants={staggerContainer}
           >
-            {doctorDetails.map((doctor, index) => (
+            {visibleDoctors.map((doctor, index) => (
               <div
-                className={index % 2 === 1 ? "md:pt-12" : ""}
+                className={index % 2 === 1 ? "md:pt-16" : ""}
                 key={doctor.slug}
                 role="listitem"
               >
                 <motion.article
                   className="doctor-gallery-item group"
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: shouldReduceMotion ? 0 : 0.45, delay: shouldReduceMotion ? 0 : Math.min(index, 3) * 0.06 }}
                   variants={cardItem}
                 >
                   <Link
@@ -142,6 +205,9 @@ export default function DoctorsPage() {
                     </RevealImage>
 
                     <div className="doctor-gallery-meta relative border-b border-[var(--color-border)] py-6 sm:py-7">
+                      <p className="mb-3 text-xs font-black tracking-[.12em] text-[var(--color-accent-strong)]">
+                        {String(index + 1).padStart(2, "0")}
+                      </p>
                       <h3 className="text-2xl font-black leading-tight text-[var(--color-heading)] sm:text-3xl">
                         {doctor.name}
                       </h3>
@@ -189,6 +255,13 @@ export default function DoctorsPage() {
                 }
                 className="ds-button ds-button-primary w-full sm:w-auto"
                 href={whatsappUrl}
+                onClick={() =>
+                  trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                    language: lang,
+                    page_type: "doctors",
+                    source_section: SOURCE_SECTIONS.DOCTORS,
+                  })
+                }
                 rel="noopener noreferrer"
                 target="_blank"
               >

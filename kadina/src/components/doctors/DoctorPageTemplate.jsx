@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Link, useLocation, useOutletContext } from "react-router-dom";
-import PageHero from "../common/PageHero";
+import { useLocation, useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
+import Breadcrumbs from "../common/Breadcrumbs";
 import Seo from "../seo/Seo";
 import {
   absoluteUrl,
@@ -9,6 +10,13 @@ import {
 } from "../seo/seoUtils";
 import { getDoctorDetail } from "../../data/doctors";
 import { createWhatsappUrl } from "../../utils/whatsapp";
+import { useTrackedView } from "../../hooks/useAnalytics";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  getCurrentPath,
+  trackContactAction,
+} from "../../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -56,6 +64,15 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
   const { lang } = useOutletContext();
   const en = lang === "en";
   const doctor = rawDoctor ? getDoctorDetail(rawDoctor.slug, lang) : null;
+  useTrackedView(
+    ANALYTICS_EVENTS.DOCTOR_VIEW,
+    {
+      doctor_slug: rawDoctor?.slug,
+      language: lang,
+      path: getCurrentPath(location),
+    },
+    Boolean(doctor),
+  );
 
   if (!doctor) {
     return (
@@ -153,70 +170,114 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
         title={`${doctor.name} — ${doctor.specialty || doctor.title}`}
       />
 
-      <PageHero
-        breadcrumbItems={[
-          { label: en ? "Doctors" : "الأطباء", to: "/doctors" },
-          { label: doctor.name },
-        ]}
-        className="doctor-detail-hero"
-        description={doctor.shortBio}
-        eyebrow={doctor.title}
-        secondaryTitle={doctor.specialty}
-        title={doctor.name}
-        variant="detail"
-        visual={
-          doctor.image
-            ? {
-                alt: doctor.name,
-                className: "h-full w-full object-cover object-top",
-                src: doctor.image,
-              }
-            : undefined
-        }
-        visualFallback={!doctor.image ? portraitFallback : undefined}
-      >
-        {doctor.yearsOfExperience !== null && (
-          <p className="mt-6 border-s-2 border-[var(--color-accent)] ps-4 text-sm font-black text-[var(--color-heading)]">
-            {en ? "Experience" : "الخبرة"}: {doctor.yearsOfExperience}{" "}
-            {en ? "years" : "سنة"}
-          </p>
-        )}
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-surface-muted)] pb-[var(--section-space)] pt-[calc(var(--nav-h,4.25rem)+3rem)] lg:pt-[calc(var(--nav-h,4.25rem)+5rem)]">
+        <img
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-24 end-[4%] h-[28rem] w-auto object-contain opacity-[.035]"
+          src="/kadina-logo3.webp"
+        />
+        <div className="ds-container relative">
+          <Breadcrumbs
+            items={[
+              { label: en ? "Doctors" : "الأطباء", to: "/doctors" },
+              { label: doctor.name },
+            ]}
+          />
 
-        {focusAreas.length > 0 && (
-          <div className="mt-7">
-            <p className="text-xs font-black text-[var(--color-accent-strong)]">
-              {en ? "Areas of Expertise" : "مجالات التميز"}
-            </p>
-            <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold text-[var(--color-text-muted)]">
-              {focusAreas.map((area, index) => (
-                <li className="inline-flex items-center gap-2" key={`hero-focus-${index}`}>
-                  <span
-                    aria-hidden="true"
-                    className="h-1 w-1 rounded-full bg-[var(--color-accent-strong)]"
-                  />
-                  {area}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+          <motion.div
+            className="mt-8 grid gap-10 lg:mt-12 lg:grid-cols-12 lg:items-center lg:gap-[clamp(3rem,7vw,8rem)]"
+            initial="hidden"
+            variants={staggerContainer}
+            animate="visible"
+          >
+            <motion.div
+              className="relative mx-auto aspect-[4/5] w-full max-w-[34rem] overflow-hidden bg-[var(--color-warm-beige-strong)] lg:col-span-5"
+              variants={fadeUp}
+            >
+              {doctor.image ? (
+                <img
+                  alt={doctor.name}
+                  className="h-full w-full object-cover object-top"
+                  decoding="async"
+                  fetchPriority="high"
+                  height="1440"
+                  src={doctor.image}
+                  width="1080"
+                />
+              ) : (
+                portraitFallback
+              )}
+              <span className="absolute bottom-0 start-8 h-16 w-px bg-[var(--color-accent)]" aria-hidden="true" />
+            </motion.div>
 
-        <a
-          aria-label={
-            en
-              ? `Book with ${doctor.name} on WhatsApp (opens in a new window)`
-              : `احجز مع ${doctor.name} عبر واتساب (يفتح في نافذة جديدة)`
-          }
-          className="ds-button ds-button-primary mt-8 w-full sm:w-auto"
-          href={whatsappUrl}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {en
-            ? "Book Your Consultation on WhatsApp"
-            : "احجز استشارتك عبر واتساب"}
-        </a>
-      </PageHero>
+            <motion.div className="lg:col-span-7" variants={fadeUp}>
+              <p className="section-title-eyebrow">{doctor.title}</p>
+              <h1 className="mt-5 max-w-4xl text-[clamp(3.25rem,8vw,7.5rem)] font-black leading-[.95] tracking-[-.06em] text-[var(--color-heading)]">
+                {doctor.name}
+              </h1>
+              <p className="mt-6 max-w-3xl text-xl font-black leading-9 text-[var(--color-accent-strong)] lg:mt-8 lg:text-2xl lg:leading-10">
+                {doctor.specialty}
+              </p>
+              {doctor.shortBio && (
+                <p className="mt-6 max-w-2xl text-lg leading-9 text-[var(--color-text-muted)]">
+                  {doctor.shortBio}
+                </p>
+              )}
+
+              {doctor.yearsOfExperience !== null && (
+                <div className="mt-8 grid grid-cols-[auto_1fr] items-baseline gap-5 border-y border-[var(--color-border-strong)] py-5">
+                  <p className="text-5xl font-black tracking-[-.05em] text-[var(--color-heading)] lg:text-6xl">
+                    {doctor.yearsOfExperience}
+                  </p>
+                  <p className="font-black text-[var(--color-text-muted)]">
+                    {en ? "Years of experience" : "سنة من الخبرة"}
+                  </p>
+                </div>
+              )}
+
+              {focusAreas.length > 0 && (
+                <div className="mt-8">
+                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-accent-strong)]">
+                    {en ? "Areas of Expertise" : "مجالات التميز"}
+                  </p>
+                  <ul className="mt-4 grid gap-3 border-t border-[var(--color-border)] sm:grid-cols-2">
+                    {focusAreas.map((area, index) => (
+                      <li className="border-b border-[var(--color-border)] py-3 font-bold leading-7 text-[var(--color-text-muted)]" key={`hero-focus-${index}`}>
+                        {area}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <a
+                aria-label={
+                  en
+                    ? `Book with ${doctor.name} on WhatsApp (opens in a new window)`
+                    : `احجز مع ${doctor.name} عبر واتساب (يفتح في نافذة جديدة)`
+                }
+                className="ds-button ds-button-primary mt-8 w-full sm:w-auto"
+                href={whatsappUrl}
+                onClick={() =>
+                  trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                    language: lang,
+                    page_type: "doctor",
+                    slug: doctor.slug,
+                    source_section: SOURCE_SECTIONS.DOCTOR_DETAIL,
+                  })
+                }
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {en
+                  ? "Book Your Consultation on WhatsApp"
+                  : "احجز استشارتك عبر واتساب"}
+              </a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
       {(doctor.services.length > 0 ||
         doctor.devices.length > 0 ||

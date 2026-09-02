@@ -2,6 +2,7 @@ export const servicePages = [
   {
     slug: "dermatology",
     title: "الجلدية",
+    seoTitle: "الجلدية في الرياض — مركز كادينا",
     subtitle: "بشرتك تستحق تشخيصًا.. لا تخمينًا",
     intro:
       "نبدأ بتشخيص استشاري دقيق، ثم نختار البروتوكول الأنسب: علاج دوائي، أو أجهزة، أو ليزر، أو جلسات عناية متقدمة. من الكلف والإكزيما إلى الهالات والأكياس الدهنية ومشاكل الأظافر.",
@@ -63,6 +64,7 @@ export const servicePages = [
   {
     slug: "laser",
     title: "الليزر",
+    seoTitle: "إزالة الشعر بالليزر في الرياض — مركز كادينا",
     subtitle: "إزالة الشعر بالليزر.. بمعيار عالمي لا يقبل المنافسة",
     intro:
       "لا نملك جهاز ليزر واحدًا — بل ثلاثة من الطراز الأول: GentleMax Pro وGentleMax Pro Plus من Candela الأمريكية، وClarity من Lutronic. لكل نوع بشرة وشعر جهازه وإعداده الأمثل، بأنظمة تبريد تجعل الجلسة أسرع وأكثر راحة.",
@@ -112,6 +114,7 @@ export const servicePages = [
   {
     slug: "plastic-surgery",
     title: "جراحة التجميل",
+    seoTitle: "جراحة التجميل في الرياض — مركز كادينا",
     subtitle: "جراحة تضع الأمان قبل الجمال",
     intro:
       "شد الوجه والجفون، تجميل الوجه والأنف، جراحات الثدي (رفع، تكبير، تصغير)، شفط الدهون ونحت القوام، شد البطن والذراعين، وإصلاح الترميم والحروق — بأيدي 4 استشاريي جراحة تجميل، بينهم استشارية متخصصة في الترميم والحروق.",
@@ -142,6 +145,7 @@ export const servicePages = [
   {
     slug: "hair",
     title: "الشعر",
+    seoTitle: "علاج الشعر وزراعته في الرياض — مركز كادينا",
     subtitle: "قبل أن تفكر في الزراعة.. اعرف السبب",
     intro:
       "تساقط الشعر ليس حالة واحدة، لذلك لا نعالجه بحل واحد: من بلازما Magellan عالية التركيز، إلى تقنية Regenera Activa بخلايا فروة رأسك نفسها، وصولًا إلى زراعة الشعر بتقنية الاقتطاف FUE — التشخيص أولًا، ثم الحل الأنسب.",
@@ -185,6 +189,7 @@ export const servicePages = [
   {
     slug: "injectables",
     title: "الحقن التجميلية",
+    seoTitle: "الحقن التجميلية في الرياض — مركز كادينا",
     subtitle: "نتيجة يلاحظها الجميع.. ولا يعرف أحد السبب",
     intro:
       "فلسفتنا في البوتوكس والفيلر والبلازما: الجمال الطبيعي المتوازن.",
@@ -222,6 +227,7 @@ export const servicePagesBySlug = Object.fromEntries(
 const servicePageTranslations = {
   dermatology: {
     title: "Dermatology",
+    seoTitle: "Dermatology in Riyadh — Kadina Center",
     subtitle: "Your skin deserves a diagnosis, not a guess",
     intro: "We begin with an accurate consultant assessment, then select the most appropriate protocol: medication, devices, laser, or advanced care sessions. This includes melasma and eczema, dark circles, sebaceous cysts, and nail concerns.",
     seoSubtitle: "Your skin deserves a diagnosis, not a guess",
@@ -236,6 +242,7 @@ const servicePageTranslations = {
   },
   laser: {
     title: "Laser",
+    seoTitle: "Laser Hair Removal in Riyadh — Kadina Center",
     subtitle: "Laser hair removal to a world-class standard",
     intro: "We do not have just one laser device, but three leading systems: GentleMax Pro and GentleMax Pro Plus by Candela in the United States, and Clarity by Lutronic. Each skin and hair type has an optimal device and setting, with cooling systems that make sessions faster and more comfortable.",
     seoSubtitle: "Laser hair removal to a world-class standard",
@@ -249,6 +256,7 @@ const servicePageTranslations = {
   },
   "plastic-surgery": {
     title: "Plastic Surgery",
+    seoTitle: "Plastic Surgery in Riyadh — Kadina Center",
     subtitle: "Surgery that puts safety before beauty",
     intro: "Face and eyelid lifts, facial and nasal surgery, breast surgery (lift, augmentation and reduction), liposuction and body contouring, tummy and arm lifts, and reconstructive and burn repair—performed by four plastic surgery consultants, including a consultant specializing in reconstruction and burns.",
     seoSubtitle: "Surgery that puts safety before beauty",
@@ -262,6 +270,7 @@ const servicePageTranslations = {
   },
   hair: {
     title: "Hair",
+    seoTitle: "Hair Treatment and Transplantation in Riyadh — Kadina Center",
     subtitle: "Understand the cause before considering a transplant",
     intro: "Hair loss is not one condition, so we do not treat it with one solution. Options range from high-concentration Magellan PRP and Regenera Activa using cells from your own scalp to FUE hair transplantation—diagnosis first, followed by the most appropriate solution.",
     seoSubtitle: "Understand the cause before considering a transplant",
@@ -275,6 +284,7 @@ const servicePageTranslations = {
   },
   injectables: {
     title: "Cosmetic Injectables",
+    seoTitle: "Cosmetic Injectables in Riyadh — Kadina Center",
     subtitle: "A result everyone notices, without knowing why",
     intro: "Our approach to Botox, fillers and plasma treatments is balanced, natural beauty.",
     additionalParagraphs: ["Botox preserves your expressions, filler restores volume without excess, and plasma renews radiance using your own blood—all in the hands of leading aesthetic injection consultants in the Kingdom."],

@@ -7,33 +7,32 @@ import {
   viewportOnce,
 } from "../../componetts/motionPresets";
 import {
-  contactAddress,
-  contactHours,
-  contactItems,
   contactMapUrl,
+  getContactAddress,
+  getContactHours,
+  getContactItems,
 } from "../../data/contact";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  getContactEventName,
+  trackContactAction,
+} from "../../utils/analytics";
 
 export default function HomeContactSection() {
   const { lang } = useOutletContext();
-  const localizedItems = contactItems.map((item, index) =>
-    lang === "ar"
-      ? item
-      : {
-          ...item,
-          title: ["Phone", "WhatsApp", "Email"][index],
-          value: index === 1 ? "Instant chat" : item.value,
-          label: ["Call Now", "Start Chat", "Send Email"][index],
-          href:
-            index === 1
-              ? item.href.replace(
-                  encodeURIComponent("للحجز والاستفسار"),
-                  encodeURIComponent(
-                    "Hello, I would like to book or ask about Kadina services.",
-                  ),
-                )
-              : item.href,
-        },
-  );
+  const localizedItems = getContactItems(lang);
+  const localizedAddress = getContactAddress(lang);
+  const localizedHours = getContactHours(lang);
+  const trackContactItem = (href) => {
+    const eventName = getContactEventName(href);
+    if (!eventName) return;
+    trackContactAction(eventName, {
+      language: lang,
+      page_type: "home",
+      source_section: SOURCE_SECTIONS.HOME_CONTACT,
+    });
+  };
 
   return (
     <section
@@ -81,6 +80,7 @@ export default function HomeContactSection() {
                   }
                   className="inline-flex min-h-11 items-center font-black text-[var(--color-accent-strong)] underline decoration-[var(--color-accent)]/45 underline-offset-8"
                   href={item.href}
+                  onClick={() => trackContactItem(item.href)}
                   rel={item.external ? "noopener noreferrer" : undefined}
                   target={item.external ? "_blank" : undefined}
                 >
@@ -99,7 +99,7 @@ export default function HomeContactSection() {
                 {lang === "ar" ? "الموقع" : "Location"}
               </h3>
               <p className="mt-3 text-lg font-bold leading-8 text-[var(--color-heading)]">
-                {lang === "ar" ? contactAddress : "Riyadh — Al-Murooj-Exit 5"}
+                {localizedAddress}
               </p>
               <a
                 aria-label={
@@ -109,6 +109,13 @@ export default function HomeContactSection() {
                 }
                 className="mt-5 inline-flex min-h-11 items-center font-black text-[var(--color-accent-strong)] underline decoration-[var(--color-accent)]/45 underline-offset-8"
                 href={contactMapUrl}
+                onClick={() =>
+                  trackContactAction(ANALYTICS_EVENTS.MAP_CLICK, {
+                    language: lang,
+                    page_type: "home",
+                    source_section: SOURCE_SECTIONS.HOME_CONTACT,
+                  })
+                }
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -121,9 +128,9 @@ export default function HomeContactSection() {
                 {lang === "ar" ? "المواعيد" : "Hours"}
               </h3>
               <p className="mt-3 text-lg font-bold leading-8 text-[var(--color-heading)]">
-                {lang === "ar" ? contactHours.days : "Saturday – Thursday"}
+                {localizedHours.days}
                 <br />
-                {lang === "ar" ? contactHours.time : "9:00 AM – 10:00 PM"}
+                {localizedHours.time}
               </p>
             </motion.article>
           </div>

@@ -1,15 +1,27 @@
 import { motion } from "framer-motion";
-import { Link, useLocation, useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
 import Breadcrumbs from "../common/Breadcrumbs";
 import SectionTitle from "../common/SectionTitle";
+import DirectAnswer from "../content/DirectAnswer";
+import MedicalReviewBy from "../content/MedicalReviewBy";
 import Seo from "../seo/Seo";
 import {
   absoluteUrl,
   createBreadcrumbSchema,
+  createFaqSchema,
   createWebPageSchema,
 } from "../seo/seoUtils";
 import { createWhatsappUrl } from "../../utils/whatsapp";
+import { getMedicalReviewer } from "../../utils/medicalReview";
 import { getArticle } from "../../data/articles";
+import { useTrackedView } from "../../hooks/useAnalytics";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  getCurrentPath,
+  trackContactAction,
+} from "../../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -24,8 +36,18 @@ export default function ArticleTemplate({ article: rawArticle }) {
   const { lang } = useOutletContext();
   const en = lang === "en";
   const article = rawArticle ? getArticle(rawArticle.slug, lang) : null;
+  const published = article?.status === "published";
+  useTrackedView(
+    ANALYTICS_EVENTS.ARTICLE_VIEW,
+    {
+      article_slug: rawArticle?.slug,
+      language: lang,
+      path: getCurrentPath(location),
+    },
+    published,
+  );
 
-  if (!article || article.status !== "published") {
+  if (!published) {
     return (
       <>
         <Seo
@@ -61,6 +83,14 @@ export default function ArticleTemplate({ article: rawArticle }) {
 
   const canonicalPath = `/blog/${article.slug}`;
   const seoDescription = article.excerpt || article.title;
+  const medicalReview = article.medicalReviewBy
+    ? {
+        ...article.medicalReviewBy,
+        lastReviewedDate:
+          article.lastReviewedDate || article.medicalReviewBy.lastReviewedDate,
+      }
+    : null;
+  const reviewer = getMedicalReviewer(medicalReview, lang);
   const articleSchema = {
     "@type": "BlogPosting",
     headline: article.title,
@@ -70,17 +100,25 @@ export default function ArticleTemplate({ article: rawArticle }) {
     ...(article.publishedAt && { datePublished: article.publishedAt }),
     ...(article.updatedAt && { dateModified: article.updatedAt }),
     ...(article.coverImage && { image: absoluteUrl(article.coverImage) }),
-    ...(article.reviewedBy && {
+    ...(reviewer && {
       reviewedBy: {
         "@type": "Person",
-        name: article.reviewedBy,
+        name: reviewer.doctor.name,
+        url: absoluteUrl(`/doctors/${reviewer.doctor.slug}`),
       },
     }),
   };
   const relatedLinks = [
     article.relatedService,
+    article.relatedProcedure,
+    article.relatedDoctor,
     article.relatedDevice,
     article.relatedSolution,
+    ...(article.relatedServices || []),
+    ...(article.relatedProcedures || []),
+    ...(article.relatedDoctors || []),
+    ...(article.relatedDevices || []),
+    ...(article.relatedSolutions || []),
   ].filter(Boolean);
   const whatsappUrl = createWhatsappUrl(article.whatsappMessage);
 
@@ -102,6 +140,7 @@ export default function ArticleTemplate({ article: rawArticle }) {
             path: canonicalPath,
           }),
           articleSchema,
+          article.faq?.length ? createFaqSchema(article.faq) : null,
         ]}
         ogType="article"
         title={article.title}
@@ -137,13 +176,14 @@ export default function ArticleTemplate({ article: rawArticle }) {
               <span>{en ? "Reading Time" : "وقت القراءة"}: {article.readingTime}</span>
             )}
           </div>
-          {article.reviewedBy && (
-            <p className="mt-4 font-bold text-[#4c2c00]/65">
-              {en ? "Medically Reviewed by" : "راجعه طبيًا"}: {article.reviewedBy}
-            </p>
-          )}
         </motion.div>
       </header>
+
+      <DirectAnswer
+        answer={article.directAnswer?.answer}
+        lang={lang}
+        question={article.directAnswer?.question}
+      />
 
       {article.coverImage && (
         <motion.div
@@ -165,7 +205,7 @@ export default function ArticleTemplate({ article: rawArticle }) {
         </motion.div>
       )}
 
-      {article.sections.length > 0 && (
+      {article.sections?.length > 0 && (
         <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
           <motion.div
             className="mx-auto max-w-4xl space-y-12"
@@ -180,16 +220,81 @@ export default function ArticleTemplate({ article: rawArticle }) {
                 variants={cardItem}
               >
                 {section.heading && <SectionTitle title={section.heading} />}
-                {section.body && (
+                {typeof section.body === "string" && (
                   <p className="mt-5 text-lg font-medium leading-9 text-[#4c2c00]/72">
                     {section.body}
                   </p>
+                )}
+                {Array.isArray(section.body) && (
+                  <div className="mt-5 space-y-4">
+                    {section.body.map((paragraph, paragraphIndex) => (
+                      <p
+                        className="text-lg font-medium leading-9 text-[#4c2c00]/72"
+                        key={`article-paragraph-${index}-${paragraphIndex}`}
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {section.items?.length > 0 && (
+                  <ul className="mt-5 list-disc space-y-3 ps-6 text-lg font-medium leading-8 text-[#4c2c00]/72">
+                    {section.items.map((item, itemIndex) => (
+                      <li key={`article-item-${index}-${itemIndex}`}>{item}</li>
+                    ))}
+                  </ul>
                 )}
               </motion.section>
             ))}
           </motion.div>
         </section>
       )}
+
+      {article.comparisonPoints?.length > 0 && (
+        <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+          <div className="mx-auto max-w-5xl">
+            <SectionTitle title={en ? "Comparison" : "المقارنة"} />
+            <div className="mt-7 overflow-x-auto">
+              <table className="w-full min-w-[42rem] border-collapse text-start">
+                <thead>
+                  <tr className="border-y border-[#f8aa2d]/35">
+                    <th className="p-4 text-start">{en ? "Point" : "النقطة"}</th>
+                    <th className="p-4 text-start">{article.itemA?.title}</th>
+                    <th className="p-4 text-start">{article.itemB?.title}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {article.comparisonPoints.map((point, index) => (
+                    <tr className="border-b border-[#f8aa2d]/20" key={`comparison-point-${index}`}>
+                      <th className="p-4 text-start">{point.label}</th>
+                      <td className="p-4">{point.itemA}</td>
+                      <td className="p-4">{point.itemB}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {article.faq?.length > 0 && (
+        <section className="px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+          <div className="mx-auto max-w-4xl">
+            <SectionTitle title={en ? "Frequently Asked Questions" : "الأسئلة الشائعة"} />
+            <div className="mt-7 border-t border-[#f8aa2d]/25">
+              {article.faq.map((item, index) => (
+                <div className="border-b border-[#f8aa2d]/25 py-6" key={`article-faq-${index}`}>
+                  <h3 className="text-lg font-black text-[#4c2c00]">{item.question}</h3>
+                  <p className="mt-3 leading-8 text-[#4c2c00]/72">{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <MedicalReviewBy lang={lang} review={medicalReview} />
 
       {relatedLinks.length > 0 && (
         <section className="bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
@@ -232,6 +337,14 @@ export default function ArticleTemplate({ article: rawArticle }) {
             aria-label={en ? "Ask on WhatsApp (opens in a new window)" : "استفسر عبر واتساب (يفتح في نافذة جديدة)"}
             className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
             href={whatsappUrl}
+            onClick={() =>
+              trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                language: lang,
+                page_type: "article",
+                slug: article.slug,
+                source_section: SOURCE_SECTIONS.ARTICLE_DETAIL,
+              })
+            }
             rel="noopener noreferrer"
             target="_blank"
           >

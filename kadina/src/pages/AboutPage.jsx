@@ -9,6 +9,7 @@ import {
   createWebPageSchema,
 } from "../components/seo/seoUtils";
 import { getAboutData } from "../data/about";
+import { SOURCE_SECTIONS } from "../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -124,6 +125,8 @@ export default function AboutPage() {
       </section>
 
       <CTASection
+        pageType="about"
+        sourceSection={SOURCE_SECTIONS.ABOUT}
         title={en ? "Consultant care that begins with an honest diagnosis" : "رعاية استشارية تبدأ بتشخيص صادق"}
         description={en ? "We begin by understanding your case, then select the most appropriate procedure and technology for a natural, considered result." : "نبدأ بفهم حالتك، ثم نختار الإجراء والتقنية الأنسب للوصول إلى نتيجة طبيعية ومدروسة."}
         primaryLabel={en ? "Book Your Consultation on WhatsApp" : "احجز استشارتك عبر واتساب"}

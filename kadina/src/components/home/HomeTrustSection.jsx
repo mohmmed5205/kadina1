@@ -1,39 +1,75 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
+import { getAboutData } from "../../data/about";
 import {
-  cardItem,
   fadeUp,
+  imageReveal,
   staggerContainer,
   viewportOnce,
 } from "../../componetts/motionPresets";
-import { getHomePageContent } from "../../data/pagesContent";
-import CountUp from "../motion/CountUp";
 
 export default function HomeTrustSection() {
   const { lang } = useOutletContext();
-  const homePageContent = getHomePageContent(lang);
+  const { content } = getAboutData(lang);
+  const shouldReduceMotion = useReducedMotion();
+
   return (
-    <section aria-label={lang === "ar" ? "أرقام الثقة في كادينا" : "Kadina trust metrics"} className="bg-[var(--color-surface)]">
-      <motion.div className="ds-container py-[var(--section-space)] text-center" initial="hidden" variants={fadeUp} viewport={viewportOnce} whileInView="visible">
-        <p className="mx-auto max-w-5xl text-[clamp(2.25rem,8vw,5rem)] font-black leading-[1.16] tracking-[-0.04em] text-[var(--color-heading)]">
-          {lang === "ar" ? "منذ 2013.. خبرة استشارية وتقنيات عالمية تحت سقف واحد" : "Since 2013, consultant expertise and world-class technology under one roof"}
-        </p>
-        <span aria-hidden="true" className="mx-auto mt-10 block h-px w-20 bg-[var(--color-accent-strong)]" />
-      </motion.div>
-      <motion.div className="border-y border-[var(--color-border-on-dark)] bg-[var(--color-surface-dark)]" initial="hidden" variants={staggerContainer} viewport={viewportOnce} whileInView="visible">
-        <div className="ds-container grid grid-cols-2 md:grid-cols-4">
-        {homePageContent.trustMetrics.map((metric, index) => (
-          <motion.div
-            className="trust-metric relative flex min-h-40 flex-col justify-center px-3 py-8 text-center sm:px-6 lg:py-14"
-            key={`trust-metric-${index}`}
-            variants={cardItem}
-          >
-            <p className="text-5xl font-black tracking-[-0.05em] text-[var(--color-accent)] sm:text-6xl lg:text-7xl">
-              <CountUp value={metric.value} />
+    <section
+      className="home-about scroll-mt-24 overflow-hidden bg-[var(--color-surface)]"
+      id="about"
+    >
+      <motion.div
+        className="ds-container grid gap-12 py-[var(--section-space)] lg:grid-cols-[minmax(0,.9fr)_minmax(30rem,1.1fr)] lg:items-center lg:gap-[clamp(4rem,8vw,9rem)]"
+        initial={shouldReduceMotion ? false : "hidden"}
+        variants={staggerContainer}
+        viewport={viewportOnce}
+        whileInView="visible"
+      >
+        <motion.div className="relative" variants={imageReveal}>
+          <div className="relative aspect-[4/5] overflow-hidden bg-[var(--color-surface-muted)] sm:aspect-[5/4] lg:aspect-[4/5]">
+            <img
+              alt={lang === "ar" ? "مبنى مركز كادينا الطبي في الرياض" : "Kadina Medical Center building in Riyadh"}
+              className="h-full w-full object-cover object-[58%_center] lg:object-[62%_center]"
+              decoding="async"
+              loading="lazy"
+              src="/homeBG.webp"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(48,32,18,.58))]" />
+            <p className="absolute bottom-6 start-6 text-[clamp(4rem,10vw,7.5rem)] font-black leading-none tracking-[-.07em] text-white/90 sm:bottom-8 sm:start-8">
+              2013
             </p>
-            <p className="mt-3 text-sm font-bold text-[var(--color-text-on-dark-muted)] sm:text-base">{metric.label}</p>
+          </div>
+          <span className="absolute -bottom-5 end-5 h-20 w-px bg-[var(--color-accent)] lg:-end-6 lg:bottom-12" aria-hidden="true" />
+        </motion.div>
+
+        <div>
+          <motion.p className="section-title-eyebrow" variants={fadeUp}>
+            {lang === "ar" ? "عن كادينا" : "About Kadina"}
+          </motion.p>
+          <motion.h2
+            className="mt-5 max-w-3xl text-[clamp(2.75rem,7vw,6.5rem)] font-black leading-[1.02] tracking-[-.055em] text-[var(--color-heading)]"
+            variants={fadeUp}
+          >
+            {content.intro}
+          </motion.h2>
+          <motion.p
+            className="mt-7 max-w-2xl text-lg leading-9 text-[var(--color-text-muted)] lg:mt-10 lg:text-xl lg:leading-10"
+            variants={fadeUp}
+          >
+            {content.story}
+          </motion.p>
+          <motion.div variants={fadeUp}>
+            <Link
+              className="mt-8 inline-flex min-h-12 items-center gap-4 border-b border-[var(--color-accent)] pb-2 font-black text-[var(--color-heading)] lg:mt-10"
+              to="/about"
+            >
+              <span>{lang === "ar" ? "اعرف أكثر عن كادينا" : "Discover more about Kadina"}</span>
+              <span aria-hidden="true" className="editorial-arrow">
+                {lang === "ar" ? "←" : "→"}
+              </span>
+            </Link>
           </motion.div>
-        ))}
         </div>
       </motion.div>
     </section>

@@ -9,6 +9,11 @@ import "swiper/css/pagination";
 import { offers } from "../data/offers";
 import { cardItem, staggerContainer, viewportOnce } from "./motionPresets";
 import { createWhatsappUrl } from "../utils/whatsapp";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  trackContactAction,
+} from "../utils/analytics";
 
 function OfferLine({ item, labels }) {
   return (
@@ -49,6 +54,7 @@ function OfferPoster({
   offer,
   data,
   externalLabel,
+  lang,
   compact = false,
 }) {
   const isDense = offer.items.length > 6;
@@ -132,6 +138,13 @@ function OfferPoster({
 
           <motion.a
             href={whatsappUrl}
+            onClick={() =>
+              trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                language: lang,
+                page_type: "home",
+                source_section: SOURCE_SECTIONS.OFFERS,
+              })
+            }
             aria-label={`${data.slideCta} (${externalLabel})`}
             target="_blank"
             rel="noopener noreferrer"
@@ -276,6 +289,7 @@ export default function OfferSlider({
               externalLabel={
                 isRtl ? "يفتح في نافذة جديدة" : "opens in a new window"
               }
+              lang={lang}
               compact={compact || modal}
             />
           </SwiperSlide>

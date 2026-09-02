@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Link, useLocation, useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
+import Link from "../components/routing/LocalizedLink";
 import Seo from "../components/seo/Seo";
 import { fadeUp } from "../componetts/motionPresets";
 

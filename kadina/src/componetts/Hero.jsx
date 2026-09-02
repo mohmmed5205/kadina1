@@ -5,16 +5,20 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { Link } from "react-router-dom";
 import { fadeUp, heroSequence, heroWord, staggerFast } from "./motionPresets";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import MagneticButton from "../components/motion/MagneticButton";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  trackContactAction,
+} from "../utils/analytics";
 
 const OffersModal = lazy(() => import("./OffersModal"));
-const MotionLink = motion.create(Link);
+
 export default function Hero({ t, lang = "ar" }) {
-  const [isOffersOpen, setIsOffersOpen] = useState(false);
   const [canParallax, setCanParallax] = useState(false);
+  const [offersOpen, setOffersOpen] = useState(false);
   const heroRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -44,13 +48,16 @@ export default function Hero({ t, lang = "ar" }) {
       <section
         ref={heroRef}
         id="home"
-        className="relative min-h-[88svh] overflow-hidden bg-[var(--color-surface-dark)] pt-[calc(var(--nav-h,4.25rem)+env(safe-area-inset-top))] sm:min-h-[92svh] lg:min-h-screen"
+        className="home-hero relative min-h-[88svh] overflow-hidden bg-[var(--color-surface-dark)] sm:min-h-[92svh] lg:min-h-screen"
       >
-        <motion.div
-          aria-hidden="true"
-          className="absolute -inset-y-[7%] inset-x-0 bg-cover bg-center bg-no-repeat"
+        <motion.img
+          alt={t.hero.imageAlt}
+          className="absolute -inset-y-[7%] h-[114%] w-full object-cover object-[58%_center] sm:object-center"
+          decoding="async"
+          fetchPriority="high"
+          loading="eager"
+          src="/homeBG.webp"
           style={{
-            backgroundImage: "url('/homeBG.webp')",
             y: canParallax ? backgroundY : 0,
           }}
         />
@@ -58,15 +65,15 @@ export default function Hero({ t, lang = "ar" }) {
           className="absolute inset-0 bg-[var(--color-surface-dark)]"
           style={{ opacity: shouldReduceMotion ? 0.28 : overlayOpacity }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(48,32,18,.82)_0%,rgba(48,32,18,.48)_44%,rgba(48,32,18,.12)_78%,rgba(48,32,18,.18)_100%)] rtl:bg-[linear-gradient(270deg,rgba(48,32,18,.82)_0%,rgba(48,32,18,.48)_44%,rgba(48,32,18,.12)_78%,rgba(48,32,18,.18)_100%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[var(--color-surface-dark)]/70 to-transparent" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(48,32,18,.92)_0%,rgba(48,32,18,.66)_45%,rgba(48,32,18,.14)_82%)] rtl:bg-[linear-gradient(270deg,rgba(48,32,18,.92)_0%,rgba(48,32,18,.66)_45%,rgba(48,32,18,.14)_82%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(48,32,18,.32)_0%,transparent_30%,rgba(48,32,18,.58)_100%)]" />
 
-        <div className="ds-container relative z-10 flex min-h-[calc(88svh-var(--nav-h,4.25rem))] items-end pb-10 pt-16 sm:min-h-[calc(92svh-var(--nav-h,4.25rem))] sm:pb-16 lg:min-h-[calc(100vh-var(--nav-h,5rem))] lg:items-end lg:pb-20 lg:pt-28">
+        <div className="ds-container relative z-10 flex min-h-[88svh] items-end pb-12 pt-[calc(var(--nav-h,4.25rem)+3rem)] sm:min-h-[92svh] sm:pb-16 lg:min-h-screen lg:pb-[clamp(5rem,10vh,8rem)]">
           <motion.div
             initial={shouldReduceMotion ? false : "hidden"}
             animate="visible"
             variants={heroSequence}
-            className="w-full min-w-0 max-w-[52rem] text-start"
+            className="w-full min-w-0 max-w-[60rem] text-start"
           >
             <motion.img
               variants={fadeUp}
@@ -75,7 +82,7 @@ export default function Hero({ t, lang = "ar" }) {
               decoding="async"
               height="284"
               width="284"
-              className="mb-8 hidden h-24 w-auto object-contain sm:block lg:h-28"
+              className="mb-8 hidden h-20 w-auto object-contain sm:block lg:mb-10 lg:h-24"
               style={{
                 filter:
                   "drop-shadow(0 6px 16px rgba(48,32,18,0.24))",
@@ -97,7 +104,7 @@ export default function Hero({ t, lang = "ar" }) {
             {/* Title */}
             <motion.h1
               aria-label={t.hero.title}
-              className="on-dark-heading mt-5 max-w-full break-words text-[clamp(2.65rem,10vw,6.5rem)] font-black leading-[1.02] tracking-[-0.045em] drop-shadow-[0_3px_14px_rgba(43,27,8,0.4)] lg:mt-7"
+              className="on-dark-heading mt-5 max-w-[56rem] break-words text-[clamp(3rem,10vw,7.25rem)] font-black leading-[.96] tracking-[-0.055em] drop-shadow-[0_3px_14px_rgba(43,27,8,0.4)] lg:mt-7"
               variants={staggerFast}
             >
               <span aria-hidden="true" className="flex flex-wrap gap-x-[0.22em]">
@@ -116,7 +123,7 @@ export default function Hero({ t, lang = "ar" }) {
             {/* Highlight */}
             <motion.p
               variants={fadeUp}
-              className="mt-4 text-base font-bold leading-7 text-[var(--color-accent)] drop-shadow-[0_2px_8px_rgba(43,27,8,0.35)] sm:text-lg md:text-xl"
+              className="mt-5 max-w-2xl text-base font-bold leading-7 text-[var(--color-accent)] drop-shadow-[0_2px_8px_rgba(43,27,8,0.35)] sm:text-lg md:text-xl lg:mt-7"
             >
               {t.hero.highlight}
             </motion.p>
@@ -124,7 +131,7 @@ export default function Hero({ t, lang = "ar" }) {
             {/* Description */}
             <motion.p
               variants={fadeUp}
-              className="mt-4 line-clamp-3 max-w-xl text-base leading-7 text-[var(--color-text-on-dark-muted)] drop-shadow-[0_2px_8px_rgba(43,27,8,0.3)] sm:mt-5 sm:line-clamp-none md:text-lg lg:mt-6"
+              className="mt-4 line-clamp-3 max-w-2xl text-base leading-7 text-[var(--color-text-on-dark-muted)] drop-shadow-[0_2px_8px_rgba(43,27,8,0.3)] sm:mt-5 sm:line-clamp-none md:text-lg lg:leading-8"
             >
               {t.hero.description}
             </motion.p>
@@ -132,26 +139,33 @@ export default function Hero({ t, lang = "ar" }) {
             {/* Buttons */}
             <motion.div
               variants={staggerFast}
-              className="mt-6 flex w-full flex-col items-stretch gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center lg:mt-9"
+              className="mt-7 flex w-full flex-wrap gap-3 sm:mt-9 lg:mt-10"
             >
               <motion.div className="w-full sm:w-auto" variants={fadeUp}>
                 <MagneticButton className="w-full sm:w-auto">
-                  <motion.a href={whatsappUrl} aria-label={`${t.hero.primaryCta} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`} target="_blank" rel="noopener noreferrer" className="ds-button ds-button-primary w-full px-6 py-3.5 sm:w-auto lg:px-8 lg:py-4" whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>{t.hero.primaryCta}</motion.a>
+                  <motion.a href={whatsappUrl} aria-label={`${t.hero.primaryCta} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`} target="_blank" rel="noopener noreferrer" className="ds-button ds-button-primary w-full px-7 py-4 sm:w-auto lg:px-9" onClick={() => trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, { language: lang, page_type: "home", source_section: SOURCE_SECTIONS.HERO })} whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }}>{t.hero.primaryCta}</motion.a>
                 </MagneticButton>
               </motion.div>
-              <motion.div className="flex w-full sm:w-auto" variants={fadeUp}>
-                <MotionLink to="/#services" className="ds-button ds-button-on-dark w-full bg-[rgba(255,250,242,0.1)] px-6 py-3.5 backdrop-blur-md sm:w-auto lg:px-8 lg:py-4" whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>{t.hero.secondaryCta}</MotionLink>
-              </motion.div>
-              <motion.div className="flex w-full sm:w-auto" variants={fadeUp}>
-                <motion.button type="button" onClick={() => setIsOffersOpen(true)} className="inline-flex min-h-12 w-full items-center justify-center px-4 py-3 text-center text-sm font-bold text-[var(--color-text-on-dark-muted)] underline decoration-[var(--color-accent)]/60 underline-offset-8 transition-colors hover:text-[var(--color-text-on-dark)] sm:w-auto" whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>{t.hero.offersCta}</motion.button>
+              <motion.div className="w-full sm:w-auto" variants={fadeUp}>
+                <motion.button
+                  aria-expanded={offersOpen}
+                  aria-haspopup="dialog"
+                  className="ds-button ds-button-secondary w-full border-white/45 bg-white/10 px-7 py-4 text-white backdrop-blur-sm hover:bg-white/15 sm:w-auto lg:px-9"
+                  onClick={() => setOffersOpen(true)}
+                  type="button"
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {t.hero.offersCta}
+                </motion.button>
               </motion.div>
             </motion.div>
           </motion.div>
         </div>
-        {!shouldReduceMotion && canParallax && (
+        {!shouldReduceMotion && (
           <motion.div
             aria-hidden="true"
-            className="absolute bottom-7 start-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 text-[#fff7eb] rtl:translate-x-1/2"
+            className="absolute bottom-3 end-[var(--page-gutter)] z-20 flex flex-col items-center gap-2 text-[#fff7eb] sm:bottom-7"
             style={{ opacity: indicatorOpacity }}
           >
             <span className="h-8 w-px overflow-hidden bg-white/30">
@@ -164,17 +178,16 @@ export default function Hero({ t, lang = "ar" }) {
           </motion.div>
         )}
       </section>
-
-      {isOffersOpen && (
+      {offersOpen ? (
         <Suspense fallback={null}>
           <OffersModal
-            open
-            onClose={() => setIsOffersOpen(false)}
             lang={lang}
+            onClose={() => setOffersOpen(false)}
+            open={offersOpen}
             t={t}
           />
         </Suspense>
-      )}
+      ) : null}
     </>
   );
 }

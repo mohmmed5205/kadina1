@@ -1,3 +1,5 @@
+import { businessContact } from "./business";
+
 export const offers = {
   ar: {
     exclusiveLabel: "عروض حصرية",
@@ -13,7 +15,7 @@ export const offers = {
     oldPriceLabel: "بدل",
     currency: "ر.س",
     phoneLabel: "للحجز والاستفسار",
-    displayPhone: "0114555444",
+    displayPhone: businessContact.phone.local,
     bookCta: "للحجز والاستفسار",
     slideCta: "احجز العرض الآن",
     cards: [
@@ -154,7 +156,7 @@ export const offers = {
     oldPriceLabel: "Before",
     currency: "SAR",
     phoneLabel: "Booking and inquiries",
-    displayPhone: "0114555444",
+    displayPhone: businessContact.phone.local,
     bookCta: "Contact us",
     slideCta: "Book this offer",
     cards: [
