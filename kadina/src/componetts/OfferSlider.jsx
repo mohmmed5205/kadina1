@@ -63,7 +63,7 @@ function OfferPoster({
   return (
     <article className="ds-card offer-poster relative h-full overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(255,250,242,0.72),transparent_50%,rgba(214,163,91,0.1))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(48,32,18,0.72),transparent_50%,rgba(214,163,91,0.1))]" />
         <div className="absolute -end-12 -top-14 hidden h-44 w-44 rounded-full border border-[var(--color-border-strong)] sm:block" />
         <div className="absolute bottom-0 start-0 h-20 w-full bg-[linear-gradient(135deg,transparent_0_46%,rgba(214,163,91,0.14)_46%_54%,transparent_54%)]" />
       </div>
@@ -95,7 +95,7 @@ function OfferPoster({
 
           <span className="relative inline-flex items-center justify-center">
             <span className="absolute h-8 w-40 -rotate-3 rounded-full bg-[var(--color-surface-raised)]/80 lg:h-10 lg:w-48" />
-            <span className="relative rounded-full border border-[var(--color-gold-strong)] bg-[var(--color-accent)] px-5 py-1.5 text-base font-black text-[var(--color-heading)] lg:px-6 lg:py-2 lg:text-xl">
+            <span className="relative rounded-full border border-[var(--color-gold-strong)] bg-[var(--color-accent)] px-5 py-1.5 text-base font-black text-[var(--color-ink)] lg:px-6 lg:py-2 lg:text-xl">
               {data.badge}
             </span>
           </span>
@@ -224,7 +224,7 @@ export default function OfferSlider({
                   onClick={() => handleTabClick(index)}
                   className={`shrink-0 rounded-full px-4 py-2 text-sm font-black transition-colors duration-200 ${
                     isActive
-                      ? "bg-[var(--color-accent)] text-[var(--color-heading)]"
+                      ? "bg-[var(--color-accent)] text-[var(--color-ink)]"
                       : "border border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text)]"
                   }`}
                   aria-current={isActive ? "true" : undefined}

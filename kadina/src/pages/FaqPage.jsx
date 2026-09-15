@@ -99,7 +99,7 @@ export default function FaqPage() {
             <p className="section-title-eyebrow">
               {en ? "FAQ" : "الأسئلة الشائعة"}
             </p>
-            <h2 className="mt-4 text-3xl font-black leading-tight text-[var(--color-heading)] sm:text-4xl lg:text-5xl">
+            <h2 className="mt-4 text-[length:var(--text-heading)] font-black leading-tight text-[var(--color-heading)]">
               {en ? "Frequently Asked Questions" : "الأسئلة الشائعة"}
             </h2>
             <p className="mt-6 max-w-md text-lg font-medium leading-9 text-[var(--color-text-muted)]">
@@ -133,7 +133,7 @@ export default function FaqPage() {
                     <button
                       aria-controls={panelId}
                       aria-expanded={isOpen}
-                      className="flex min-h-[3.25rem] w-full items-center justify-between gap-5 py-5 text-start text-lg font-black leading-8 text-[var(--color-heading)] outline-none transition-colors hover:text-[var(--color-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent-strong)] sm:gap-8 sm:py-7 sm:text-2xl"
+                      className="flex min-h-[3.25rem] w-full items-center justify-between gap-5 py-5 text-start text-lg font-black leading-8 text-[var(--color-heading)] outline-none transition-colors hover:text-[var(--color-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent-strong)] sm:gap-8 sm:py-7 sm:text-xl"
                       id={buttonId}
                       onClick={() =>
                         setOpenIndex((current) =>

@@ -16,18 +16,18 @@ export default function HomeTrustSection() {
 
   return (
     <section
-      className="home-about scroll-mt-24 overflow-hidden bg-[var(--color-surface)]"
+      className="home-about scroll-mt-24 overflow-hidden bg-[var(--color-surface-muted)]"
       id="about"
     >
       <motion.div
-        className="ds-container grid gap-12 py-[var(--section-space)] lg:grid-cols-[minmax(0,.9fr)_minmax(30rem,1.1fr)] lg:items-center lg:gap-[clamp(4rem,8vw,9rem)]"
+        className="ds-container grid gap-7 py-[var(--section-space)] lg:grid-cols-[minmax(0,.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-[clamp(2.5rem,5vw,4.5rem)]"
         initial={shouldReduceMotion ? false : "hidden"}
         variants={staggerContainer}
         viewport={viewportOnce}
         whileInView="visible"
       >
         <motion.div className="relative" variants={imageReveal}>
-          <div className="relative aspect-[4/5] overflow-hidden bg-[var(--color-surface-muted)] sm:aspect-[5/4] lg:aspect-[4/5]">
+          <div className="relative aspect-[5/4] overflow-hidden bg-[var(--color-surface-muted)] lg:aspect-[5/4]">
             <img
               alt={lang === "ar" ? "مبنى مركز كادينا الطبي في الرياض" : "Kadina Medical Center building in Riyadh"}
               className="h-full w-full object-cover object-[58%_center] lg:object-[62%_center]"
@@ -36,7 +36,7 @@ export default function HomeTrustSection() {
               src="/homeBG.webp"
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(48,32,18,.58))]" />
-            <p className="absolute bottom-6 start-6 text-[clamp(4rem,10vw,7.5rem)] font-black leading-none tracking-[-.07em] text-white/90 sm:bottom-8 sm:start-8">
+            <p className="absolute bottom-6 start-6 text-[clamp(2.75rem,5vw,4rem)] font-black leading-none tracking-[-.07em] text-[var(--color-text-on-dark)] sm:bottom-8 sm:start-8">
               2013
             </p>
           </div>
@@ -48,13 +48,13 @@ export default function HomeTrustSection() {
             {lang === "ar" ? "عن كادينا" : "About Kadina"}
           </motion.p>
           <motion.h2
-            className="mt-5 max-w-3xl text-[clamp(2.75rem,7vw,6.5rem)] font-black leading-[1.02] tracking-[-.055em] text-[var(--color-heading)]"
+            className="mt-5 max-w-3xl text-[clamp(1.75rem,3vw,2.5rem)] font-black leading-[1.04] tracking-[-.045em] text-[var(--color-heading)]"
             variants={fadeUp}
           >
             {content.intro}
           </motion.h2>
           <motion.p
-            className="mt-7 max-w-2xl text-lg leading-9 text-[var(--color-text-muted)] lg:mt-10 lg:text-xl lg:leading-10"
+            className="mt-6 max-w-2xl text-base leading-8 text-[var(--color-text-muted)] sm:text-base lg:mt-6 lg:text-lg lg:leading-8"
             variants={fadeUp}
           >
             {content.story}

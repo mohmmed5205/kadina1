@@ -95,7 +95,7 @@ export default function ContactPage() {
           <p className="section-title-eyebrow">
             {en ? "Contact Details" : "بيانات التواصل"}
           </p>
-          <h2 className="mt-4 max-w-5xl text-4xl font-black leading-tight text-[var(--color-heading)] sm:text-5xl lg:text-6xl">
+          <h2 className="mt-4 max-w-5xl text-[length:var(--text-heading)] font-black leading-tight text-[var(--color-heading)]">
             {en ? "We Are Here to Answer" : "نحن هنا للإجابة عنك"}
           </h2>
           <div className="mt-9 h-px w-20 bg-[var(--color-accent)]" />

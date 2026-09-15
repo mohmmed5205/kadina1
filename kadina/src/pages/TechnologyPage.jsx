@@ -109,7 +109,7 @@ export default function TechnologyPage() {
       <section className="ds-section bg-[var(--color-surface)]">
         <div className="ds-container">
           <motion.div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end" initial="hidden" variants={fadeUp} viewport={viewportOnce} whileInView="visible">
-            <p className="max-w-3xl text-lg font-bold leading-9 text-[var(--color-text-muted)] sm:text-xl">
+            <p className="max-w-3xl text-base font-bold leading-8 text-[var(--color-text-muted)] sm:text-lg">
               {en ? "Browse our devices and learn what each one does and who it suits." : "تصفح أجهزتنا، واعرف ماذا يفعل كل جهاز، ولمن يناسب."}
             </p>
             <p className="text-xs font-black tracking-[.12em] text-[var(--color-accent-strong)]">
@@ -126,7 +126,7 @@ export default function TechnologyPage() {
                     <button
                       aria-controls="technology-results"
                       aria-pressed={isActive}
-                      className={`technology-filter relative isolate min-h-11 shrink-0 overflow-hidden px-4 py-2.5 text-sm font-black transition-colors focus-visible:outline-none sm:px-5 ${isActive ? "text-[var(--color-heading)]" : "text-[var(--color-text-muted)] hover:text-[var(--color-accent-strong)]"}`}
+                      className={`technology-filter relative isolate min-h-11 shrink-0 overflow-hidden px-4 py-2.5 text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)] sm:px-5 ${isActive ? "text-[var(--color-heading)]" : "text-[var(--color-text-muted)] hover:text-[var(--color-accent-strong)]"}`}
                       key={filter.slug}
                       onClick={() => selectFilter(filter.slug)}
                       type="button"
@@ -164,14 +164,14 @@ export default function TechnologyPage() {
                   const secondaryName = en ? device.arabicName : device.englishName;
                   return (
                     <MotionLink
-                      className={`technology-result-row group grid min-w-0 gap-7 border-b border-[var(--color-border-strong)] py-9 focus-visible:outline-none md:items-center md:gap-12 lg:py-14 ${index % 2 === 0 ? "technology-result-standard" : "technology-result-reverse"}`}
+                      className={`technology-result-row group grid min-w-0 gap-6 border-b border-[var(--color-border-strong)] py-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)] md:items-center md:gap-10 lg:py-10 ${index % 2 === 0 ? "technology-result-standard" : "technology-result-reverse"}`}
                       key={device.slug}
                       layout
                       to={`/technology/${device.slug}`}
                       variants={cardItem}
                     >
-                      <motion.div className="technology-result-image flex aspect-[5/4] min-w-0 items-center justify-center overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface-muted)] p-3 sm:p-5" variants={imageReveal}>
-                        <img alt={device.displayName} className="h-[94%] max-h-[29rem] w-[96%] object-contain transition-transform duration-500 group-hover:scale-[1.015]" decoding="async" loading="lazy" src={device.image} />
+                      <motion.div className="technology-result-image flex aspect-[5/4] min-w-0 items-center justify-center overflow-hidden border border-[var(--color-border)] bg-[var(--surface-muted)] p-3 sm:p-4 md:aspect-[16/10]" variants={imageReveal}>
+                        <img alt={device.displayName} className="h-[92%] max-h-[20rem] w-[94%] object-contain transition-transform duration-500 group-hover:scale-[1.015]" decoding="async" loading="lazy" src={device.image} />
                       </motion.div>
                       <div className="technology-result-content min-w-0 py-1">
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-black tracking-[0.1em] text-[var(--color-accent-strong)]">
@@ -179,12 +179,12 @@ export default function TechnologyPage() {
                           <span aria-hidden="true" className="h-px w-8 bg-[var(--color-border-strong)]" />
                           <span>{device.category}</span>
                         </div>
-                        <h2 className="mt-5 break-words text-[clamp(2rem,5vw,4rem)] font-black leading-[1.08] text-[var(--color-heading)]">{primaryName}</h2>
+                        <h2 className="mt-4 break-words text-[clamp(1.5rem,3vw,2.5rem)] font-black leading-[1.1] text-[var(--color-heading)]">{primaryName}</h2>
                         {secondaryName && (
-                          <p className="mt-3 break-words text-base font-black text-[var(--color-accent-strong)] sm:text-lg" dir={en ? "rtl" : "ltr"}>{secondaryName}</p>
+                          <p className="mt-2 break-words text-sm font-black text-[var(--color-accent-strong)] sm:text-base" dir={en ? "rtl" : "ltr"}>{secondaryName}</p>
                         )}
-                        <p className="mt-6 max-w-xl text-base leading-8 text-[var(--color-text-muted)] sm:text-lg">{device.cardDescription}</p>
-                        <span className="mt-7 inline-flex min-h-11 items-center gap-2 border-b border-[var(--color-border-strong)] pb-1 text-sm font-black text-[var(--color-accent-strong)]">
+                        <p className="mt-4 max-w-xl text-sm leading-7 text-[var(--color-text-muted)] sm:text-base sm:leading-8">{device.cardDescription}</p>
+                        <span className="mt-5 inline-flex min-h-10 items-center gap-2 border-b border-[var(--color-border-strong)] pb-1 text-sm font-black text-[var(--color-accent-strong)]">
                           {en ? "Details" : "التفاصيل"}
                           <span aria-hidden="true" className="editorial-arrow">{en ? "→" : "←"}</span>
                         </span>

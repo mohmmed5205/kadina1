@@ -39,7 +39,7 @@ export default function HomeTechnologySection() {
 
   return (
     <section
-      className="ds-section scroll-mt-24 overflow-hidden bg-[var(--color-warm-beige-strong)]"
+      className="ds-section scroll-mt-24 overflow-hidden bg-[var(--color-surface-muted)]"
       id="technology"
     >
       <div className="ds-container">

@@ -10,6 +10,12 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             {
+              name: "preload-helper",
+              test: /vite[\\/]preload-helper/,
+              priority: 10,
+              includeDependenciesRecursively: false,
+            },
+            {
               name: "react-vendor",
               test: /node_modules[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/,
               priority: 4,

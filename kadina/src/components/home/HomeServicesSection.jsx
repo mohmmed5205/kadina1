@@ -65,7 +65,7 @@ export default function HomeServicesSection() {
                   </span>
                 </div>
 
-                <div className={`service-panel-visual relative min-h-[22rem] overflow-hidden ${dark ? "bg-[#3a2819]" : "bg-[var(--color-surface)]"} ${index % 2 ? "lg:order-1" : ""}`}>
+                <div className={`service-panel-visual relative min-h-[22rem] overflow-hidden ${dark ? "bg-[var(--color-surface-raised)]" : "bg-[var(--color-surface)]"} ${index % 2 ? "lg:order-1" : ""}`}>
                   {visual ? (
                   <img
                     alt={service.title}
@@ -84,7 +84,7 @@ export default function HomeServicesSection() {
                         loading="lazy"
                         src="/kadina-logo3.webp"
                       />
-                      <span className={`absolute text-[clamp(10rem,24vw,28rem)] font-black leading-none tracking-[-.1em] ${dark ? "text-white/[.035]" : "text-[var(--color-heading)]/[.035]"}`} aria-hidden="true">
+                      <span className={`absolute text-[clamp(10rem,24vw,28rem)] font-black leading-none tracking-[-.1em] ${dark ? "text-[var(--color-text-on-dark)]/[.035]" : "text-[var(--color-heading)]/[.035]"}`} aria-hidden="true">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                     </div>

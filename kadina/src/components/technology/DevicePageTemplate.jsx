@@ -167,7 +167,7 @@ export default function DevicePageTemplate({ device: rawDevice }) {
         title={`${device.arabicName} — ${device.englishName || (en ? "Kadina Devices" : "أجهزة كادينا")}`}
       />
 
-      <section className="relative overflow-hidden bg-[var(--color-warm-beige-strong)] pb-16 pt-28 sm:pb-20 sm:pt-32 lg:min-h-[48rem] lg:pb-24 lg:pt-36">
+      <section className="relative overflow-hidden bg-[var(--color-surface-muted)] pb-14 pt-24 sm:pb-16 sm:pt-28 lg:pb-12 lg:pt-28">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_12%,rgba(214,163,91,.19),transparent_38%)]" />
         <motion.div
           animate="visible"
@@ -187,12 +187,12 @@ export default function DevicePageTemplate({ device: rawDevice }) {
             />
           </motion.div>
 
-          <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-x-16 xl:gap-x-24">
+          <div className="mt-7 grid gap-7 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-x-14 xl:gap-x-20">
             <motion.div className={`${copyPosition} lg:row-start-1`} variants={textReveal}>
               <p className="text-xs font-black tracking-[.14em] text-[var(--color-accent-strong)]">
                 {en ? "AVAILABLE AT KADINA" : "متوفر في كادينا"}
               </p>
-              <h1 className="mt-5 max-w-full break-words text-[clamp(2.25rem,10vw,6rem)] font-black leading-[1.08] text-[var(--color-heading)] [text-wrap:wrap]">
+              <h1 className="mt-5 max-w-full break-words text-[clamp(1.75rem,3vw,2.625rem)] font-black leading-[1.1] text-[var(--color-heading)] [text-wrap:wrap]">
                 {device.arabicName}
               </h1>
               {secondaryName ? (
@@ -206,7 +206,7 @@ export default function DevicePageTemplate({ device: rawDevice }) {
             </motion.div>
 
             <motion.div
-              className={`relative flex aspect-[4/5] max-h-[40rem] min-h-0 items-center justify-center overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface)] p-3 sm:aspect-[5/4] sm:p-5 lg:row-span-2 lg:row-start-1 lg:aspect-auto lg:min-h-[38rem] ${visualPosition}`}
+              className={`relative mx-auto flex w-full max-w-[26rem] aspect-[5/4] max-h-[26rem] min-h-0 items-center justify-center overflow-hidden border border-[var(--color-border)] bg-[var(--surface-muted)] p-4 sm:aspect-[5/4] sm:p-5 lg:row-span-2 lg:row-start-1 lg:max-w-none lg:aspect-auto lg:min-h-[24rem] ${visualPosition}`}
               variants={imageReveal}
             >
               <span
@@ -217,7 +217,7 @@ export default function DevicePageTemplate({ device: rawDevice }) {
               </span>
               <img
                 alt={`${device.arabicName} — ${secondaryName || ""}`}
-                className="relative z-10 h-[94%] w-[96%] object-contain"
+                className="relative z-10 h-[90%] w-[92%] object-contain"
                 decoding="async"
                 fetchPriority="high"
                 height="1200"
@@ -227,7 +227,7 @@ export default function DevicePageTemplate({ device: rawDevice }) {
             </motion.div>
 
             <motion.div className={`${copyPosition} lg:row-start-2`} variants={textReveal}>
-              <p className="mt-1 max-w-2xl text-lg font-medium leading-9 text-[var(--color-text)] sm:text-xl">
+              <p className="mt-1 max-w-2xl text-base font-medium leading-8 text-[var(--color-text)] sm:text-lg">
                 {device.tagline}
               </p>
 

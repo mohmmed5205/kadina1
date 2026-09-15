@@ -18,9 +18,9 @@ export default function NotFoundPage() {
         title={en ? "Page Not Found" : "الصفحة غير موجودة"}
       />
       <motion.section className="min-h-[70vh] px-4 pb-20 pt-32 text-center" animate="visible" initial="hidden" variants={fadeUp}>
-        <h1 className="text-3xl font-black text-[#4c2c00]">{en ? "Page Not Found" : "الصفحة غير موجودة"}</h1>
-        <p className="mt-4 text-[#4c2c00]/70">{en ? "We could not find the page you requested." : "لم نتمكن من العثور على الصفحة المطلوبة."}</p>
-        <Link className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08]" to="/">{en ? "Back to Home" : "العودة إلى الرئيسية"}</Link>
+        <h1 className="text-3xl font-black text-[var(--color-heading)]">{en ? "Page Not Found" : "الصفحة غير موجودة"}</h1>
+        <p className="mt-4 text-[var(--color-text-muted)]">{en ? "We could not find the page you requested." : "لم نتمكن من العثور على الصفحة المطلوبة."}</p>
+        <Link className="mt-7 inline-block rounded-full bg-[var(--color-accent)] px-6 py-3 font-black text-[var(--color-ink)]" to="/">{en ? "Back to Home" : "العودة إلى الرئيسية"}</Link>
       </motion.section>
     </>
   );

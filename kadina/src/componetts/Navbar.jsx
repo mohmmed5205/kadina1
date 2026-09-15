@@ -1,19 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import clsx from "clsx";
-import { FaWhatsapp } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import Link from "../components/routing/LocalizedLink";
 import { getPrimaryNavigation } from "../data/navigation";
 import { cardItem, smoothEase, staggerContainer } from "./motionPresets";
-import { createWhatsappUrl } from "../utils/whatsapp";
 import { stripLanguagePrefix } from "../utils/languageRouting";
-import {
-  ANALYTICS_EVENTS,
-  SOURCE_SECTIONS,
-  getPageType,
-  trackContactAction,
-} from "../utils/analytics";
 
 export default function Navbar({
   t,
@@ -30,15 +22,7 @@ export default function Navbar({
   const menuPanelRef = useRef(null);
   const location = useLocation();
   const currentPath = stripLanguagePrefix(location.pathname);
-  const isHome = currentPath === "/";
-  const whatsappUrl = createWhatsappUrl(t.contact.whatsappCta);
   const navigationItems = getPrimaryNavigation(lang);
-  const trackNavbarWhatsapp = () =>
-    trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
-      language: lang,
-      page_type: getPageType(location.pathname),
-      source_section: SOURCE_SECTIONS.NAVBAR,
-    });
   const isCurrentLink = (to) => {
     if (to === "/") {
       return currentPath === "/" && !location.hash;
@@ -147,15 +131,11 @@ export default function Navbar({
       }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: smoothEase }}
       className={clsx(
-        "fixed inset-x-0 top-0 z-[70] isolate w-full border-b pt-[env(safe-area-inset-top)] transition-[background-color,border-color,box-shadow] duration-300",
-        scrolled
-          ? "border-[var(--color-border)] bg-[rgba(255,250,242,.94)] shadow-[0_8px_30px_rgba(48,32,18,.06)] backdrop-blur-2xl"
-          : isHome
-            ? "border-white/15 bg-[linear-gradient(180deg,rgba(48,32,18,.52),transparent)] text-[var(--color-text-on-dark)]"
-            : "border-[var(--color-border)] bg-[rgba(255,250,242,.9)] backdrop-blur-xl"
+        "fixed inset-x-0 top-0 z-[70] isolate w-full border-b border-[var(--color-border)] bg-[var(--color-glass)] pt-[env(safe-area-inset-top)] text-[var(--color-heading)] backdrop-blur-xl transition-[box-shadow] duration-300",
+        scrolled && "shadow-[0_10px_36px_rgba(48,32,18,.08)]",
       )}
     >
-      <div className={clsx("ds-container flex items-center justify-between transition-[height] duration-300", scrolled ? "h-[4rem] lg:h-[4.5rem]" : "h-[var(--nav-h,4.25rem)] lg:h-[5.5rem]")}>
+      <div className="ds-container flex h-[var(--nav-h,4.25rem)] items-center justify-between gap-5 lg:h-[var(--nav-h)]">
         <motion.div
           className="shrink-0"
           whileHover={{ y: -2 }}
@@ -172,10 +152,7 @@ export default function Navbar({
               decoding="async"
               height="284"
               width="284"
-              className={clsx(
-                "h-14 w-auto object-contain transition-[filter] duration-300 sm:h-16 lg:h-[4.5rem]",
-                isHome && !scrolled && "brightness-0 invert",
-              )}
+              className="brand-logo-on-dark h-12 w-auto object-contain sm:h-14 lg:h-16"
               onError={(event) => {
                 event.currentTarget.onerror = null;
                 event.currentTarget.src = "/kadina-logo.webp";
@@ -186,7 +163,7 @@ export default function Navbar({
 
         <nav
           aria-label={navLabel}
-          className="hidden items-center gap-5 xl:flex 2xl:gap-7"
+          className="hidden min-w-0 flex-1 items-center justify-center gap-3 xl:flex 2xl:gap-5"
         >
           {navigationItems.map((link) => (
             <motion.div
@@ -196,12 +173,10 @@ export default function Navbar({
             >
               <Link
                 className={clsx(
-                  "relative block py-3 text-[0.72rem] font-bold transition-colors duration-200 2xl:text-[0.82rem]",
+                  "relative whitespace-nowrap py-3 text-[0.8125rem] font-bold transition-colors duration-200 2xl:text-[0.875rem]",
                   isCurrentLink(link.to)
-                    ? "text-[var(--color-accent)]"
-                    : isHome && !scrolled
-                      ? "text-white/80 hover:text-white"
-                      : "text-[var(--color-text-muted)] hover:text-[var(--color-heading)]",
+                    ? "text-[var(--color-accent-strong)]"
+                    : "text-[var(--color-text-muted)] hover:text-[var(--color-accent)]",
                 )}
                 to={link.to}
               >
@@ -232,8 +207,7 @@ export default function Navbar({
             type="button"
             onClick={handleLanguageToggle}
             className={clsx(
-              "min-h-11 border-0 bg-transparent px-2 py-2 text-sm font-black transition-colors",
-              isHome && !scrolled ? "text-white/85 hover:text-white" : "text-[var(--color-heading)]",
+              "min-h-11 border-0 bg-transparent px-2 py-2 text-sm font-black text-[var(--color-heading)] transition-colors",
               !languageSwitchAvailable && "cursor-not-allowed opacity-45",
             )}
             whileHover={{ y: -2 }}
@@ -242,19 +216,15 @@ export default function Navbar({
             {t.langLabel}
           </motion.button>
 
-          <motion.a
-            href={whatsappUrl}
-            aria-label={`${lang === "ar" ? "تواصل معنا" : "Contact us"} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ds-button ds-button-primary min-h-11 px-5 py-2 text-sm"
-            onClick={trackNavbarWhatsapp}
+          <motion.div
+            className="shrink-0"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
-            <FaWhatsapp className="text-base" aria-hidden="true" />
-            <span>{lang === "ar" ? "تواصل معنا" : "Contact us"}</span>
-          </motion.a>
+            <Link className="ds-button ds-button-primary min-h-11 whitespace-nowrap px-5 py-2 text-sm" to="/booking">
+              {lang === "ar" ? "احجز موعدك" : "Book an appointment"}
+            </Link>
+          </motion.div>
         </div>
 
         <button
@@ -262,9 +232,7 @@ export default function Navbar({
           type="button"
           className={clsx(
             "flex h-11 w-11 items-center justify-center border transition xl:hidden",
-            isHome && !scrolled
-              ? "border-white/35 bg-white/5 text-white backdrop-blur"
-              : "border-[var(--color-border)] bg-[var(--color-surface-raised)]/65 text-[var(--color-heading)] backdrop-blur",
+            "border-[var(--color-border-strong)] bg-transparent text-[var(--color-heading)]",
           )}
           onClick={() => setIsOpen((current) => !current)}
           aria-controls="mobile-navigation"
@@ -304,7 +272,7 @@ export default function Navbar({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 18 }}
             transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: smoothEase }}
-            className="fixed inset-x-0 bottom-0 top-[calc(var(--nav-h,4.25rem)+env(safe-area-inset-top))] z-[80] overflow-y-auto overscroll-contain border-t border-[var(--color-border-on-dark)] bg-[var(--color-surface-dark)] pb-[env(safe-area-inset-bottom)] xl:hidden"
+            className="fixed inset-x-0 h-[calc(100dvh-var(--nav-h,4.25rem)-env(safe-area-inset-top))] top-[calc(var(--nav-h,4.25rem)+env(safe-area-inset-top))] z-[80] overflow-y-auto overscroll-contain border-t border-[var(--color-border)] bg-[var(--color-surface)] pb-[env(safe-area-inset-bottom)] xl:hidden"
           >
             <motion.div
               initial={shouldReduceMotion ? false : "hidden"}
@@ -323,20 +291,23 @@ export default function Navbar({
                     className={clsx(
                       "flex min-h-14 items-center justify-between border-b border-[var(--color-border-on-dark)] py-3 text-xl font-black transition-colors sm:min-h-16 sm:text-2xl",
                       isCurrentLink(link.to)
-                        ? "text-[var(--color-accent)]"
-                        : "text-[var(--color-text-on-dark)] hover:text-[var(--color-accent)]",
+                        ? "text-[var(--color-accent-strong)]"
+                        : "text-[var(--color-heading)] hover:text-[var(--color-accent-strong)]",
                     )}
                     to={link.to}
                   >
                     <span>{link.title}</span>
-                    <span className="text-xs font-bold tracking-[.12em] text-[var(--color-text-on-dark-muted)]" aria-hidden="true">
+                    <span className="text-xs font-bold tracking-[.12em] text-[var(--color-text-muted)]" aria-hidden="true">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                   </Link>
                 </motion.div>
               ))}
 
-              <div className="mt-auto grid gap-3 pt-7 sm:grid-cols-2">
+              <div className="mt-auto grid gap-3 border-t border-[var(--color-border)] pt-7 sm:grid-cols-2">
+                <Link className="ds-button ds-button-primary w-full sm:col-span-2" onClick={() => setIsOpen(false)} to="/booking">
+                  {lang === "ar" ? "احجز موعدك" : "Book an appointment"}
+                </Link>
                 <button
                   aria-label={
                     languageSwitchAvailable
@@ -349,27 +320,16 @@ export default function Navbar({
                   type="button"
                   onClick={handleLanguageToggle}
                   className={clsx(
-                    "ds-button w-full border-[var(--color-border-on-dark)] text-[var(--color-text-on-dark)]",
+                    "ds-button ds-button-secondary w-full",
                     !languageSwitchAvailable && "cursor-not-allowed opacity-45",
                   )}
                 >
                   {t.langLabel}
                 </button>
 
-                <a
-                  href={whatsappUrl}
-                  aria-label={`${t.contact.whatsappCta} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => {
-                    setIsOpen(false);
-                    trackNavbarWhatsapp();
-                  }}
-                  className="ds-button ds-button-primary w-full"
-                >
-                  <FaWhatsapp aria-hidden="true" />
-                  <span>{t.contact.whatsappCta}</span>
-                </a>
+                <Link className="ds-button ds-button-secondary w-full" onClick={() => setIsOpen(false)} to="/contact">
+                  {lang === "ar" ? "تواصل معنا" : "Contact us"}
+                </Link>
               </div>
             </motion.div>
           </motion.div>

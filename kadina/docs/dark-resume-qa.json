@@ -1,0 +1,103 @@
+{
+  "matrix": {
+    "cases": 80,
+    "overflow": 0,
+    "broken_images": 0,
+    "delayed_pages": [
+      {
+        "width": 1440,
+        "lang": "ar",
+        "path": "/solutions"
+      },
+      {
+        "width": 1024,
+        "lang": "en",
+        "path": "/booking"
+      }
+    ]
+  },
+  "normal-matrix": {
+    "cases": 56,
+    "overflow": 0,
+    "broken_images": 0,
+    "delayed_pages": [
+      {
+        "width": 1440,
+        "lang": "ar",
+        "path": "/technology"
+      }
+    ]
+  },
+  "marquee": {
+    "cases": 12,
+    "all_nine": true,
+    "focus_visible_and_paused": true,
+    "hover_resume": true,
+    "focus_resume": true,
+    "loop": true,
+    "reduced_manual": true,
+    "duplicate_tab_stops": 0,
+    "visible_cards": {
+      "390": 1.49,
+      "1440": 4.04,
+      "1920": 5.56
+    }
+  },
+  "functional": {
+    "cases": 34
+  },
+  "targeted": {
+    "cases": 54,
+    "failed": []
+  },
+  "commands": {
+    "lint": "pass",
+    "build": "pass",
+    "git_diff_check": "pass"
+  },
+  "runtime_exceptions": 0,
+  "recheck": {
+    "cases": 5,
+    "results": [
+      {
+        "width": 1440,
+        "lang": "ar",
+        "path": "/solutions",
+        "h1": "مشكلتك لها حل.. ونعرفه بالاسم",
+        "canonical": "https://kadinacenter.com/ar/solutions",
+        "overflow": false,
+        "broken": 0
+      },
+      {
+        "width": 1440,
+        "lang": "ar",
+        "path": "/technology",
+        "h1": "13 تقنية وجهازًا ضمن رحلة العناية في كادينا",
+        "canonical": "https://kadinacenter.com/ar/technology",
+        "overflow": false,
+        "broken": 0
+      },
+      {
+        "width": 1024,
+        "lang": "en",
+        "path": "/booking",
+        "h1": "Request an appointment",
+        "canonical": "https://kadinacenter.com/en/booking",
+        "overflow": false,
+        "broken": 0
+      },
+      {
+        "lang": "ar",
+        "touch": true,
+        "paused": true,
+        "clicked": true
+      },
+      {
+        "lang": "en",
+        "touch": true,
+        "paused": true,
+        "clicked": true
+      }
+    ]
+  }
+}

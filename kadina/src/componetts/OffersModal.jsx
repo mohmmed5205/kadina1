@@ -139,7 +139,7 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
             </header>
 
             <main className="offers-modal-main min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-[calc(2rem+env(safe-area-inset-bottom))] pt-6 lg:pt-10">
-              <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(145deg,rgba(255,250,242,0.98),rgba(241,231,216,0.88)_55%,rgba(214,163,91,0.08))]" />
+              <div className="pointer-events-none fixed inset-0 bg-[var(--color-glass)]" />
 
               <motion.div
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 14, scale: 0.97 }}

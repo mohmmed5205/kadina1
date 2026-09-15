@@ -5,7 +5,7 @@ import CTASection from "../components/common/CTASection";
 import PageHero from "../components/common/PageHero";
 import SectionTitle from "../components/common/SectionTitle";
 import DirectAnswer from "../components/content/DirectAnswer";
-import RevealImage from "../components/motion/RevealImage";
+import "./ServicesPage.css";
 import Seo from "../components/seo/Seo";
 import {
   createBreadcrumbSchema,
@@ -33,7 +33,9 @@ export default function ServicePageTemplate({ slug }) {
   const location = useLocation();
   const { lang } = useOutletContext();
   const en = lang === "en";
+
   const service = getServicePage(slug, lang);
+
   useTrackedView(
     ANALYTICS_EVENTS.SERVICE_VIEW,
     {
@@ -49,7 +51,7 @@ export default function ServicePageTemplate({ slug }) {
   const publishedProcedures = getPublishedProceduresByService(slug, lang);
 
   return (
-    <div>
+    <div className="services-page service-detail-page">
       <Seo
         canonicalPath={`/services/${service.slug}`}
         description={service.seoDescription}
@@ -71,17 +73,19 @@ export default function ServicePageTemplate({ slug }) {
 
       <PageHero
         breadcrumbItems={[
-          { label: en ? "Services" : "الخدمات", to: "/services" },
-          { label: service.title },
+          {
+            label: en ? "Services" : "الخدمات",
+            to: "/services",
+          },
+          {
+            label: service.title,
+          },
         ]}
         eyebrow={en ? "Kadina Services" : "خدمات كادينا"}
         title={service.title}
         description={service.subtitle}
-        variant="detail"
-        visual={service.relatedDevices[0] ? {
-          alt: service.relatedDevices[0].name,
-          src: service.relatedDevices[0].image,
-        } : undefined}
+        variant="editorial"
+        className="services-hero services-detail-hero"
       />
 
       <DirectAnswer
@@ -90,55 +94,85 @@ export default function ServicePageTemplate({ slug }) {
         question={service.directAnswer?.question}
       />
 
-      <motion.section className="ds-section bg-[var(--color-surface)]" initial="hidden" variants={fadeUp} viewport={viewportOnce} whileInView="visible">
-        <div className="ds-container grid gap-8 lg:grid-cols-[minmax(12rem,.42fr)_minmax(0,1fr)] lg:gap-20">
-          <div>
-            <p className="text-xs font-black tracking-[0.14em] text-[var(--color-accent-strong)]">{en ? "THE KADINA APPROACH" : "منهج كادينا"}</p>
-            <span aria-hidden="true" className="mt-5 block h-px w-16 bg-[var(--color-accent)]" />
-            <p className="mt-5 text-sm font-black text-[var(--color-heading)]">{service.title}</p>
+      {/* Approach */}
+      <motion.section
+        className="services-intro services-section"
+        initial="hidden"
+        variants={fadeUp}
+        viewport={viewportOnce}
+        whileInView="visible"
+      >
+        <div
+          className={`ds-container services-intro-layout${
+            service.relatedDevices[0] ? " services-intro-with-visual" : ""
+          }`}
+        >
+          <div className="services-intro-heading">
+            <p className="section-title-eyebrow">
+              {en ? "Our Approach" : "منهجنا"}
+            </p>
+
+            <h2>
+              {en ? "The Kadina Approach" : "منهج كادينا"}
+            </h2>
+
+            <p>{service.title}</p>
           </div>
-          <div className="border-t border-[var(--color-border-strong)] pt-8 lg:pt-10">
-            <p className="max-w-4xl text-xl font-medium leading-[2] text-[var(--color-text)] sm:text-2xl sm:leading-[1.9]">{service.intro}</p>
+
+          <div className="services-intro-copy">
+            <p>{service.intro}</p>
+
             {service.additionalParagraphs.map((paragraph, index) => (
-              <p className="mt-6 max-w-4xl text-lg font-medium leading-9 text-[var(--color-text-muted)] sm:text-xl" key={`service-paragraph-${index}`}>{paragraph}</p>
+              <p key={`service-paragraph-${index}`}>
+                {paragraph}
+              </p>
             ))}
           </div>
+
+          {service.relatedDevices[0] && (
+            <figure className="services-intro-visual">
+              <img
+                alt={service.relatedDevices[0].name}
+                src={service.relatedDevices[0].image}
+                loading="lazy"
+                decoding="async"
+              />
+
+              <figcaption dir="ltr">
+                {service.relatedDevices[0].name}
+              </figcaption>
+            </figure>
+          )}
         </div>
       </motion.section>
 
-      {publishedProcedures.length > 0 && (
-        <section className="ds-section border-y border-[var(--color-border)] bg-[var(--color-surface-raised)]">
-          <div className="ds-container grid gap-8 lg:grid-cols-[minmax(0,.65fr)_minmax(0,1.35fr)] lg:gap-20">
-            <div>
-              <p className="section-title-eyebrow">
-                {en ? "Procedures" : "الإجراءات"}
-              </p>
-              <h2 className="mt-4 text-3xl font-black text-[var(--color-heading)] sm:text-4xl">
-                {en ? "Procedures in This Service" : "إجراءات هذا القسم"}
-              </h2>
-            </div>
-            <motion.div className="border-t border-[var(--color-border-strong)]" initial="hidden" variants={staggerContainer} viewport={viewportOnce} whileInView="visible">
-              {publishedProcedures.map((procedure, index) => (
-                <MotionLink className="group grid min-h-24 grid-cols-[3rem_1fr_auto] items-center gap-3 border-b border-[var(--color-border)] py-5 sm:grid-cols-[5rem_1fr_auto]" key={procedure.slug} to={`/procedures/${procedure.slug}`} variants={cardItem}>
-                  <span className="text-xs font-black text-[var(--color-accent-strong)]">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="text-xl font-black text-[var(--color-heading)] sm:text-2xl">{procedure.title}</span>
-                  <span aria-hidden="true" className="editorial-arrow text-[var(--color-accent-strong)]">{en ? "→" : "←"}</span>
-                </MotionLink>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-      )}
-
+      {/* Treatments */}
       {service.treatments.length > 0 && (
-        <section className="ds-section border-y border-[var(--color-border)] bg-[var(--color-surface-muted)]">
+        <section className="services-treatments services-section">
           <div className="ds-container">
-            <SectionTitle title={en ? "What Do We Treat?" : "ماذا نعالج؟"} />
-            <motion.div className="mt-10 grid border-y border-[var(--color-border-strong)] sm:grid-cols-2" initial="hidden" variants={staggerContainer} viewport={viewportOnce} whileInView="visible">
+            <SectionTitle
+              eyebrow={en ? "Care" : "الرعاية"}
+              title={en ? "What Do We Treat?" : "ماذا نعالج؟"}
+            />
+
+            <motion.div
+              className="services-treatment-list"
+              initial="hidden"
+              variants={staggerContainer}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               {service.treatments.map((treatment, index) => (
-                <motion.div className="border-b border-[var(--color-border)] py-6 font-black text-[var(--color-heading)] sm:px-7" key={`service-treatment-${index}`} variants={cardItem}>
-                  <span className="me-4 text-xs text-[var(--color-accent-strong)]">{String(index + 1).padStart(2, "0")}</span>
-                  {treatment}
+                <motion.div
+                  className="services-treatment-item"
+                  key={`service-treatment-${index}`}
+                  variants={cardItem}
+                >
+                  <span aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <p>{treatment}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -146,24 +180,117 @@ export default function ServicePageTemplate({ slug }) {
         </section>
       )}
 
+      {/* Procedures */}
+      {publishedProcedures.length > 0 && (
+        <section className="services-procedures services-section">
+          <div className="ds-container services-procedures-layout">
+            <div>
+              <p className="section-title-eyebrow">
+                {en ? "Procedures" : "الإجراءات"}
+              </p>
+
+              <h2 className="services-procedures-title">
+                {en
+                  ? "Procedures in This Service"
+                  : "إجراءات هذا القسم"}
+              </h2>
+            </div>
+
+            <motion.div
+              className="services-procedure-list"
+              initial="hidden"
+              variants={staggerContainer}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
+              {publishedProcedures.map((procedure, index) => (
+                <MotionLink
+                  className="services-procedure-link"
+                  key={procedure.slug}
+                  to={`/procedures/${procedure.slug}`}
+                  variants={cardItem}
+                >
+                  <span className="services-procedure-index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span className="services-procedure-name">
+                    {procedure.title}
+                  </span>
+
+                  <span
+                    aria-hidden="true"
+                    className="editorial-arrow"
+                  >
+                    {en ? "→" : "←"}
+                  </span>
+                </MotionLink>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Related devices */}
       {service.relatedDevices.length > 0 && (
-        <section className="ds-section border-y border-[var(--color-border)] bg-[var(--color-surface-muted)]">
+        <section className="services-devices services-section">
           <div className="ds-container">
-            <SectionTitle eyebrow={en ? "Technology" : "التقنيات"} title={en ? "Related Devices" : "الأجهزة المرتبطة"} />
-            <motion.div className="mt-12 border-t border-[var(--color-border-strong)]" initial="hidden" variants={staggerContainer} viewport={viewportOnce} whileInView="visible">
+            <SectionTitle
+              eyebrow={en ? "Technology" : "التقنيات"}
+              title={en ? "Related Devices" : "الأجهزة المرتبطة"}
+            />
+
+            <motion.div
+              className="services-device-list"
+              initial="hidden"
+              variants={staggerContainer}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               {service.relatedDevices.map((device, index) => (
-                <motion.article className="service-device-row grid gap-7 border-b border-[var(--color-border-strong)] py-8 md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,.85fr)] md:items-center md:gap-12 lg:py-12" key={device.to} variants={cardItem}>
-                  <RevealImage className="flex aspect-[4/3] items-center justify-center rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-5 sm:p-8" rtl={!en}>
-                    <img alt={device.name} className="h-full w-full object-contain" decoding="async" loading="lazy" src={device.image} />
-                  </RevealImage>
-                  <div className="py-1">
-                    <span className="text-xs font-black text-[var(--color-accent-strong)]">{String(index + 1).padStart(2, "0")}</span>
-                    <h3 className="mt-5 text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.08] text-[var(--color-heading)]" dir="ltr">{device.name}</h3>
-                    {device.use && <p className="mt-5 max-w-xl leading-8 text-[var(--color-text-muted)]">{device.use}</p>}
-                    <MotionLink className="group mt-7 inline-flex min-h-11 items-center gap-2 border-b border-[var(--color-border-strong)] pb-1 text-sm font-black text-[var(--color-accent-strong)] focus-visible:outline-none" to={device.to}>
+                <motion.article
+                  className="services-device-item"
+                  key={device.to}
+                  variants={cardItem}
+                >
+                  <div className="services-device-visual">
+                    <img
+                      alt={device.name}
+                      decoding="async"
+                      loading="lazy"
+                      src={device.image}
+                    />
+                  </div>
+
+                  <div className="services-device-copy">
+                    <span className="services-index" aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <h3 dir="ltr">
+                      {device.name}
+                    </h3>
+
+                    {device.use && (
+                      <p>{device.use}</p>
+                    )}
+
+                    <Link
+                      className="services-text-link"
+                      to={device.to}
+                      aria-label={`${
+                        en ? "Device Details" : "تفاصيل الجهاز"
+                      }: ${device.name}`}
+                    >
                       {en ? "Device Details" : "تفاصيل الجهاز"}
-                      <span aria-hidden="true" className="editorial-arrow">{en ? "→" : "←"}</span>
-                    </MotionLink>
+
+                      <span
+                        aria-hidden="true"
+                        className="editorial-arrow"
+                      >
+                        {en ? "→" : "←"}
+                      </span>
+                    </Link>
                   </div>
                 </motion.article>
               ))}
@@ -172,15 +299,37 @@ export default function ServicePageTemplate({ slug }) {
         </section>
       )}
 
+      {/* FAQ */}
       {service.faq.length > 0 && (
-        <section className="ds-section bg-[var(--color-surface)]">
-          <div className="ds-container max-w-4xl">
-            <SectionTitle eyebrow={en ? "Before Booking" : "قبل الحجز"} title={en ? "Frequently Asked Questions" : "الأسئلة الشائعة"} />
-            <motion.div className="mt-10 border-t border-[var(--color-border-strong)]" initial="hidden" variants={staggerContainer} viewport={viewportOnce} whileInView="visible">
+        <section className="services-faq services-section">
+          <div className="ds-container services-faq-container">
+            <SectionTitle
+              eyebrow={en ? "Before Booking" : "قبل الحجز"}
+              title={
+                en
+                  ? "Frequently Asked Questions"
+                  : "الأسئلة الشائعة"
+              }
+            />
+
+            <motion.div
+              className="services-faq-list"
+              initial="hidden"
+              variants={staggerContainer}
+              viewport={viewportOnce}
+              whileInView="visible"
+            >
               {service.faq.map((item, index) => (
-                <motion.details className="group border-b border-[var(--color-border)] py-5" key={`service-faq-${index}`} variants={cardItem}>
-                  <summary className="min-h-11 cursor-pointer list-none pe-1 text-lg font-black text-[var(--color-heading)] outline-none marker:hidden">{item.question}</summary>
-                  <p className="mt-4 max-w-3xl leading-8 text-[var(--color-text-muted)]">{item.answer}</p>
+                <motion.details
+                  className="services-faq-item"
+                  key={`service-faq-${index}`}
+                  variants={cardItem}
+                >
+                  <summary>
+                    {item.question}
+                  </summary>
+
+                  <p>{item.answer}</p>
                 </motion.details>
               ))}
             </motion.div>
@@ -188,7 +337,17 @@ export default function ServicePageTemplate({ slug }) {
         </section>
       )}
 
-      <CTASection title={service.subtitle} description={service.intro} primaryLabel={service.ctaLabel} whatsappMessage={service.whatsappMessage} pageType="service" slug={service.slug} sourceSection={SOURCE_SECTIONS.SERVICE_DETAIL} />
+      <div className="services-contact">
+        <CTASection
+          title={service.subtitle}
+          description={service.intro}
+          primaryLabel={service.ctaLabel}
+          whatsappMessage={service.whatsappMessage}
+          pageType="service"
+          slug={service.slug}
+          sourceSection={SOURCE_SECTIONS.SERVICE_DETAIL}
+        />
+      </div>
     </div>
   );
 }

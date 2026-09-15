@@ -220,23 +220,23 @@ export default function SolutionsPage() {
               key={`empty-${activeFilter.slug}`}
               animate="visible"
               aria-live="polite"
-              className="mt-7 rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center"
+              className="mt-7 rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface-muted)] p-8 text-center"
               id="solutions-results"
               initial="hidden"
               role="status"
               variants={fadeUp}
             >
-              <h2 className="text-2xl font-black text-[#4c2c00]">
+              <h2 className="text-2xl font-black text-[var(--color-heading)]">
                 {en ? "No solutions match this category." : "لم نجد حلولًا مطابقة لهذا التصنيف."}
               </h2>
 
-              <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#4c2c00]/70">
+              <p className="mx-auto mt-4 max-w-2xl leading-8 text-[var(--color-text-muted)]">
                 {en ? "Contact us and we will help direct you to the right department for your case." : "تواصل معنا، وسنساعدك في الوصول إلى القسم الأنسب لحالتك."}
               </p>
 
               <a
                 aria-label={en ? "Ask us on WhatsApp (opens in a new window)" : "اسألنا عبر واتساب (يفتح في نافذة جديدة)"}
-                className="mt-6 inline-flex rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
+                className="mt-6 inline-flex rounded-full bg-[var(--color-accent)] px-6 py-3 font-black text-[var(--color-ink)] transition hover:bg-[var(--color-accent-hover)] hover:text-[var(--color-ink)]"
                 href={emptyStateWhatsappUrl}
                 onClick={() =>
                   trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {

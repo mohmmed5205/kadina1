@@ -241,7 +241,7 @@ export default function ProcedurePageTemplate({ procedure: rawProcedure }) {
               <h3 className="text-sm font-black !text-[var(--color-accent)]">
                 {en ? "Service" : "الخدمة"}
               </h3>
-              <div className="mt-4 [&_a]:!border-white/15 [&_a]:!text-[var(--color-text-on-dark)]">
+              <div className="mt-4 [&_a]:!border-[var(--color-border-on-dark)] [&_a]:!text-[var(--color-text-on-dark)]">
                 <EditorialRelation
                   en={en}
                   eyebrow={en ? "Related service" : "الخدمة المرتبطة"}
@@ -255,7 +255,7 @@ export default function ProcedurePageTemplate({ procedure: rawProcedure }) {
                 <h3 className="text-sm font-black !text-[var(--color-accent)]">
                   {en ? "Concern" : "المشكلة المرتبطة"}
                 </h3>
-                <div className="mt-4 space-y-3 [&_a]:!border-white/15 [&_a]:!text-[var(--color-text-on-dark)]">
+                <div className="mt-4 space-y-3 [&_a]:!border-[var(--color-border-on-dark)] [&_a]:!text-[var(--color-text-on-dark)]">
                   {solutions.map((solution) => (
                     <EditorialRelation
                       en={en}

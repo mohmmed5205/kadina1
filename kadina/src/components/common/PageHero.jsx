@@ -29,21 +29,13 @@ export default function PageHero({
       ? "page-hero-detail"
       : "page-hero-editorial";
 
+  const detailDensityClassName = detail && !hasVisual
+    ? "page-hero-detail-no-visual"
+    : "";
+
   return (
-    <section className={`page-hero ${variantClassName} ${className}`}>
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(214,163,91,.22),transparent_38%)]" />
-      <motion.span
-        aria-hidden="true"
-        className="pointer-events-none absolute end-[12%] top-[22%] hidden h-32 w-32 rounded-full border border-[var(--color-border-strong)] lg:block"
-        animate={shouldReduceMotion ? undefined : { y: [0, -12, 0], scale: [1, 1.04, 1], opacity: [0.35, 0.55, 0.35] }}
-        transition={{ duration: 11, ease: "easeInOut", repeat: Infinity }}
-      />
-      <img
-        aria-hidden="true"
-        alt=""
-        className={`pointer-events-none absolute -bottom-20 end-[5%] h-72 w-auto object-contain opacity-[0.045] sm:h-96 ${utility ? "brightness-[4]" : ""}`}
-        src="/kadina-logo3.webp"
-      />
+    <section className={`page-hero ${variantClassName} ${detailDensityClassName} ${className}`}>
+      <div className="pointer-events-none absolute inset-x-[var(--page-gutter)] bottom-0 h-px bg-[var(--color-border-strong)]" />
       <motion.div
         animate="visible"
         className="ds-container relative"

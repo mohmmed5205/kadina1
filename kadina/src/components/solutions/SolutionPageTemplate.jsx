@@ -28,7 +28,7 @@ import {
 function EditorialList({ items, dark = false }) {
   return (
     <motion.ul
-      className={`mt-8 border-t ${dark ? "border-white/15" : "border-[var(--color-border)]"}`}
+      className={`mt-8 border-t ${dark ? "border-[var(--color-border-on-dark)]" : "border-[var(--color-border)]"}`}
       initial="hidden"
       variants={staggerContainer}
       viewport={viewportOnce}
@@ -36,7 +36,7 @@ function EditorialList({ items, dark = false }) {
     >
       {items.map((item, index) => (
         <motion.li
-          className={`grid grid-cols-[2.75rem_1fr] gap-4 border-b py-5 sm:grid-cols-[4rem_1fr] sm:py-6 ${dark ? "border-white/15 text-[var(--color-text-on-dark)]" : "border-[var(--color-border)] text-[var(--color-text)]"}`}
+          className={`grid grid-cols-[2.75rem_1fr] gap-4 border-b py-5 sm:grid-cols-[4rem_1fr] sm:py-6 ${dark ? "border-[var(--color-border-on-dark)] text-[var(--color-text-on-dark)]" : "border-[var(--color-border)] text-[var(--color-text)]"}`}
           key={`solution-list-item-${index}`}
           variants={cardItem}
         >
@@ -60,7 +60,7 @@ function RelatedLinks({ items, en }) {
 
   return (
     <motion.div
-      className="mt-5 border-t border-white/15"
+      className="mt-5 border-t border-[var(--color-border-on-dark)]"
       initial="hidden"
       variants={staggerContainer}
       viewport={viewportOnce}
@@ -68,7 +68,7 @@ function RelatedLinks({ items, en }) {
     >
       {items.map((item) => (
         <motion.div
-          className="border-b border-white/15"
+          className="border-b border-[var(--color-border-on-dark)]"
           key={item.to}
           variants={cardItem}
         >
@@ -166,20 +166,20 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
         <section className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8">
           <motion.div
             animate="visible"
-            className="mx-auto max-w-3xl rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-12"
+            className="mx-auto max-w-3xl rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface-muted)] p-8 text-center shadow-[var(--shadow-card)] sm:p-12"
             initial="hidden"
             variants={fadeUp}
           >
-            <h1 className="text-3xl font-black text-[#4c2c00]">
+            <h1 className="text-3xl font-black text-[var(--color-heading)]">
               {en ? "Solution Not Found" : "الحل غير موجود"}
             </h1>
-            <p className="mt-4 leading-8 text-[#4c2c00]/68">
+            <p className="mt-4 leading-8 text-[var(--color-text-muted)]">
               {en
                 ? "We could not find the requested solution."
                 : "لم نتمكن من العثور على الحل المطلوب."}
             </p>
             <Link
-              className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
+              className="mt-7 inline-block rounded-full bg-[var(--color-accent)] px-6 py-3 font-black text-[var(--color-ink)] transition hover:bg-[var(--color-accent-hover)] hover:text-[var(--color-ink)]"
               to="/solutions"
             >
               {en ? "Back to Solutions" : "العودة إلى الحلول"}

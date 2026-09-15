@@ -40,6 +40,7 @@ export const SOURCE_SECTIONS = Object.freeze({
   FAQ: "faq",
   OFFERS: "offers",
   BOOKING_FORM: "booking_form",
+  HOME_BOOKING: "home_booking",
 });
 
 const VALID_EVENT_NAME = /^[a-z][a-z0-9_]*$/;

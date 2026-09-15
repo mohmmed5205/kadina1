@@ -65,7 +65,7 @@ export default function BlogPage() {
           >
             {localizedCategories.map((category, index) => (
               <motion.span
-                className="rounded-full border border-[#f8aa2d]/30 bg-[#fff7eb] px-4 py-2 text-sm font-black text-[#4c2c00]"
+                className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-4 py-2 text-sm font-black text-[var(--color-heading)]"
                 key={`article-category-${index}`}
                 variants={cardItem}
               >
@@ -76,7 +76,7 @@ export default function BlogPage() {
         </div>
       </section>
 
-      <section className="bg-[#fff7eb]/65 px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
+      <section className="bg-[var(--color-surface-muted)] px-4 py-14 sm:px-5 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           {publishedArticles.length > 0 ? (
             <>
@@ -100,16 +100,16 @@ export default function BlogPage() {
             </>
           ) : (
             <motion.div
-              className="rounded-[2rem] border border-[#f8aa2d]/25 bg-white/70 px-6 py-14 text-center shadow-[0_18px_45px_rgba(76,44,0,0.07)] sm:px-10"
+              className="rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-6 py-14 text-center shadow-[var(--shadow-card)] sm:px-10"
               initial="hidden"
               variants={fadeUp}
               viewport={viewportOnce}
               whileInView="visible"
             >
-              <h2 className="text-2xl font-black text-[#4c2c00] sm:text-3xl">
+              <h2 className="text-2xl font-black text-[var(--color-heading)] sm:text-3xl">
                 {en ? "Articles Coming Soon" : "المقالات قريبًا"}
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl leading-8 text-[#4c2c00]/68">
+              <p className="mx-auto mt-4 max-w-2xl leading-8 text-[var(--color-text-muted)]">
                 {en ? "No medical article has completed the approval and review workflow yet." : "لا يوجد حتى الآن مقال طبي أكمل مسار الاعتماد والمراجعة."}
               </p>
             </motion.div>
