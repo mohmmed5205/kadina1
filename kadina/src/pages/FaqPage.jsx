@@ -15,6 +15,7 @@ import {
   staggerContainer,
   viewportOnce,
 } from "../componetts/motionPresets";
+import { SOURCE_SECTIONS } from "../utils/analytics";
 
 const faqItems = [
   {
@@ -98,7 +99,7 @@ export default function FaqPage() {
             <p className="section-title-eyebrow">
               {en ? "FAQ" : "الأسئلة الشائعة"}
             </p>
-            <h2 className="mt-4 text-3xl font-black leading-tight text-[var(--color-heading)] sm:text-4xl lg:text-5xl">
+            <h2 className="mt-4 text-[length:var(--text-heading)] font-black leading-tight text-[var(--color-heading)]">
               {en ? "Frequently Asked Questions" : "الأسئلة الشائعة"}
             </h2>
             <p className="mt-6 max-w-md text-lg font-medium leading-9 text-[var(--color-text-muted)]">
@@ -132,7 +133,7 @@ export default function FaqPage() {
                     <button
                       aria-controls={panelId}
                       aria-expanded={isOpen}
-                      className="flex min-h-[3.25rem] w-full items-center justify-between gap-5 py-5 text-start text-lg font-black leading-8 text-[var(--color-heading)] outline-none transition-colors hover:text-[var(--color-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent-strong)] sm:gap-8 sm:py-7 sm:text-2xl"
+                      className="flex min-h-[3.25rem] w-full items-center justify-between gap-5 py-5 text-start text-lg font-black leading-8 text-[var(--color-heading)] outline-none transition-colors hover:text-[var(--color-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent-strong)] sm:gap-8 sm:py-7 sm:text-xl"
                       id={buttonId}
                       onClick={() =>
                         setOpenIndex((current) =>
@@ -179,6 +180,8 @@ export default function FaqPage() {
       </section>
 
       <CTASection
+        pageType="faq"
+        sourceSection={SOURCE_SECTIONS.FAQ}
         title={en ? "Did Not Find Your Answer?" : "ما لقيت إجابة لسؤالك؟"}
         description={en ? "Contact us on WhatsApp and we will help you find the answer or the appropriate department." : "تواصل معنا عبر واتساب، وسنساعدك في الوصول إلى الإجابة أو القسم المناسب."}
         primaryLabel={en ? "Ask Us on WhatsApp" : "اسألنا عبر واتساب"}

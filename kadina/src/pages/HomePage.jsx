@@ -3,16 +3,13 @@ import { useOutletContext } from "react-router-dom";
 import Hero from "../componetts/Hero";
 import HomeTrustSection from "../components/home/HomeTrustSection";
 import HomeAboutSection from "../components/home/HomeAboutSection";
-import HomeServicesSection from "../components/home/HomeServicesSection";
-import HomeJourneySection from "../components/home/HomeJourneySection";
-import HomeFinalCta from "../components/home/HomeFinalCta";
+import HomeNumbersSection from "../components/home/HomeNumbersSection";
+import HomeBrandStatement from "../components/home/HomeBrandStatement";
+import HomeBookingSection from "../components/home/HomeBookingSection";
 import HomeContactSection from "../components/home/HomeContactSection";
 import Seo from "../components/seo/Seo";
 import { createWebPageSchema } from "../components/seo/seoUtils";
 
-const HomeTechnologySection = lazy(
-  () => import("../components/home/HomeTechnologySection"),
-);
 const HomeDoctorsSection = lazy(
   () => import("../components/home/HomeDoctorsSection"),
 );
@@ -39,21 +36,18 @@ export default function HomePage() {
         title={lang === "ar" ? "مركز كادينا الطبي للجلدية والتجميل والليزر بالرياض" : "Kadina Medical Center for Dermatology, Aesthetics and Laser in Riyadh"}
       />
       <Hero t={t} lang={lang} />
+      <HomeNumbersSection />
       <HomeTrustSection />
-      <HomeAboutSection />
-      <HomeServicesSection />
-      <Suspense fallback={sectionFallback}>
-        <HomeTechnologySection />
-      </Suspense>
+      <HomeBrandStatement />
       <Suspense fallback={sectionFallback}>
         <HomeDoctorsSection />
       </Suspense>
-      <HomeJourneySection />
+      <HomeAboutSection />
+      <HomeBookingSection />
       <Suspense fallback={sectionFallback}>
         <BeforeAfter t={t} />
       </Suspense>
       <HomeContactSection />
-      <HomeFinalCta />
     </>
   );
 }

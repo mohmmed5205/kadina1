@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useOutletContext } from "react-router-dom";
 import { absoluteUrl } from "./seoUtils";
+import { localizePath } from "../../utils/languageRouting";
 
 function formatTitle(title, lang) {
   const normalizedTitle = title.trim();
@@ -17,7 +18,36 @@ function formatDescription(description) {
     : normalizedDescription;
 }
 
-function normalizeJsonLd(jsonLd) {
+function localizeJsonLdUrls(value, lang, parentKey = "") {
+  if (Array.isArray(value)) {
+    return value.map((item) => localizeJsonLdUrls(item, lang, parentKey));
+  }
+  if (!value || typeof value !== "object") {
+    if (
+      typeof value === "string" &&
+      ["url", "item", "@id"].includes(parentKey) &&
+      value.startsWith(`${absoluteUrl("/")}`)
+    ) {
+      const parsedUrl = new URL(value);
+      return absoluteUrl(
+        localizePath(
+          `${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}`,
+          lang,
+        ),
+      );
+    }
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, child]) => [
+      key,
+      localizeJsonLdUrls(child, lang, key),
+    ]),
+  );
+}
+
+function normalizeJsonLd(jsonLd, lang) {
   if (!jsonLd) return null;
 
   const graph = Array.isArray(jsonLd) ? jsonLd.filter(Boolean) : [jsonLd];
@@ -25,7 +55,7 @@ function normalizeJsonLd(jsonLd) {
 
   return JSON.stringify({
     "@context": "https://schema.org",
-    "@graph": graph,
+    "@graph": localizeJsonLdUrls(graph, lang),
   });
 }
 
@@ -37,13 +67,25 @@ export default function Seo({
   image,
   noindex = false,
   jsonLd,
+  alternateLanguages = true,
 }) {
   const { lang = "ar" } = useOutletContext();
   const resolvedTitle = formatTitle(title, lang);
   const resolvedDescription = formatDescription(description);
-  const canonicalUrl = absoluteUrl(canonicalPath);
+  const canonicalUrl = absoluteUrl(localizePath(canonicalPath, lang));
   const imageUrl = image ? absoluteUrl(image) : null;
-  const jsonLdContent = normalizeJsonLd(jsonLd);
+  const jsonLdContent = normalizeJsonLd(jsonLd, lang);
+  const alternateLanguageCodes = useMemo(
+    () =>
+      noindex
+        ? []
+        : alternateLanguages === true
+          ? ["ar", "en"]
+          : Array.isArray(alternateLanguages)
+            ? alternateLanguages
+            : [],
+    [alternateLanguages, noindex],
+  );
 
   useEffect(() => {
     const createdElements = [];
@@ -110,6 +152,32 @@ export default function Seo({
     });
     setAttribute(canonical, "href", canonicalUrl);
 
+    document.head
+      .querySelectorAll('link[rel="alternate"][hreflang]')
+      .forEach((element) => {
+        removedElements.push({
+          element,
+          parent: element.parentNode,
+          nextSibling: element.nextSibling,
+        });
+        element.remove();
+      });
+
+    const addAlternate = (hreflang, language) => {
+      const link = document.createElement("link");
+      link.rel = "alternate";
+      link.hreflang = hreflang;
+      link.href = absoluteUrl(localizePath(canonicalPath, language));
+      link.dataset.kadinaSeo = "alternate";
+      document.head.appendChild(link);
+      createdElements.push(link);
+    };
+
+    alternateLanguageCodes.forEach((language) =>
+      addAlternate(language, language),
+    );
+    if (alternateLanguageCodes.includes("ar")) addAlternate("x-default", "ar");
+
     setMeta('meta[property="og:title"]', "property", "og:title", resolvedTitle);
     setMeta(
       'meta[property="og:description"]',
@@ -119,6 +187,18 @@ export default function Seo({
     );
     setMeta('meta[property="og:url"]', "property", "og:url", canonicalUrl);
     setMeta('meta[property="og:type"]', "property", "og:type", ogType);
+    setMeta(
+      'meta[property="og:locale"]',
+      "property",
+      "og:locale",
+      lang === "en" ? "en_US" : "ar_SA",
+    );
+    setMeta(
+      'meta[property="og:locale:alternate"]',
+      "property",
+      "og:locale:alternate",
+      lang === "en" ? "ar_SA" : "en_US",
+    );
     setMeta(
       'meta[name="twitter:card"]',
       "name",
@@ -193,12 +273,15 @@ export default function Seo({
     };
   }, [
     canonicalUrl,
+    canonicalPath,
+    alternateLanguageCodes,
     imageUrl,
     jsonLdContent,
     noindex,
     ogType,
     resolvedDescription,
     resolvedTitle,
+    lang,
   ]);
 
   return null;

@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
-import { Link, useLocation, useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
 import PageHero from "../common/PageHero";
+import DirectAnswer from "../content/DirectAnswer";
+import MedicalReviewBy from "../content/MedicalReviewBy";
 import Seo from "../seo/Seo";
 import {
   createBreadcrumbSchema,
@@ -8,6 +11,13 @@ import {
 } from "../seo/seoUtils";
 import { createWhatsappUrl } from "../../utils/whatsapp";
 import { getSolutionDetail } from "../../data/solutions";
+import { useTrackedView } from "../../hooks/useAnalytics";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  getCurrentPath,
+  trackContactAction,
+} from "../../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -18,7 +28,7 @@ import {
 function EditorialList({ items, dark = false }) {
   return (
     <motion.ul
-      className={`mt-8 border-t ${dark ? "border-white/15" : "border-[var(--color-border)]"}`}
+      className={`mt-8 border-t ${dark ? "border-[var(--color-border-on-dark)]" : "border-[var(--color-border)]"}`}
       initial="hidden"
       variants={staggerContainer}
       viewport={viewportOnce}
@@ -26,7 +36,7 @@ function EditorialList({ items, dark = false }) {
     >
       {items.map((item, index) => (
         <motion.li
-          className={`grid grid-cols-[2.75rem_1fr] gap-4 border-b py-5 sm:grid-cols-[4rem_1fr] sm:py-6 ${dark ? "border-white/15 text-[var(--color-text-on-dark)]" : "border-[var(--color-border)] text-[var(--color-text)]"}`}
+          className={`grid grid-cols-[2.75rem_1fr] gap-4 border-b py-5 sm:grid-cols-[4rem_1fr] sm:py-6 ${dark ? "border-[var(--color-border-on-dark)] text-[var(--color-text-on-dark)]" : "border-[var(--color-border)] text-[var(--color-text)]"}`}
           key={`solution-list-item-${index}`}
           variants={cardItem}
         >
@@ -50,7 +60,7 @@ function RelatedLinks({ items, en }) {
 
   return (
     <motion.div
-      className="mt-5 border-t border-white/15"
+      className="mt-5 border-t border-[var(--color-border-on-dark)]"
       initial="hidden"
       variants={staggerContainer}
       viewport={viewportOnce}
@@ -58,7 +68,7 @@ function RelatedLinks({ items, en }) {
     >
       {items.map((item) => (
         <motion.div
-          className="border-b border-white/15"
+          className="border-b border-[var(--color-border-on-dark)]"
           key={item.to}
           variants={cardItem}
         >
@@ -80,6 +90,48 @@ function RelatedLinks({ items, en }) {
   );
 }
 
+function FutureFaq({ items, en }) {
+  if (!items?.length) return null;
+
+  return (
+    <section className="border-t border-[var(--color-border)]">
+      <div className="ds-container ds-section">
+        <motion.h2
+          className="text-3xl font-black text-[var(--color-heading)] sm:text-4xl"
+          initial="hidden"
+          variants={fadeUp}
+          viewport={viewportOnce}
+          whileInView="visible"
+        >
+          {en ? "Frequently Asked Questions" : "الأسئلة الشائعة"}
+        </motion.h2>
+        <motion.div
+          className="mt-8 border-t border-[var(--color-border)]"
+          initial="hidden"
+          variants={staggerContainer}
+          viewport={viewportOnce}
+          whileInView="visible"
+        >
+          {items.map((item, index) => (
+            <motion.div
+              className="grid gap-3 border-b border-[var(--color-border)] py-6 lg:grid-cols-[minmax(0,.8fr)_minmax(0,1.2fr)] lg:gap-16"
+              key={`${item.question}-${index}`}
+              variants={cardItem}
+            >
+              <h3 className="text-lg font-black text-[var(--color-heading)]">
+                {item.question}
+              </h3>
+              <p className="font-bold leading-8 text-[var(--color-text)]">
+                {item.answer}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 export default function SolutionPageTemplate({ solution: rawSolution }) {
   const location = useLocation();
   const { lang } = useOutletContext();
@@ -87,6 +139,16 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
   const solution = rawSolution
     ? getSolutionDetail(rawSolution.slug, lang)
     : null;
+  useTrackedView(
+    ANALYTICS_EVENTS.SOLUTION_VIEW,
+    {
+      area: rawSolution?.category,
+      language: lang,
+      path: getCurrentPath(location),
+      solution_slug: rawSolution?.slug,
+    },
+    Boolean(solution),
+  );
 
   if (!solution) {
     return (
@@ -104,20 +166,20 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
         <section className="min-h-[70vh] px-4 pb-20 pt-32 sm:px-5 lg:px-8">
           <motion.div
             animate="visible"
-            className="mx-auto max-w-3xl rounded-[2rem] border border-[#f8aa2d]/25 bg-[#fff7eb] p-8 text-center shadow-[0_20px_60px_rgba(76,44,0,0.1)] sm:p-12"
+            className="mx-auto max-w-3xl rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface-muted)] p-8 text-center shadow-[var(--shadow-card)] sm:p-12"
             initial="hidden"
             variants={fadeUp}
           >
-            <h1 className="text-3xl font-black text-[#4c2c00]">
+            <h1 className="text-3xl font-black text-[var(--color-heading)]">
               {en ? "Solution Not Found" : "الحل غير موجود"}
             </h1>
-            <p className="mt-4 leading-8 text-[#4c2c00]/68">
+            <p className="mt-4 leading-8 text-[var(--color-text-muted)]">
               {en
                 ? "We could not find the requested solution."
                 : "لم نتمكن من العثور على الحل المطلوب."}
             </p>
             <Link
-              className="mt-7 inline-block rounded-full bg-[#f8aa2d] px-6 py-3 font-black text-[#2b1b08] transition hover:bg-[#cf7d11] hover:text-white"
+              className="mt-7 inline-block rounded-full bg-[var(--color-accent)] px-6 py-3 font-black text-[var(--color-ink)] transition hover:bg-[var(--color-accent-hover)] hover:text-[var(--color-ink)]"
               to="/solutions"
             >
               {en ? "Back to Solutions" : "العودة إلى الحلول"}
@@ -167,9 +229,16 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
           { label: solution.shortTitle },
         ]}
         description={solution.intro}
-        eyebrow={solution.title}
+        eyebrow={en ? "Problems & Solutions" : "المشكلات والحلول"}
+        secondaryTitle={solution.title}
         title={solution.painHeadline}
         variant="detail"
+      />
+
+      <DirectAnswer
+        answer={solution.directAnswer?.answer}
+        lang={lang}
+        question={solution.directAnswer?.question}
       />
 
       {!solution.compact && solution.isThisYou && (
@@ -275,6 +344,14 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
                     <RelatedLinks en={en} items={[solution.relatedDoctor]} />
                   </div>
                 )}
+                {solution.relatedProcedures?.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-black !text-[var(--color-accent)]">
+                      {en ? "Related Procedures" : "الإجراءات المرتبطة"}
+                    </h3>
+                    <RelatedLinks en={en} items={solution.relatedProcedures} />
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
@@ -316,6 +393,22 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
         </motion.section>
       )}
 
+      <FutureFaq en={en} items={solution.faq} />
+
+      <MedicalReviewBy
+        lang={lang}
+        review={
+          solution.medicalReviewBy
+            ? {
+                ...solution.medicalReviewBy,
+                lastReviewedDate:
+                  solution.lastReviewedDate ||
+                  solution.medicalReviewBy.lastReviewedDate,
+              }
+            : null
+        }
+      />
+
       <motion.section
         className="ds-section-compact"
         initial="hidden"
@@ -328,6 +421,14 @@ export default function SolutionPageTemplate({ solution: rawSolution }) {
             aria-label={`${solution.ctaLabel} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
             className="ds-button ds-button-primary w-full sm:w-auto"
             href={whatsappUrl}
+            onClick={() =>
+              trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                language: lang,
+                page_type: "solution",
+                slug: solution.slug,
+                source_section: SOURCE_SECTIONS.SOLUTION_DETAIL,
+              })
+            }
             rel="noopener noreferrer"
             target="_blank"
           >

@@ -4,6 +4,11 @@ import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
 import { createWhatsappUrl } from "../../utils/whatsapp";
 import { getHomePageContent } from "../../data/pagesContent";
 import MagneticButton from "../motion/MagneticButton";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  trackContactAction,
+} from "../../utils/analytics";
 
 export default function HomeFinalCta() {
   const { lang } = useOutletContext();
@@ -32,6 +37,13 @@ export default function HomeFinalCta() {
               aria-label={`${finalCta.label} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
               className="ds-button ds-button-primary w-full px-7 py-3.5 sm:w-auto"
               href={createWhatsappUrl(finalCta.message)}
+              onClick={() =>
+                trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                  language: lang,
+                  page_type: "home",
+                  source_section: SOURCE_SECTIONS.HOME_FINAL_CTA,
+                })
+              }
               rel="noopener noreferrer"
               target="_blank"
             >

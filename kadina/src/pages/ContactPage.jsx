@@ -8,11 +8,18 @@ import {
   createWebPageSchema,
 } from "../components/seo/seoUtils";
 import {
-  contactAddress,
-  contactHours,
-  contactItems,
   contactMapUrl,
+  getContactAddress,
+  getContactHours,
+  getContactItems,
 } from "../data/contact";
+import { businessMaps } from "../data/business";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  getContactEventName,
+  trackContactAction,
+} from "../utils/analytics";
 import {
   cardItem,
   fadeUp,
@@ -23,26 +30,19 @@ import {
 export default function ContactPage() {
   const { lang } = useOutletContext();
   const en = lang === "en";
-  const localizedItems = contactItems.map((item, index) =>
-    en
-      ? {
-          ...item,
-          title: ["Phone", "WhatsApp", "Email"][index],
-          value: index === 1 ? "Instant chat" : item.value,
-          label: ["Call Now", "Start Chat", "Send Email"][index],
-          href:
-            index === 1
-              ? item.href.replace(
-                  encodeURIComponent("للحجز والاستفسار"),
-                  encodeURIComponent(
-                    "Hello, I would like to book or ask about Kadina services.",
-                  ),
-                )
-              : item.href,
-        }
-      : item,
-  );
+  const localizedItems = getContactItems(lang);
+  const localizedAddress = getContactAddress(lang);
+  const localizedHours = getContactHours(lang);
   const whatsappItem = localizedItems[1];
+  const trackContactItem = (href) => {
+    const eventName = getContactEventName(href);
+    if (!eventName) return;
+    trackContactAction(eventName, {
+      language: lang,
+      page_type: "contact",
+      source_section: SOURCE_SECTIONS.CONTACT,
+    });
+  };
 
   return (
     <div>
@@ -50,8 +50,8 @@ export default function ContactPage() {
         canonicalPath="/contact"
         description={
           en
-            ? "Contact Kadina Center on Riyadh's Northern Ring Road by phone, WhatsApp or email."
-            : "تواصل مع مركز كادينا في الرياض على الطريق الدائري الشمالي عبر الهاتف أو واتساب أو البريد الإلكتروني."
+            ? "Contact Kadina Center in Riyadh by phone, WhatsApp or email."
+            : "تواصل مع مركز كادينا في الرياض عبر الهاتف أو واتساب أو البريد الإلكتروني."
         }
         jsonLd={[
           createBreadcrumbSchema([
@@ -95,7 +95,7 @@ export default function ContactPage() {
           <p className="section-title-eyebrow">
             {en ? "Contact Details" : "بيانات التواصل"}
           </p>
-          <h2 className="mt-4 max-w-5xl text-4xl font-black leading-tight text-[var(--color-heading)] sm:text-5xl lg:text-6xl">
+          <h2 className="mt-4 max-w-5xl text-[length:var(--text-heading)] font-black leading-tight text-[var(--color-heading)]">
             {en ? "We Are Here to Answer" : "نحن هنا للإجابة عنك"}
           </h2>
           <div className="mt-9 h-px w-20 bg-[var(--color-accent)]" />
@@ -122,6 +122,7 @@ export default function ContactPage() {
             aria-label={`${whatsappItem.label} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`}
             className="ds-button ds-button-primary w-full sm:w-auto"
             href={whatsappItem.href}
+            onClick={() => trackContactItem(whatsappItem.href)}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -163,6 +164,7 @@ export default function ContactPage() {
                   }
                   className="mt-4 inline-flex min-h-11 items-center font-black text-[var(--color-accent-strong)] transition-colors hover:text-[var(--color-heading)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent-strong)]"
                   href={item.href}
+                  onClick={() => trackContactItem(item.href)}
                   rel={item.external ? "noopener noreferrer" : undefined}
                   target={item.external ? "_blank" : undefined}
                 >
@@ -187,7 +189,7 @@ export default function ContactPage() {
               {en ? "Location" : "الموقع"}
             </p>
             <h2 className="mt-4 text-3xl font-black text-[var(--color-heading)] sm:text-4xl">
-              {en ? "Riyadh — Al-Murooj-Exit 5" : contactAddress}
+              {localizedAddress}
             </h2>
             <a
               aria-label={
@@ -197,6 +199,13 @@ export default function ContactPage() {
               }
               className="mt-6 inline-flex min-h-11 items-center font-black text-[var(--color-accent-strong)]"
               href={contactMapUrl}
+              onClick={() =>
+                trackContactAction(ANALYTICS_EVENTS.MAP_CLICK, {
+                  language: lang,
+                  page_type: "contact",
+                  source_section: SOURCE_SECTIONS.CONTACT,
+                })
+              }
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -215,10 +224,10 @@ export default function ContactPage() {
               {en ? "Hours" : "المواعيد"}
             </p>
             <h2 className="mt-4 text-3xl font-black text-[var(--color-heading)] sm:text-4xl">
-              {en ? "Saturday – Saturday" : contactHours.days}
+              {localizedHours.days}
             </h2>
             <p className="mt-4 text-xl font-bold text-[var(--color-text-muted)]">
-              {en ? "9:00 AM – 10:00 PM" : contactHours.time}
+              {localizedHours.time}
             </p>
           </motion.article>
         </div>
@@ -236,7 +245,7 @@ export default function ContactPage() {
             className="h-[340px] w-full border-0 sm:h-[380px]"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=Kadina%20Medical%20Center%20Riyadh&output=embed"
+            src={businessMaps.embedCandidate}
             title={
               en
                 ? "Kadina Medical Center location map"

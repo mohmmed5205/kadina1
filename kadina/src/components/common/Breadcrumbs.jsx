@@ -1,4 +1,5 @@
-import { Link, useLocation, useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
 
 export default function Breadcrumbs({ items }) {
   const { lang = "ar" } = useOutletContext();

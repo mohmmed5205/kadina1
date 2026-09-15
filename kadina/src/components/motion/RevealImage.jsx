@@ -40,7 +40,7 @@ export default function RevealImage({ children, className = "", rtl = false }) {
       {!shouldReduceMotion && (
         <motion.span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(135deg,#fff7eb,#f8d9aa)]"
+          className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(135deg,var(--color-cream),var(--color-warm-beige))]"
           initial={{ x: 0 }}
           viewport={viewportOnce}
           whileInView={{ x: rtl ? "-102%" : "102%" }}

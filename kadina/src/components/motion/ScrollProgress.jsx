@@ -23,7 +23,7 @@ export default function ScrollProgress() {
   return (
     <motion.div
       aria-hidden="true"
-      className="fixed inset-x-0 top-[env(safe-area-inset-top)] z-[60] h-0.5 origin-left bg-[#f8aa2d] shadow-[0_1px_8px_rgba(248,170,45,0.45)] rtl:origin-right"
+      className="fixed inset-x-0 top-[env(safe-area-inset-top)] z-[60] h-0.5 origin-left bg-[var(--color-accent)] shadow-[0_1px_8px_var(--color-accent-wash)] rtl:origin-right"
       style={{ scaleX }}
     />
   );

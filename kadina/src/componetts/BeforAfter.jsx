@@ -15,25 +15,21 @@ export default function BeforeAfter({ t }) {
   return (
     <section
       id="before-after"
-      className="ds-section relative overflow-hidden bg-[var(--color-surface-dark)]"
+      className="ds-section relative overflow-hidden bg-[var(--color-surface)]"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,170,45,0.11),transparent_42%)]" />
-
       <div className="ds-container relative">
         <motion.div
           variants={fadeUp}
           initial={shouldReduceMotion ? false : "hidden"}
           whileInView="visible"
           viewport={viewportOnce}
-          className="mx-auto mb-8 max-w-3xl text-center lg:mb-12"
+          className="mb-8 grid gap-5 border-b border-[var(--color-border-strong)] pb-7 lg:mb-12 lg:grid-cols-12 lg:items-end"
         >
-          <span className="section-eyebrow">{data.eyebrow}</span>
-          <h2 className="on-dark-heading mt-4 text-[var(--text-heading)] font-black leading-[var(--leading-heading)] lg:mt-6">
-            {data.title}
-          </h2>
-          <p className="mt-4 text-base leading-8 text-[var(--color-text-on-dark-muted)] md:text-lg">
-            {data.description}
-          </p>
+          <div className="lg:col-span-8">
+            <span className="section-title-eyebrow">{data.eyebrow}</span>
+            <h2 className="mt-4 text-[clamp(1.75rem,4vw,3rem)] font-black leading-[1.05] tracking-[-.04em] text-[var(--color-heading)]">{data.title}</h2>
+          </div>
+          <p className="max-w-md text-sm leading-7 text-[var(--color-text-muted)] md:text-base lg:col-span-4 lg:justify-self-end">{data.description}</p>
         </motion.div>
 
         <motion.div
@@ -56,19 +52,19 @@ export default function BeforeAfter({ t }) {
             spaceBetween={12}
             slidesPerView={1}
             breakpoints={{
-              640: { slidesPerView: 1.25, spaceBetween: 18 },
-              1024: { slidesPerView: 2.4, spaceBetween: 24 },
-              1280: { slidesPerView: 3.1, spaceBetween: 28 },
+              640: { slidesPerView: 1.35, spaceBetween: 20 },
+              1024: { slidesPerView: 2.5, spaceBetween: 28 },
+              1440: { slidesPerView: 3.1, spaceBetween: 32 },
             }}
-            className="kadina-swiper dark-section-swiper before-after-swiper"
+            className="kadina-swiper before-after-swiper !overflow-visible"
           >
             {data.cases.map((item, index) => (
               <SwiperSlide key={`${item.image}-${index}`}>
                 <motion.article
-                  whileHover={shouldReduceMotion ? undefined : { y: -5 }}
-                  className="premium-card group h-full p-3 sm:p-4"
+                  whileHover={shouldReduceMotion ? undefined : { y: -3 }}
+                  className="group h-full"
                 >
-                  <RevealImage className="aspect-[4/5] w-full rounded-[var(--radius-md)] bg-[var(--color-warm-beige)]" rtl={t.dir === "rtl"}>
+                  <RevealImage className="aspect-[5/6] w-full bg-[var(--color-surface-muted)]" rtl={t.dir === "rtl"}>
                     <img
                       src={item.image}
                       alt={`${item.title}${item.doctor ? ` - ${item.doctor}` : ""}`}
@@ -84,8 +80,8 @@ export default function BeforeAfter({ t }) {
                       }}
                     />
                   </RevealImage>
-                  <div className="px-2 pb-1 pt-4">
-                    <h3 className="font-black leading-7 text-[var(--color-heading)]">{item.title}</h3>
+                  <div className="border-b border-[var(--color-border-strong)] pb-5 pt-5">
+                    <h3 className="text-base font-black leading-7 text-[var(--color-heading)]">{item.title}</h3>
                     {item.doctor && (
                       <p className="mt-1 text-sm font-bold text-[var(--color-accent-strong)]">{item.doctor}</p>
                     )}

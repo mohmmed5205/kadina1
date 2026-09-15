@@ -6,6 +6,11 @@ import OfferSlider from "./OfferSlider";
 import { smoothEase } from "./motionPresets";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import { MODAL_EVENT } from "../components/motion/SmoothScroll";
+import {
+  ANALYTICS_EVENTS,
+  SOURCE_SECTIONS,
+  trackContactAction,
+} from "../utils/analytics";
 
 const labels = {
   ar: {
@@ -134,7 +139,7 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
             </header>
 
             <main className="offers-modal-main min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-[calc(2rem+env(safe-area-inset-bottom))] pt-6 lg:pt-10">
-              <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(145deg,rgba(255,250,242,0.98),rgba(241,231,216,0.88)_55%,rgba(214,163,91,0.08))]" />
+              <div className="pointer-events-none fixed inset-0 bg-[var(--color-glass)]" />
 
               <motion.div
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 14, scale: 0.97 }}
@@ -160,6 +165,13 @@ export default function OffersModal({ open, onClose, lang = "ar", t }) {
                 <div className="border-t border-[var(--color-border)] pt-7 text-center">
                   <motion.a
                     href={whatsappUrl}
+                    onClick={() =>
+                      trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                        language: lang,
+                        page_type: "home",
+                        source_section: SOURCE_SECTIONS.OFFERS,
+                      })
+                    }
                     aria-label={`${text.bookCta} (${isRtl ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
                     target="_blank"
                     rel="noopener noreferrer"

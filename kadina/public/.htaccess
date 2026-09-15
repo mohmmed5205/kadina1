@@ -2,6 +2,22 @@
   RewriteEngine On
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
+
+  # Keep the language home URLs canonical with a trailing slash.
+  RewriteRule ^ar$ /ar/ [R=301,L]
+  RewriteRule ^en$ /en/ [R=301,L]
+
+  # Serve real assets and directories without language redirects.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Temporary legacy URL migration. Arabic is the deterministic default at
+  # the host layer; query strings are retained automatically.
+  RewriteCond %{REQUEST_URI} !^/(ar|en)(/|$) [NC]
+  RewriteRule ^(.*)$ /ar/$1 [R=302,L,NE]
+
+  # React Router history fallback for both language trees.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]

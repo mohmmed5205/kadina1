@@ -1,8 +1,13 @@
 import { motion } from "framer-motion";
-import { Link, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
+import Link from "../routing/LocalizedLink";
 import { fadeUp, viewportOnce } from "../../componetts/motionPresets";
 import { createWhatsappUrl } from "../../utils/whatsapp";
 import MagneticButton from "../motion/MagneticButton";
+import {
+  ANALYTICS_EVENTS,
+  trackContactAction,
+} from "../../utils/analytics";
 
 export default function CTASection({
   title,
@@ -12,6 +17,9 @@ export default function CTASection({
   whatsappMessage,
   secondaryLabel,
   secondaryTo,
+  sourceSection,
+  pageType,
+  slug,
 }) {
   const { lang = "ar" } = useOutletContext();
   const resolvedTitle = title || (lang === "ar" ? "خطوتك الأولى تبدأ باستشارة واضحة" : "Your first step begins with a clear consultation");
@@ -50,6 +58,15 @@ export default function CTASection({
                   aria-label={`${resolvedPrimaryLabel} (${lang === "ar" ? "يفتح في نافذة جديدة" : "opens in a new window"})`}
                   className="ds-button ds-button-primary w-full sm:w-auto"
                   href={whatsappUrl}
+                  onClick={() =>
+                    sourceSection &&
+                    trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, {
+                      language: lang,
+                      page_type: pageType,
+                      slug,
+                      source_section: sourceSection,
+                    })
+                  }
                   rel="noopener noreferrer"
                   target="_blank"
                 >
