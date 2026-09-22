@@ -1508,19 +1508,6 @@ button:focus-visible {
   border-radius: 6px;
 }
 
-/* Intentional light island: shared booking form, including native options. */
-.booking-form {
-  color-scheme: light;
-  --color-surface-raised: var(--surface-muted);
-  --color-heading: var(--color-ink);
-  --color-text: var(--color-ink);
-  --color-text-muted: rgba(48, 32, 18, .74);
-  --color-border: rgba(48, 32, 18, .14);
-  --color-border-strong: rgba(48, 32, 18, .32);
-  --color-accent-strong: #80521e;
-  color: var(--color-text);
-}
-.booking-form select option { background: var(--surface-muted); color: var(--color-ink); }
 :root { color-scheme: dark; }
 
 /* One continuous doctor rail. It moves slowly by itself, pauses on hover/touch/focus,
