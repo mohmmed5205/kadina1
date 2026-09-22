@@ -16,9 +16,9 @@
 
   /* Dark Kadina surfaces: brand primitives stay immutable. */
   --surface-dark-primary: var(--color-dark-brown);
-  --surface-dark-secondary: #382719;
-  --surface-dark-elevated: #453121;
-  --surface-dark-footer: #21160d;
+  --surface-dark-secondary: var(--color-dark-brown);
+  --surface-dark-elevated: var(--color-dark-brown);
+  --surface-dark-footer: var(--color-dark-brown);
   --surface-light: var(--color-cream);
   --surface-muted: var(--color-warm-beige);
   --text-on-dark: var(--color-cream);
@@ -1508,26 +1508,25 @@ button:focus-visible {
   border-radius: 6px;
 }
 
-/* Intentional light island: shared booking form, including native options. */
-.booking-form {
-  color-scheme: light;
-  --color-surface-raised: var(--surface-muted);
-  --color-heading: var(--color-ink);
-  --color-text: var(--color-ink);
-  --color-text-muted: rgba(48, 32, 18, .74);
-  --color-border: rgba(48, 32, 18, .14);
-  --color-border-strong: rgba(48, 32, 18, .32);
-  --color-accent-strong: #80521e;
-  color: var(--color-text);
-}
-.booking-form select option { background: var(--surface-muted); color: var(--color-ink); }
 :root { color-scheme: dark; }
 
-/* Each equal-width group includes its trailing gap, so 50% is exactly one set. */
+/* One continuous doctor rail. It moves slowly by itself, pauses on hover/touch/focus,
+   and remains a native horizontal scroller so it can be dragged with a finger. */
 @keyframes doctors-marquee {
   to { transform: translateX(-50%); }
 }
-.doctors-marquee-track { animation: doctors-marquee 60s linear infinite; }
+.doctors-marquee {
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+}
+.doctors-marquee::-webkit-scrollbar { display: none; }
+.doctors-marquee-track {
+  animation: doctors-marquee 68s linear infinite;
+  will-change: transform;
+}
 [dir="rtl"] .doctors-marquee-track { animation-direction: reverse; }
 .doctors-marquee[data-paused="true"] .doctors-marquee-track,
 .doctors-marquee:focus-within .doctors-marquee-track,
@@ -1535,20 +1534,17 @@ button:focus-visible {
 @media (hover: hover) {
   .doctors-marquee:hover .doctors-marquee-track { animation-play-state: paused; }
 }
-/* Keyboard navigation switches to a native scroller so every focused card is visible. */
+/* Keyboard navigation switches to the native scroller so the focused doctor is fully visible. */
 .doctors-marquee:focus-within .doctors-marquee-track { transform: none !important; }
 .doctors-marquee:focus-within [data-marquee-copy] { display: none; }
-.doctors-marquee[data-static] { overflow-x: auto; }
 .doctors-marquee[data-static] .doctors-marquee-track { animation: none; transform: none; }
 [dir="rtl"] .doctors-marquee[data-static] { direction: rtl; }
 @media (prefers-reduced-motion: reduce) {
   .doctors-marquee-track { animation: none !important; transform: none !important; }
   .doctors-marquee [data-marquee-copy] { display: none; }
+  [dir="rtl"] .doctors-marquee { direction: rtl; }
 }
 
 .brand-logo-on-dark { filter: brightness(0) invert(1); }
-/* Native RTL scrolling starts at the first logical doctor when motion is disabled. */
+/* Native RTL scrolling starts at the first logical doctor when keyboard motion is paused. */
 [dir="rtl"] .doctors-marquee:focus-within { direction: rtl; }
-@media (prefers-reduced-motion: reduce) {
-  [dir="rtl"] .doctors-marquee { direction: rtl; }
-}
