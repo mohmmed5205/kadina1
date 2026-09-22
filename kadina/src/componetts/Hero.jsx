@@ -24,7 +24,7 @@ export default function Hero({ t, lang = "ar" }) {
 
   return (
     <>
-      <section className="home-hero relative min-h-[min(64svh,36rem)] overflow-hidden bg-[var(--color-surface-dark)] pt-[var(--nav-h)] lg:min-h-[min(82svh,46rem)]" id="home" ref={heroRef}>
+      <section className="home-hero relative min-h-[32rem] overflow-hidden bg-[var(--color-surface-dark)] pt-[var(--nav-h)] sm:min-h-[38rem] lg:min-h-[min(82svh,46rem)]" id="home" ref={heroRef}>
       <motion.img
         alt={t.hero.imageAlt}
         className="absolute inset-x-0 bottom-0 h-[calc(100%_-_var(--nav-h))] w-full object-cover object-[58%_center] sm:object-center"
@@ -34,8 +34,8 @@ export default function Hero({ t, lang = "ar" }) {
         src="/homeBG.webp"
         style={{ y: canParallax ? backgroundY : 0 }}
       />
-      <div className="absolute inset-x-0 bottom-0 h-[calc(100%_-_var(--nav-h))] bg-[linear-gradient(180deg,rgba(48,32,18,.28),rgba(48,32,18,.74))]" />
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,rgba(48,32,18,.55))]" />
+      <div className="absolute inset-x-0 bottom-0 h-[calc(100%_-_var(--nav-h))] bg-[linear-gradient(180deg,rgba(48,32,18,.06),rgba(48,32,18,.18)_58%,var(--color-surface)_100%)] lg:bg-[linear-gradient(180deg,rgba(48,32,18,.28),rgba(48,32,18,.74))]" />
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-[linear-gradient(180deg,transparent,var(--color-surface))] lg:h-1/2 lg:bg-[linear-gradient(180deg,transparent,rgba(48,32,18,.55))]" />
 
       <div className="pointer-events-none absolute inset-y-[20%] left-6 hidden items-center border-s border-[var(--color-border-on-dark)] ps-3 text-[.65rem] font-bold tracking-[.18em] text-[var(--color-text-on-dark-muted)] lg:flex">
         <span className="[writing-mode:vertical-rl]">KADINA MEDICAL CENTER</span>
@@ -44,7 +44,7 @@ export default function Hero({ t, lang = "ar" }) {
         <span className="[writing-mode:vertical-rl]">RIYADH · EST. 2013</span>
       </div>
 
-      <div className="ds-container relative z-10 flex min-h-[calc(min(64svh,36rem)-var(--nav-h))] items-center justify-center py-10 sm:py-12 lg:min-h-[calc(min(82svh,46rem)-var(--nav-h))] lg:py-14">
+      <div className="ds-container relative z-10 hidden min-h-[calc(min(82svh,46rem)-var(--nav-h))] items-center justify-center py-14 lg:flex">
         <motion.div animate="visible" className="mx-auto w-full max-w-4xl text-center" initial={shouldReduceMotion ? false : "hidden"} variants={heroSequence}>
           <motion.p className="text-xs font-black tracking-[.14em] text-[var(--color-accent)] sm:text-sm" variants={fadeUp}>{t.hero.eyebrow}</motion.p>
           <motion.h1 aria-label={t.hero.title} className="on-dark-heading mt-4 text-[clamp(2.25rem,6vw,4.25rem)] font-black leading-[1] tracking-[-.05em] drop-shadow-[0_4px_18px_rgba(48,32,18,.42)]" variants={staggerFast}>
