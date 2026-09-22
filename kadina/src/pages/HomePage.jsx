@@ -1,21 +1,15 @@
 import { lazy, Suspense } from "react";
 import { useOutletContext } from "react-router-dom";
 import Hero from "../componetts/Hero";
+import HomeNumbersSection from "../components/home/HomeNumbersSection";
 import HomeTrustSection from "../components/home/HomeTrustSection";
+import HomeDoctorsSection from "../components/home/HomeDoctorsSection";
 import HomeAboutSection from "../components/home/HomeAboutSection";
-import HomeBrandStatement from "../components/home/HomeBrandStatement";
+import HomeBookingSection from "../components/home/HomeBookingSection";
 import Seo from "../components/seo/Seo";
 import { createWebPageSchema } from "../components/seo/seoUtils";
 
-const HomeServicesSection = lazy(
-  () => import("../components/home/HomeServicesSection"),
-);
-const HomeDoctorsSection = lazy(
-  () => import("../components/home/HomeDoctorsSection"),
-);
-const HomeTechnologySection = lazy(
-  () => import("../components/home/HomeTechnologySection"),
-);
+const BeforeAfter = lazy(() => import("../componetts/BeforAfter"));
 
 const sectionFallback = (
   <div className="min-h-72 bg-[var(--color-surface)]" aria-hidden="true" />
@@ -45,26 +39,16 @@ export default function HomePage() {
         }
       />
 
-      {/* Symphony home structure:
-          Hero → About → Why → Brand statement → Services → Doctors → Technology → Footer */}
+      {/* Symphony-inspired home flow using Kadina content only:
+          visual hero → numbers → about/building → doctors → why → help/booking → before/after → footer */}
       <Hero t={t} lang={lang} />
-
+      <HomeNumbersSection />
       <HomeTrustSection />
-
+      <HomeDoctorsSection />
       <HomeAboutSection />
-
-      <HomeBrandStatement />
-
+      <HomeBookingSection />
       <Suspense fallback={sectionFallback}>
-        <HomeServicesSection />
-      </Suspense>
-
-      <Suspense fallback={sectionFallback}>
-        <HomeDoctorsSection />
-      </Suspense>
-
-      <Suspense fallback={sectionFallback}>
-        <HomeTechnologySection />
+        <BeforeAfter t={t} />
       </Suspense>
     </>
   );
