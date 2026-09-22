@@ -3,10 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import Hero from "../componetts/Hero";
 import HomeTrustSection from "../components/home/HomeTrustSection";
 import HomeAboutSection from "../components/home/HomeAboutSection";
-import HomeNumbersSection from "../components/home/HomeNumbersSection";
 import HomeBrandStatement from "../components/home/HomeBrandStatement";
-import HomeBookingSection from "../components/home/HomeBookingSection";
-import HomeContactSection from "../components/home/HomeContactSection";
 import Seo from "../components/seo/Seo";
 import { createWebPageSchema } from "../components/seo/seoUtils";
 
@@ -19,7 +16,6 @@ const HomeDoctorsSection = lazy(
 const HomeTechnologySection = lazy(
   () => import("../components/home/HomeTechnologySection"),
 );
-const BeforeAfter = lazy(() => import("../componetts/BeforAfter"));
 
 const sectionFallback = (
   <div className="min-h-72 bg-[var(--color-surface)]" aria-hidden="true" />
@@ -49,11 +45,14 @@ export default function HomePage() {
         }
       />
 
+      {/* Symphony home structure:
+          Hero → About → Why → Brand statement → Services → Doctors → Technology → Footer */}
       <Hero t={t} lang={lang} />
 
       <HomeTrustSection />
-      <HomeNumbersSection />
+
       <HomeAboutSection />
+
       <HomeBrandStatement />
 
       <Suspense fallback={sectionFallback}>
@@ -67,14 +66,6 @@ export default function HomePage() {
       <Suspense fallback={sectionFallback}>
         <HomeTechnologySection />
       </Suspense>
-
-      <HomeBookingSection />
-
-      <Suspense fallback={sectionFallback}>
-        <BeforeAfter t={t} />
-      </Suspense>
-
-      <HomeContactSection />
     </>
   );
 }
