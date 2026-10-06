@@ -131,7 +131,7 @@ export default function Navbar({
       }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: smoothEase }}
       className={clsx(
-        "fixed inset-x-0 top-0 z-[70] isolate w-full border-b border-[var(--color-border)] bg-[var(--color-glass)] pt-[env(safe-area-inset-top)] text-[var(--color-heading)] backdrop-blur-xl transition-[box-shadow] duration-300",
+        "fixed inset-x-0 top-0 z-[70] isolate w-full border-b border-[var(--color-border)] bg-[var(--color-glass)] pt-[env(safe-area-inset-top)] text-[var(--color-heading)] backdrop-blur-md transition-[box-shadow] duration-300",
         scrolled && "shadow-[0_10px_36px_rgba(48,32,18,.08)]",
       )}
     >
@@ -175,7 +175,7 @@ export default function Navbar({
                 className={clsx(
                   "relative whitespace-nowrap py-3 text-[0.8125rem] font-bold transition-colors duration-200 2xl:text-[0.875rem]",
                   isCurrentLink(link.to)
-                    ? "text-[var(--color-accent-strong)]"
+                    ? "text-[var(--color-heading)]"
                     : "text-[var(--color-text-muted)] hover:text-[var(--color-accent)]",
                 )}
                 to={link.to}
@@ -291,7 +291,7 @@ export default function Navbar({
                     className={clsx(
                       "flex min-h-14 items-center justify-between border-b border-[var(--color-border-on-dark)] py-3 text-xl font-black transition-colors sm:min-h-16 sm:text-2xl",
                       isCurrentLink(link.to)
-                        ? "text-[var(--color-accent-strong)]"
+                        ? "text-[var(--color-heading)]"
                         : "text-[var(--color-heading)] hover:text-[var(--color-accent-strong)]",
                     )}
                     to={link.to}

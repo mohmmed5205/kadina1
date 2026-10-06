@@ -175,7 +175,7 @@ export default function SolutionsPage() {
             <motion.div
               key={activeFilter.slug}
               animate="visible"
-              className="mt-8 grid grid-cols-1 gap-px border border-[var(--color-border)] bg-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3"
+              className="solutions-editorial-list"
               id="solutions-results"
               initial="hidden"
               variants={staggerContainer}
@@ -188,15 +188,9 @@ export default function SolutionsPage() {
                   to={`/solutions/${solution.slug}`}
                   variants={cardItem}
                 >
-                  <img
-                    alt=""
-                    aria-hidden="true"
-                    className="h-7 w-auto self-start object-contain"
-                    decoding="async"
-                    src="/logo.webp"
-                  />
 
-                  <h2 className="mt-7 line-clamp-3 text-[clamp(1.35rem,2.2vw,1.75rem)] font-black leading-[1.45] text-[var(--color-heading)]">
+
+                  <h2 className="solution-pain-title text-[clamp(1.35rem,2.2vw,1.75rem)] font-black leading-[1.45] text-[var(--color-heading)]">
                     {solution.painHeadline ||
                       solution.shortTitle ||
                       solution.title}

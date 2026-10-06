@@ -4,9 +4,9 @@ import Hero from "../componetts/Hero";
 import HomeTrustSection from "../components/home/HomeTrustSection";
 import HomeAboutSection from "../components/home/HomeAboutSection";
 import HomeNumbersSection from "../components/home/HomeNumbersSection";
-import HomeBrandStatement from "../components/home/HomeBrandStatement";
-import HomeBookingSection from "../components/home/HomeBookingSection";
+import "./HomePage.css";
 import HomeContactSection from "../components/home/HomeContactSection";
+import HomeBookingSection from "../components/home/HomeBookingSection";
 import Seo from "../components/seo/Seo";
 import { createWebPageSchema } from "../components/seo/seoUtils";
 
@@ -35,19 +35,20 @@ export default function HomePage() {
         })}
         title={lang === "ar" ? "مركز كادينا الطبي للجلدية والتجميل والليزر بالرياض" : "Kadina Medical Center for Dermatology, Aesthetics and Laser in Riyadh"}
       />
+      <div className="kadina-home">
       <Hero t={t} lang={lang} />
       <HomeNumbersSection />
       <HomeTrustSection />
-      <HomeBrandStatement />
       <Suspense fallback={sectionFallback}>
         <HomeDoctorsSection />
       </Suspense>
       <HomeAboutSection />
-      <HomeBookingSection />
       <Suspense fallback={sectionFallback}>
         <BeforeAfter t={t} />
       </Suspense>
+      <HomeBookingSection />
       <HomeContactSection />
+      </div>
     </>
   );
 }

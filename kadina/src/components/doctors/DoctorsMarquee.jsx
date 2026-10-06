@@ -1,9 +1,9 @@
-import { useId, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "../routing/LocalizedLink";
 
 function DoctorCard({ doctor, lang, duplicate }) {
   return (
-    <li className="w-[var(--doctor-width)] shrink-0">
+    <li className="w-[var(--doctor-width)] shrink-0" dir={lang === "ar" ? "rtl" : "ltr"}>
       <Link
         className="group block h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[var(--color-accent)]"
         tabIndex={duplicate ? -1 : undefined}
@@ -28,48 +28,87 @@ function DoctorCard({ doctor, lang, duplicate }) {
   );
 }
 
-// Shared from the existing home rail; the CSS loop remains the single implementation.
+// Native scrolling keeps touch, keyboard and automatic motion on the same track.
 export default function DoctorsMarquee({ doctors, lang, autoplay = true, leadingControl }) {
-  const id = useId();
-  const [paused, setPaused] = useState(false);
-  const [interacting, setInteracting] = useState(false);
-  const [hovered, setHovered] = useState(false);
+  const railRef = useRef(null);
+  const interaction = useRef({ hovered: false, focused: false, touching: false, until: 0 });
+  const drag = useRef(null);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame;
+    let last = 0;
+    let position = rail.scrollLeft;
+    const tick = now => {
+      const state = interaction.current;
+      const paused = state.hovered || state.focused || state.touching || now < state.until;
+      const distance = rail.querySelector("ul")?.getBoundingClientRect().width || 0;
+      if (autoplay && !reduced.matches && !paused && distance > 0) {
+        position += Math.min(now - (last || now), 50) * 0.016;
+        if (position >= distance) position -= distance;
+        rail.scrollLeft = position;
+      } else position = rail.scrollLeft;
+      last = now;
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [autoplay, doctors.length]);
+
+  const release = () => {
+    interaction.current.touching = false;
+    interaction.current.until = performance.now() + 1200;
+    drag.current = null;
+  };
+
   return (
     <>
-      {autoplay && <div className="ds-container">
-        <div className={leadingControl ? "mt-6 flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-4" : "flex justify-end"}>
-          {leadingControl}
-          <button aria-controls={id} aria-pressed={paused} className="min-h-11 px-3 text-sm font-bold text-[var(--color-accent)] motion-reduce:hidden" onClick={() => setPaused(value => !value)} type="button">
-            {paused ? (lang === "ar" ? "استئناف الحركة" : "Resume motion") : (lang === "ar" ? "إيقاف الحركة" : "Pause motion")}
-          </button>
-        </div>
-      </div>}
+      {leadingControl && <div className="ds-container">{leadingControl}</div>}
       <div
         aria-label={lang === "ar" ? "أطباء كادينا" : "Kadina doctors"}
-        className="doctors-marquee mt-7 overflow-x-hidden focus-within:overflow-x-auto motion-reduce:overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [--doctor-gap:1rem] [--doctor-width:62vw] sm:[--doctor-gap:1.5rem] sm:[--doctor-width:36vw] lg:[--doctor-width:23vw] 2xl:[--doctor-width:20rem]"
-        dir="ltr"
-        data-paused={paused || interacting || hovered}
+        className="kadina-doctor-rail"
         data-static={!autoplay || undefined}
-        onFocus={event => {
-          event.target.closest("a")?.scrollIntoView({
-            behavior: "instant",
-            block: "nearest",
-            inline: "nearest",
-          });
-        }}
-        onBlur={event => {
-          if (!event.currentTarget.contains(event.relatedTarget)) event.currentTarget.scrollLeft = 0;
-        }}
-        onPointerEnter={event => { if (event.pointerType === "mouse") setHovered(true); }}
-        onPointerDown={() => setInteracting(true)}
-        onPointerUp={() => setInteracting(false)}
-        onPointerCancel={() => setInteracting(false)}
-        onPointerLeave={() => { setInteracting(false); setHovered(false); }}
+        data-lenis-prevent
+        dir="ltr"
+        ref={railRef}
         role="region"
+        tabIndex={0}
+        onFocus={() => { interaction.current.focused = true; }}
+        onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) interaction.current.focused = false; }}
+        onPointerEnter={event => { if (event.pointerType === "mouse") interaction.current.hovered = true; }}
+        onPointerLeave={event => {
+          interaction.current.hovered = false;
+          if (event.pointerType === "mouse" && !event.currentTarget.hasPointerCapture(event.pointerId)) release();
+        }}
+        onPointerDown={event => {
+          interaction.current.touching = true;
+          if (event.pointerType === "mouse") drag.current = { x: event.clientX, scroll: event.currentTarget.scrollLeft, moved: false };
+        }}
+        onPointerMove={event => {
+          if (!drag.current) return;
+          const delta = event.clientX - drag.current.x;
+          if (Math.abs(delta) > 5) {
+            drag.current.moved = true;
+            event.currentTarget.setPointerCapture(event.pointerId);
+            event.currentTarget.scrollLeft = drag.current.scroll - delta;
+          }
+        }}
+        onClickCapture={event => {
+          if (interaction.current.dragged) { event.preventDefault(); interaction.current.dragged = false; }
+        }}
+        onPointerUp={() => { interaction.current.dragged = drag.current?.moved; release(); }}
+        onPointerCancel={event => { if (event.pointerType !== "touch") release(); }}
+        onLostPointerCapture={event => { if (event.pointerType !== "touch") release(); }}
+        onDragStart={event => event.preventDefault()}
+        onWheel={() => { interaction.current.until = performance.now() + 1200; }}
+        onTouchStart={() => { interaction.current.touching = true; }}
+        onTouchEnd={release}
+        onTouchCancel={release}
       >
-        <div className="doctors-marquee-track flex w-max" dir="ltr" id={id}>
+        <div className="kadina-doctor-track">
           {(autoplay ? [false, true] : [false]).map(duplicate => (
-            <ul aria-hidden={duplicate || undefined} className="flex shrink-0 gap-[var(--doctor-gap)] pe-[var(--doctor-gap)]" data-marquee-copy={duplicate ? "true" : undefined} dir={lang === "ar" ? "rtl" : "ltr"} key={String(duplicate)}>
+            <ul aria-hidden={duplicate || undefined} className="kadina-doctor-group" data-marquee-copy={duplicate ? "true" : undefined} dir="ltr" key={String(duplicate)}>
               {doctors.map(doctor => <DoctorCard doctor={doctor} duplicate={duplicate} key={doctor.slug} lang={lang} />)}
             </ul>
           ))}

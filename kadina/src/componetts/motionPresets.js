@@ -37,11 +37,11 @@ export const softScale = {
 };
 
 export const imageReveal = {
-  hidden: { opacity: 0, scale: 1.04 },
+  hidden: { opacity: 0, scale: 1.02 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.75, ease: smoothEase },
+    transition: { duration: 0.7, ease: smoothEase },
   },
 };
 

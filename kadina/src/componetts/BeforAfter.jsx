@@ -1,9 +1,8 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { Navigation, Pagination } from "swiper/modules";
+import { A11y, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
 import { fadeUp, viewportOnce } from "./motionPresets";
 import RevealImage from "../components/motion/RevealImage";
 
@@ -40,23 +39,24 @@ export default function BeforeAfter({ t }) {
         >
           <Swiper
             key={`before-after-${lang}`}
-            modules={[Pagination, Navigation]}
+            modules={[A11y, Navigation]}
+            a11y={{ prevSlideMessage: lang === "ar" ? "الحالة السابقة" : "Previous case", nextSlideMessage: lang === "ar" ? "الحالة التالية" : "Next case" }}
             dir={t.dir}
             centeredSlides={false}
             loop={false}
             rewind
             slidesPerGroup={1}
             speed={shouldReduceMotion ? 0 : 650}
-            pagination={{ clickable: true }}
+            pagination={false}
             navigation
             spaceBetween={12}
             slidesPerView={1}
             breakpoints={{
-              640: { slidesPerView: 1.35, spaceBetween: 20 },
-              1024: { slidesPerView: 2.5, spaceBetween: 28 },
-              1440: { slidesPerView: 3.1, spaceBetween: 32 },
+              640: { slidesPerView: 1, spaceBetween: 20 },
+              1024: { slidesPerView: 2, spaceBetween: 28 },
+              1440: { slidesPerView: 2, spaceBetween: 32 },
             }}
-            className="kadina-swiper before-after-swiper !overflow-visible"
+            className="kadina-swiper before-after-swiper"
           >
             {data.cases.map((item, index) => (
               <SwiperSlide key={`${item.image}-${index}`}>
@@ -64,11 +64,11 @@ export default function BeforeAfter({ t }) {
                   whileHover={shouldReduceMotion ? undefined : { y: -3 }}
                   className="group h-full"
                 >
-                  <RevealImage className="aspect-[5/6] w-full bg-[var(--color-surface-muted)]" rtl={t.dir === "rtl"}>
+                  <RevealImage className="w-full bg-[var(--color-surface-muted)]" rtl={t.dir === "rtl"}>
                     <img
                       src={item.image}
                       alt={`${item.title}${item.doctor ? ` - ${item.doctor}` : ""}`}
-                      className="h-full w-full object-contain"
+                      className="h-auto w-full object-contain"
                       decoding="async"
                       height="1440"
                       loading="lazy"

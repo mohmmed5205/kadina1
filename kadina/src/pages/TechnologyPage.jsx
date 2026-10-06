@@ -79,7 +79,7 @@ export default function TechnologyPage() {
   };
 
   return (
-    <div>
+    <div className="technology-page">
       <Seo
         canonicalPath="/technology"
         description={en ? "Explore Kadina's 13+ devices and technologies for hair removal, skin renewal, care, lifting, contouring and hair treatment." : "تعرّف على أجهزة وتقنيات كادينا الـ13 لإزالة الشعر وتجديد البشرة والعناية والشد والنحت وعلاج الشعر."}

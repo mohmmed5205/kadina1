@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaInstagram, FaSnapchatGhost, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import Link from "../components/routing/LocalizedLink";
 import { getPrimaryNavigation } from "../data/navigation";
@@ -7,6 +7,8 @@ import { getContactAddress, getContactItems } from "../data/contact";
 import { createWhatsappUrl } from "../utils/whatsapp";
 import { fadeUp, viewportOnce } from "./motionPresets";
 import { ANALYTICS_EVENTS, SOURCE_SECTIONS, getPageType, trackContactAction } from "../utils/analytics";
+
+const socialIcons = { instagram: FaInstagram, snapchat: FaSnapchatGhost, tiktok: FaTiktok };
 
 const serviceLinks = [
   { to: "/services/dermatology", ar: "الجلدية", en: "Dermatology" },
@@ -27,16 +29,22 @@ export default function Bottom({ t, lang }) {
   return (
     <footer className="relative overflow-hidden border-t border-[var(--color-border-on-dark)] bg-[var(--surface-dark-footer)] text-[var(--color-text-on-dark)]" id="footer">
       <motion.div className="ds-container relative py-9 lg:py-12" initial={shouldReduceMotion ? false : "hidden"} variants={fadeUp} viewport={viewportOnce} whileInView="visible">
-        <div className="grid grid-cols-2 gap-7 lg:grid-cols-[1.15fr_.75fr_.85fr_1.15fr] lg:gap-10">
-          <div className="col-span-2 sm:col-span-1">
+        <div className="footer-columns grid grid-cols-2 gap-7 lg:grid-cols-[1.15fr_.75fr_.85fr_1.15fr] lg:gap-10">
+          <div className="footer-brand col-span-2 sm:col-span-1">
             <Link aria-label={t.center.name} className="inline-flex" to="/">
               <img alt={t.center.name} className="h-14 w-auto brightness-0 invert" decoding="async" height="284" loading="lazy" src="/kadina-logo3.webp" width="284" />
             </Link>
             <p className="mt-6 max-w-xs text-base font-bold leading-8 text-[var(--color-text-on-dark-muted)]">{t.footer.note}</p>
-            <a aria-label={`${t.contact.whatsappCta} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`} className="ds-button ds-button-primary mt-7" href={whatsappUrl} onClick={() => trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, { language: lang, page_type: getPageType(location.pathname), source_section: SOURCE_SECTIONS.FOOTER })} rel="noopener noreferrer" target="_blank">
+            <a aria-label={`${t.contact.whatsappCta} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`} className="footer-whatsapp ds-button ds-button-primary mt-7" href={whatsappUrl} onClick={() => trackContactAction(ANALYTICS_EVENTS.WHATSAPP_CLICK, { language: lang, page_type: getPageType(location.pathname), source_section: SOURCE_SECTIONS.FOOTER })} rel="noopener noreferrer" target="_blank">
               <FaWhatsapp aria-hidden="true" />
               <span>{t.contact.whatsappCta}</span>
             </a>
+            <div className="footer-socials">
+              {t.contact.socials.map(social => {
+                const Icon = socialIcons[social.key];
+                return <a aria-label={`${social.label} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`} href={social.url} key={social.key} rel="noopener noreferrer" target="_blank">{Icon ? <Icon aria-hidden="true" /> : social.label}</a>;
+              })}
+            </div>
           </div>
 
           <nav aria-label={en ? "Footer navigation" : "روابط تذييل الموقع"}>
@@ -61,9 +69,7 @@ export default function Bottom({ t, lang }) {
               <a className="flex min-h-11 items-center break-words hover:text-[var(--color-accent)]" href={contactItems[2].href}>{contactItems[2].value}</a>
               <p>{address}</p>
             </div>
-            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
-              {t.contact.socials.map((social) => <a aria-label={`${social.label} (${en ? "opens in a new window" : "يفتح في نافذة جديدة"})`} className="inline-flex min-h-11 items-center border-b border-[var(--color-border-on-dark)] text-sm font-bold text-[var(--color-text-on-dark-muted)] hover:text-[var(--color-accent)]" href={social.url} key={social.key} rel="noopener noreferrer" target="_blank">{social.label}</a>)}
-            </div>
+
           </div>
         </div>
 

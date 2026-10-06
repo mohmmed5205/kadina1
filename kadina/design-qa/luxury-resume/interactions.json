@@ -1,0 +1,78 @@
+{
+  "checks": [
+    {
+      "name": "mock error visible",
+      "pass": true
+    },
+    {
+      "name": "values retained on error",
+      "pass": true
+    },
+    {
+      "name": "mock retry success",
+      "pass": true
+    },
+    {
+      "name": "all booking requests intercepted",
+      "pass": true
+    },
+    {
+      "name": "ar beforeAfter next",
+      "pass": true
+    },
+    {
+      "name": "ar beforeAfter previous",
+      "pass": true
+    },
+    {
+      "name": "ar beforeAfter finger swipe",
+      "pass": true
+    },
+    {
+      "name": "ar images not mirrored",
+      "pass": true
+    },
+    {
+      "name": "touch holds marquee",
+      "pass": true
+    },
+    {
+      "name": "ar marquee finger drag",
+      "pass": true
+    },
+    {
+      "name": "ar reduced motion",
+      "pass": true
+    },
+    {
+      "name": "en beforeAfter next",
+      "pass": true
+    },
+    {
+      "name": "en beforeAfter previous",
+      "pass": true
+    },
+    {
+      "name": "en beforeAfter finger swipe",
+      "pass": true
+    },
+    {
+      "name": "en images not mirrored",
+      "pass": true
+    },
+    {
+      "name": "touch holds marquee",
+      "pass": true
+    },
+    {
+      "name": "en marquee finger drag",
+      "pass": true
+    },
+    {
+      "name": "en reduced motion",
+      "pass": true
+    }
+  ],
+  "intercepted": 2,
+  "realBookingRequests": 0
+}

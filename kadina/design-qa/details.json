@@ -1,0 +1,98 @@
+[
+  {
+    "lang": "ar",
+    "path": "doctors/mohammed-alhaddab",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "path": "doctors/mohammed-alhaddab",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "path": "technology/ultraformer-iii",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "path": "technology/ultraformer-iii",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "path": "services/dermatology",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "path": "services/dermatology",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "path": "solutions/hair-loss",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "lang": "ar",
+    "path": "solutions/hair-loss",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "path": "doctors/mohammed-alhaddab",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "path": "doctors/mohammed-alhaddab",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "path": "technology/ultraformer-iii",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "path": "technology/ultraformer-iii",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "path": "services/dermatology",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "path": "services/dermatology",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "path": "solutions/hair-loss",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "lang": "en",
+    "path": "solutions/hair-loss",
+    "width": 1440,
+    "overflow": false
+  }
+]

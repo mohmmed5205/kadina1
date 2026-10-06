@@ -87,7 +87,7 @@ export default function FaqPage() {
         variant="utility"
       />
 
-      <section className="ds-section bg-[var(--color-surface)]">
+      <section className="ds-section kadina-pattern pattern-quiet bg-[var(--color-surface)]">
         <div className="ds-container grid gap-12 lg:grid-cols-[minmax(0,.75fr)_minmax(0,1.25fr)] lg:gap-20">
           <motion.div
             className="lg:sticky lg:top-28 lg:self-start"

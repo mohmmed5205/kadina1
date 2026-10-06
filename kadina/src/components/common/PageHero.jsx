@@ -3,6 +3,10 @@ import { useLocation } from "react-router-dom";
 import Breadcrumbs from "./Breadcrumbs";
 import { staggerFast, textReveal } from "../../componetts/motionPresets";
 
+export function PageHeroSurface({ children, className = "", ...props }) {
+  return <section {...props} className={`page-hero kadina-brand-surface ${className}`}>{children}</section>;
+}
+
 export default function PageHero({
   children,
   className = "",
@@ -34,7 +38,7 @@ export default function PageHero({
     : "";
 
   return (
-    <section className={`page-hero ${variantClassName} ${detailDensityClassName} ${className}`}>
+    <PageHeroSurface className={`${variantClassName} ${detailDensityClassName} ${className}`}>
       <div className="pointer-events-none absolute inset-x-[var(--page-gutter)] bottom-0 h-px bg-[var(--color-border-strong)]" />
       <motion.div
         animate="visible"
@@ -91,6 +95,6 @@ export default function PageHero({
           )}
         </div>
       </motion.div>
-    </section>
+    </PageHeroSurface>
   );
 }
