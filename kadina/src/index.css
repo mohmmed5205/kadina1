@@ -5,26 +5,28 @@
 /* ─── Tokens ─────────────────────────────────────────────── */
 :root {
   /* Core brand palette */
-  --color-cream: #fffaf2;
-  --color-cream-raised: #fffdf8;
-  --color-warm-beige: #f1e7d8;
-  --color-warm-beige-strong: #e6d3ba;
-  --color-dark-brown: #302012;
-  --color-brown: #573a21;
-  --color-gold: #d6a35b;
-  --color-gold-strong: #b9823b;
+  --color-cream: #FAF7F2;
+  --color-cream-raised: #FFFDFC;
+  --color-warm-beige: #F4EBDD;
+  --color-warm-beige-strong: #E3C79B;
+  --color-soft-sand: #EDE0CF;
+  --color-deep-brown: #2A1C14;
+  --color-dark-brown: #34261D;
+  --color-brown: #78695E;
+  --color-gold: #C99A55;
+  --color-gold-strong: #89612E;
 
-  /* Dark Kadina surfaces: brand primitives stay immutable. */
-  --surface-dark-primary: var(--color-dark-brown);
-  --surface-dark-secondary: var(--color-dark-brown);
-  --surface-dark-elevated: var(--color-dark-brown);
-  --surface-dark-footer: var(--color-dark-brown);
+  /* Legacy surface aliases resolve to the Light Kadina palette. */
+  --surface-dark-primary: var(--color-cream);
+  --surface-dark-secondary: var(--color-warm-beige);
+  --surface-dark-elevated: var(--color-cream-raised);
+  --surface-dark-footer: #3A2A20;
   --surface-light: var(--color-cream);
   --surface-muted: var(--color-warm-beige);
-  --text-on-dark: var(--color-cream);
-  --text-on-dark-muted: rgba(255, 250, 242, 0.74);
+  --text-on-dark: var(--color-dark-brown);
+  --text-on-dark-muted: var(--color-brown);
   --accent-gold: var(--color-gold);
-  --border-on-dark: rgba(255, 250, 242, 0.14);
+  --border-on-dark: rgba(52, 38, 29, 0.12);
   --color-surface: var(--surface-dark-primary);
   --color-surface-raised: var(--surface-dark-elevated);
   --color-surface-muted: var(--surface-dark-secondary);
@@ -34,41 +36,41 @@
   --color-text-muted: var(--text-on-dark-muted);
   --color-text-on-dark: var(--text-on-dark);
   --color-text-on-dark-muted: var(--text-on-dark-muted);
-  --color-accent: var(--accent-gold);
-  --color-accent-strong: var(--accent-gold);
+  --color-accent: var(--color-gold-strong);
+  --color-accent-strong: var(--color-gold-strong);
   --color-border: var(--border-on-dark);
-  --color-border-strong: rgba(255, 250, 242, 0.24);
+  --color-border-strong: rgba(52, 38, 29, 0.20);
   --color-border-on-dark: var(--border-on-dark);
-  --color-glass: rgba(48, 32, 18, 0.96);
+  --color-glass: rgba(250, 247, 242, 0.92);
   --color-accent-hover: #e3b777;
   --color-accent-wash: rgba(214, 163, 91, 0.1);
   --color-ink: var(--color-dark-brown);
 
   /* Layout and rhythm */
-  --container-max: 76rem;
+  --container-max: 78rem;
   --container-reading: 44rem;
   --page-gutter: clamp(1rem, 3vw, 2rem);
-  --section-space: clamp(3.5rem, 6vw, 5.5rem);
+  --section-space: clamp(4.5rem, 7vw, 6.5rem);
   --section-space-compact: clamp(2.5rem, 4vw, 4rem);
   --card-padding: clamp(1.25rem, 3vw, 2rem);
 
   /* Shape and elevation */
-  --radius-sm: 0.75rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 1.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.125rem;
   --radius-full: 9999px;
-  --shadow-card: 0 12px 30px rgba(48, 32, 18, 0.07);
-  --shadow-floating: 0 18px 48px rgba(48, 32, 18, 0.11);
+  --shadow-card: none;
+  --shadow-floating: 0 12px 40px rgba(52, 38, 29, 0.06);
 
   /* Fluid typography */
   --text-eyebrow: 0.75rem;
   --text-body: 1rem;
   --text-body-lg: clamp(0.9375rem, 1.25vw, 1.0625rem);
   --text-heading-sm: clamp(1.375rem, 3vw, 1.75rem);
-  --text-heading: clamp(1.625rem, 3.5vw, 2.25rem);
-  --text-display: clamp(1.875rem, 4vw, 3.25rem);
-  --leading-heading: 1.12;
+  --text-heading: clamp(1.875rem, 3.5vw, 3rem);
+  --text-display: clamp(2.125rem, 4vw, 3.5rem);
+  --leading-heading: 1.3;
   --tracking-heading: -0.03em;
 
   /* Compatibility aliases */
@@ -79,7 +81,7 @@
   --gold: var(--color-gold);
   --gold-dark: var(--color-accent);
   --white-glass: var(--color-glass);
-  --nav-h: 4rem;
+  --nav-h: 4.75rem;
   --section-padding: var(--section-space) 0;
   --section-padding-sm: var(--section-space-compact) 0;
 }
@@ -613,7 +615,7 @@
 
 @media (max-width: 639px) {
   :root {
-    --section-space: 3rem;
+    --section-space: 3.75rem;
     --section-space-compact: 2.25rem;
   }
 
@@ -1508,43 +1510,80 @@ button:focus-visible {
   border-radius: 6px;
 }
 
-:root { color-scheme: dark; }
+/* Intentional light island: shared booking form, including native options. */
+.booking-form {
+  color-scheme: light;
+  --color-surface-raised: var(--surface-muted);
+  --color-heading: var(--color-ink);
+  --color-text: var(--color-ink);
+  --color-text-muted: rgba(48, 32, 18, .74);
+  --color-border: rgba(48, 32, 18, .14);
+  --color-border-strong: rgba(48, 32, 18, .32);
+  --color-accent-strong: #80521e;
+  color: var(--color-text);
+}
+.booking-form select option { background: var(--surface-muted); color: var(--color-ink); }
+:root { color-scheme: light; }
 
-/* One continuous doctor rail. It moves slowly by itself, pauses on hover/touch/focus,
-   and remains a native horizontal scroller so it can be dragged with a finger. */
-@keyframes doctors-marquee {
-  to { transform: translateX(-50%); }
-}
-.doctors-marquee {
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scrollbar-width: none;
-  touch-action: pan-x;
-  -webkit-overflow-scrolling: touch;
-}
-.doctors-marquee::-webkit-scrollbar { display: none; }
-.doctors-marquee-track {
-  animation: doctors-marquee 68s linear infinite;
-  will-change: transform;
-}
-[dir="rtl"] .doctors-marquee-track { animation-direction: reverse; }
-.doctors-marquee[data-paused="true"] .doctors-marquee-track,
-.doctors-marquee:focus-within .doctors-marquee-track,
-.doctors-marquee:active .doctors-marquee-track { animation-play-state: paused; }
-@media (hover: hover) {
-  .doctors-marquee:hover .doctors-marquee-track { animation-play-state: paused; }
-}
-/* Keyboard navigation switches to the native scroller so the focused doctor is fully visible. */
-.doctors-marquee:focus-within .doctors-marquee-track { transform: none !important; }
-.doctors-marquee:focus-within [data-marquee-copy] { display: none; }
-.doctors-marquee[data-static] .doctors-marquee-track { animation: none; transform: none; }
-[dir="rtl"] .doctors-marquee[data-static] { direction: rtl; }
-@media (prefers-reduced-motion: reduce) {
-  .doctors-marquee-track { animation: none !important; transform: none !important; }
-  .doctors-marquee [data-marquee-copy] { display: none; }
-  [dir="rtl"] .doctors-marquee { direction: rtl; }
-}
+.brand-logo-on-dark { filter: none; }
 
-.brand-logo-on-dark { filter: brightness(0) invert(1); }
-/* Native RTL scrolling starts at the first logical doctor when keyboard motion is paused. */
-[dir="rtl"] .doctors-marquee:focus-within { direction: rtl; }
+/* One native scroll track for automatic movement and direct interaction. */
+.kadina-doctor-rail { --doctor-width: 260px; --doctor-gap: 20px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; margin-top: 40px; cursor: grab; }
+.kadina-doctor-rail::-webkit-scrollbar { display: none; }
+.kadina-doctor-rail:active { cursor: grabbing; }
+.kadina-doctor-track { display: flex; width: max-content; }
+.kadina-doctor-group { display: flex; flex-shrink: 0; gap: var(--doctor-gap); padding-inline-end: var(--doctor-gap); }
+.kadina-doctor-group li > a > div:first-child { border-radius: 14px; }
+.kadina-doctor-group li > a > div:last-child { text-align: center; border: 0; }
+.kadina-doctor-rail:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+@media (max-width: 767px) { .kadina-doctor-rail { --doctor-width: 220px; --doctor-gap: 14px; margin-top: 30px; } }
+@media (prefers-reduced-motion: reduce) { .kadina-doctor-rail [data-marquee-copy] { display: none; } }
+
+/* Light Kadina shared components. The only dark region is the closing footer. */
+.ds-button { border-radius: 8px; min-height: 52px; font-weight: 700; }
+.ds-button-primary { background: var(--color-dark-brown); color: var(--color-cream); }
+.ds-button-primary:hover { background: #513D2D; color: var(--color-cream); }
+.ds-button-accent { background: var(--color-gold); color: var(--color-dark-brown); }
+.ds-button-secondary { border-color: var(--color-border-strong); }
+header { --nav-h: 76px; }
+header img.brand-logo-on-dark { width: 100px; height: 76px; object-fit: contain; }
+header button[aria-controls="mobile-navigation"] { border-radius: 50%; }
+.page-hero, .page-hero-editorial, .page-hero-detail, .page-hero-utility { min-height: 0; background: var(--color-surface-muted); padding-block: calc(var(--nav-h) + 48px) 48px; }
+.page-hero .page-hero-title { font-size: var(--text-display); font-weight: 700; line-height: 1.25; }
+.page-hero .page-hero-description { font-size: 17px; line-height: 1.85; }
+.page-hero-detail-visual { max-height: 260px; }
+.doctor-detail-hero .page-hero-detail-visual { max-height: 380px; max-width: 304px; }
+.kadina-pattern { position: relative; isolation: isolate; }
+.kadina-pattern::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url('/kadina-pattern.svg') repeat; background-size: 560px 560px; opacity: .045; }
+.pattern-quiet::before { opacity: .025; }
+.kadina-watermark::before { background: url('/logo.webp') no-repeat 85% 50%; background-size: 220px; opacity: .035; }
+.booking-form { --color-surface-raised: #FFFDFC; background: var(--color-cream-raised); border: 1px solid var(--color-border); border-radius: 14px; box-shadow: none; }
+.booking-form::before { display: none; }
+.booking-form input:not([name="website"]), .booking-form select, .booking-form textarea { min-height: 52px; background: #FFFDFC; border: 1px solid var(--color-border-strong); border-radius: 8px; padding-inline: 14px; font-weight: 500; }
+.booking-form textarea { min-height: 108px; }
+.booking-form input:focus, .booking-form select:focus, .booking-form textarea:focus { outline: 2px solid var(--color-accent-strong); outline-offset: 2px; border-color: var(--color-gold); }
+.booking-form select option { background: #FFFDFC; }
+.booking-form label { font-weight: 700; }
+.kadina-doctor-group li > a > div:first-child { background: var(--color-warm-beige); }
+.kadina-doctor-group li > a > div:last-child::after { content: ''; display: block; width: 36px; height: 1px; background: var(--color-gold); margin: 16px auto 0; }
+.cta-panel { background: var(--color-surface-muted); border-color: var(--color-border); }
+.section-title-heading { font-weight: 700; }
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] .section-title-eyebrow, [dir="rtl"] .page-hero-eyebrow { letter-spacing: 0; line-height: 1.45; }
+[dir="rtl"] .home-hero-copy h1 { line-height: 1.3; }
+:focus-visible, a:focus-visible, button:focus-visible { outline-color: var(--color-accent-strong); }
+#footer { --color-accent: var(--color-gold); --color-text-on-dark: #FAF7F2; --color-text-on-dark-muted: #E8DCCB; --color-border-on-dark: rgba(250,247,242,.18); background: #3A2A20; }
+#footer > .ds-container { padding-block: 72px 32px; }
+#footer .ds-button-primary { background: var(--color-gold); color: var(--color-dark-brown); }
+#footer .footer-brand img { height: 84px; }
+.footer-socials { display: flex; gap: 12px; margin-top: 22px; }
+.footer-socials a { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--color-border-on-dark); border-radius: 8px; font-size: 20px; }
+@media (max-width: 767px) {
+ .kadina-pattern::before { background-size: 380px 380px; }
+ .kadina-watermark::before { background-size: 160px; }
+ .page-hero, .page-hero-editorial, .page-hero-detail, .page-hero-utility { padding-block: calc(var(--nav-h) + 32px) 36px; }
+ .page-hero .page-hero-title { font-size: 34px; }
+ .page-hero .page-hero-description { font-size: 16px; }
+ #footer .footer-columns { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+.doctor-profile-hero.page-hero { padding-block: 40px; }
+.doctor-profile-hero .page-hero-title, .device-profile-hero h1 { font-size: var(--text-display); font-weight: 700; }

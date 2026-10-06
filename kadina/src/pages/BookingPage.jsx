@@ -30,7 +30,7 @@ export default function BookingPage() {
         variant="utility"
       />
 
-      <section className="ds-section bg-[var(--color-surface-muted)]">
+      <section className="ds-section kadina-pattern bg-[var(--color-surface-muted)]">
         <div className="ds-container grid gap-8 lg:grid-cols-[minmax(0,.68fr)_minmax(0,1.32fr)] lg:gap-14">
           <div className="max-w-xl lg:pt-8">
             <p className="section-title-eyebrow">{en ? "Appointment request" : "طلب موعد"}</p>

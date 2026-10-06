@@ -1,3 +1,4 @@
+import { PageHeroSurface } from "../common/PageHero";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocation, useOutletContext } from "react-router-dom";
 import Link from "../routing/LocalizedLink";
@@ -167,7 +168,7 @@ export default function DevicePageTemplate({ device: rawDevice }) {
         title={`${device.arabicName} — ${device.englishName || (en ? "Kadina Devices" : "أجهزة كادينا")}`}
       />
 
-      <section className="relative overflow-hidden bg-[var(--color-surface-muted)] pb-14 pt-24 sm:pb-16 sm:pt-28 lg:pb-12 lg:pt-28">
+      <PageHeroSurface className="device-profile-hero">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_12%,rgba(214,163,91,.19),transparent_38%)]" />
         <motion.div
           animate="visible"
@@ -262,7 +263,7 @@ export default function DevicePageTemplate({ device: rawDevice }) {
             </motion.div>
           </div>
         </motion.div>
-      </section>
+      </PageHeroSurface>
 
       {device.intro ? (
         <motion.section className="ds-section-compact bg-[var(--color-surface)]" initial="hidden" variants={fadeUp} viewport={viewportOnce} whileInView="visible">

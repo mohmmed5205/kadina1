@@ -92,11 +92,11 @@ export default function DoctorsPage() {
             : "تعرّف على فريق كادينا الاستشاري واختر الطبيب الأقرب لاحتياجك."
         }
         variant="editorial"
-        className="!min-h-[300px] !bg-[var(--color-surface-muted)] md:!min-h-[330px]"
+        className="doctors-page-hero"
       />
 
       {/* Team */}
-      <section className="bg-[var(--color-dark-brown)] py-12 sm:py-16 lg:py-20">
+      <section className="bg-[var(--color-surface-muted)] py-12 sm:py-16 lg:py-20">
         <div className="ds-container !max-w-[76rem]">
           <motion.header
             className="mb-8 flex flex-col gap-4 sm:mb-10 lg:mb-12 lg:flex-row lg:items-end lg:justify-between"
@@ -106,11 +106,11 @@ export default function DoctorsPage() {
             whileInView="visible"
           >
             <div>
-              <p className="text-xs font-black tracking-[0.12em] text-[var(--color-gold)]">
+              <p className="text-xs font-black tracking-[0.12em] text-[var(--color-accent-strong)]">
                 {en ? "CONSULTANT TEAM" : "فريق الاستشاريين"}
               </p>
 
-              <h2 className="mt-3 max-w-2xl text-[clamp(1.75rem,3vw,2.75rem)] font-black leading-[1.2] text-[var(--color-cream)]">
+              <h2 className="mt-3 max-w-2xl text-[clamp(1.75rem,3vw,2.75rem)] font-black leading-[1.2] text-[var(--color-heading)]">
                 {en ? "Meet Kadina's Doctors" : "تعرّف على أطباء كادينا"}
               </h2>
             </div>
@@ -154,7 +154,7 @@ export default function DoctorsPage() {
                   className={`min-h-11 shrink-0 snap-start rounded-full border px-5 py-2 text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-gold)] ${
                     active
                       ? "border-[var(--color-gold)] bg-[var(--color-gold)] text-[var(--color-dark-brown)]"
-                      : "border-[var(--color-border-on-dark)] bg-[var(--color-surface-raised)] text-[var(--color-text-on-dark-muted)] hover:border-[rgba(214,163,91,.55)] hover:text-[var(--color-cream)]"
+                      : "border-[var(--color-border-on-dark)] bg-[var(--color-surface-raised)] text-[var(--color-text-on-dark-muted)] hover:border-[rgba(214,163,91,.55)] hover:text-[var(--color-heading)]"
                   }`}
                   key={category.to}
                   onClick={() => {
@@ -186,14 +186,14 @@ export default function DoctorsPage() {
 
       {/* CTA */}
       <motion.section
-        className="border-t border-[var(--color-border-on-dark)] bg-[var(--color-dark-brown)] py-12 sm:py-14"
+        className="border-t border-[var(--color-border-on-dark)] bg-[var(--color-surface-muted)] py-12 sm:py-14"
         initial="hidden"
         variants={fadeUp}
         viewport={viewportOnce}
         whileInView="visible"
       >
         <div className="ds-container text-center">
-          <h2 className="text-2xl font-black text-[var(--color-cream)] sm:text-3xl">
+          <h2 className="text-2xl font-black text-[var(--color-heading)] sm:text-3xl">
             {en ? "Choose Your Doctor and Book" : "اختر طبيبك واحجز معه"}
           </h2>
 

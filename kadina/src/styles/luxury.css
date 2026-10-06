@@ -1,0 +1,106 @@
+/* Shared Kadina composition: restrained surfaces, large visuals and hairlines. */
+:root { --shadow-floating: 0 16px 50px rgba(52,38,29,.07); }
+.ds-button { border-radius: 10px; transition-duration: 450ms; }
+.ds-text-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; min-height: 48px; padding-block: 10px; border-bottom: 1px solid var(--color-gold); color: var(--color-heading); font-size: 14px; font-weight: 700; }
+.ds-text-link::after { content: '↗'; font-size: 21px; color: var(--color-accent-strong); }
+[dir="rtl"] .ds-text-link::after { content: '↖'; }
+.ds-text-link:hover { border-color: var(--color-heading); }
+header nav a { font-weight: 500; }
+header img.brand-logo-on-dark { width: 116px; height: 80px; }
+.kadina-pattern::before { background-size: 1120px 960px; opacity: .018; }
+.pattern-quiet::before { opacity: .015; }
+.kadina-brand-surface { position: relative; isolation: isolate; }
+.kadina-brand-surface::before { content: ''; position: absolute; z-index: -1; inset-inline-end: -50px; top: -55px; width: 360px; height: 360px; background: url('/logo.webp') center/contain no-repeat; opacity: .025; pointer-events: none; }
+.page-hero.page-hero-editorial, .page-hero.page-hero-utility { margin-top: var(--nav-h); padding-block: 28px 32px; min-height: 250px; }
+.page-hero .page-hero-eyebrow { margin-top: 18px; font-size: 11px; font-weight: 500; }
+.page-hero .page-hero-title { font-size: clamp(34px,3.6vw,52px); line-height: 1.16; margin-top: 10px; }
+.page-hero .page-hero-description { max-width: 44rem; font-size: 16px; line-height: 1.75; margin-top: 14px; }
+[dir="rtl"] .page-hero .page-hero-title { line-height: 1.25; }
+.about-page .page-hero.about-hero, .services-page .page-hero.services-hero { margin-top: 0; padding-block: 28px 32px; min-height: 250px; }
+.about-page .page-hero.about-hero .page-hero-title, .services-page .page-hero.services-hero .page-hero-title { font-size: clamp(34px,3.6vw,52px); line-height: 1.25; }
+.about-page .about-identity { background: var(--color-surface); }
+.about-page .about-statement { display: grid; grid-template-columns: .8fr 1.2fr; column-gap: 80px; text-align: start; }
+.about-page .about-statement .about-eyebrow { grid-column: 1; }
+.about-page .about-statement h2 { margin: 18px 0 0; grid-column: 1; }
+.about-page .about-story-copy { grid-column: 2; grid-row: 1 / 3; margin: 0; font-size: 18px; }
+.about-page .about-experience { grid-template-columns: 1.3fr .8fr; gap: 80px; }
+.about-page .about-clinic { height: 500px; border-radius: 2px; margin-block: -32px; }
+.about-page .about-purpose section { background: transparent; }
+.about-page .about-principles { margin-top: 60px; }
+.services-listing-page .services-specialties-stack { gap: 0; }
+.services-listing-page .services-specialty-panel { display: grid; grid-template-columns: 1fr 1fr; column-gap: 80px; padding-block: 64px; overflow: visible; }
+.services-listing-page .services-specialty-header { grid-column: 1; grid-row: 1; margin-bottom: 26px; }
+.services-listing-page .services-specialty-content { display: contents; }
+.services-listing-page .services-specialty-main { grid-column: 1; grid-row: 2; }
+.services-listing-page .services-specialty-visual { grid-column: 2; grid-row: 1 / 3; min-height: 390px; background: radial-gradient(ellipse at 50% 85%,var(--color-soft-sand),transparent 70%); border-radius: 0; border: 0; padding: 30px 24px; }
+.services-listing-page .services-specialty-visual img { height: 310px; width: 90%; }
+.services-listing-page .services-specialty-panel:nth-child(even) .services-specialty-header, .services-listing-page .services-specialty-panel:nth-child(even) .services-specialty-main { grid-column: 2; }
+.services-listing-page .services-specialty-panel:nth-child(even) .services-specialty-visual { grid-column: 1; }
+.services-listing-page .services-specialty-header h2 { font-size: clamp(32px,3.4vw,48px); font-weight: 700; }
+.services-listing-page .services-treatment-grid { grid-template-columns: 1fr 1fr; column-gap: 24px; }
+.services-listing-page .services-treatment-tile { flex-direction: row; align-items: center; justify-content: start; gap: 12px; min-height: 58px; }
+.services-listing-page .services-treatment-name { margin: 0; font-size: 15px; }
+.services-listing-page .services-panel-cta { align-self: flex-start; margin-inline: 0; margin-top: 28px; background: transparent; border-radius: 0; border-bottom: 1px solid var(--color-gold); padding-inline: 0; gap: 40px; }
+.services-listing-page .services-placeholder-mark { border: 0; border-radius: 0; color: transparent; background: url('/logo.webp') center/contain no-repeat; opacity: .4; width: 160px; height: 160px; }
+.technology-page > section.ds-section { background: var(--color-warm-beige); }
+.technology-page .technology-results { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 54px 48px; padding-top: 40px; }
+.technology-page .technology-result-row { display: flex; flex-direction: column; align-items: stretch; padding: 0 0 32px; gap: 24px; }
+.technology-page .technology-result-image { aspect-ratio: 4 / 3; background: linear-gradient(180deg,var(--color-cream),var(--color-cream) 82%,var(--color-soft-sand) 82%,var(--color-warm-beige) 100%); border: 0; border-radius: 8px; padding: 24px; }
+.technology-page .technology-result-image img { max-height: 290px; }
+.technology-page .technology-result-content h2 { font-size: clamp(26px,2.3vw,34px); font-weight: 700; }
+.technology-page .technology-result-content > p { color: var(--color-text-muted); }
+.solutions-editorial-list { margin-top: 32px; border-top: 1px solid var(--color-border); }
+.solutions-editorial-list .solution-index-card { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,.65fr) auto; align-items: center; gap: 40px; min-height: 160px; padding: 32px 0; border-bottom: 1px solid var(--color-border); background: transparent; }
+.solutions-editorial-list .solution-pain-title { margin: 0; font-size: clamp(24px,2.6vw,36px); font-weight: 700; line-height: 1.35; }
+.solutions-editorial-list .solution-index-card > p { margin: 0; }
+.solutions-editorial-list .solution-index-card > span { margin: 0; padding: 0; align-items: center; font-size: 14px; font-weight: 500; }
+.solutions-editorial-list .solution-index-card:hover { background: var(--color-warm-beige); }
+.booking-form { --color-surface-raised: var(--color-warm-beige); background: var(--color-warm-beige); border-radius: 12px; box-shadow: var(--shadow-floating); padding: 36px; }
+.booking-form input:not([name="website"]), .booking-form select, .booking-form textarea { background: var(--color-cream); min-height: 54px; border-radius: 8px; }
+.booking-form textarea { min-height: 100px; }
+.kadina-doctor-group li > a > div:first-child { border-radius: 12px; border: 0; }
+.kadina-doctor-group li > a > div:last-child { text-align: start; padding-block: 20px; }
+.kadina-doctor-group li > a > div:last-child::after { margin-inline: 0; }
+.kadina-doctor-group h3 { font-size: 20px; }
+.kadina-doctor-group p { font-size: 14px; }
+#footer { background: var(--color-deep-brown); }
+#footer .footer-brand img { height: 126px; width: 150px; object-fit: contain; }
+#footer .footer-brand p { margin-top: 10px; font-weight: 400; }
+#footer nav a { font-weight: 400; }
+#footer .footer-whatsapp { background: transparent; color: var(--color-cream); border: 1px solid var(--color-border-on-dark); }
+.premium-card:hover, .premium-card:focus-within { transform: translateY(-2px) scale(1.01); }
+@media (max-width: 1023px) {
+ .services-listing-page .services-specialty-panel { column-gap: 36px; }
+ .about-page .about-statement, .about-page .about-experience { gap: 36px; }
+ .solutions-editorial-list .solution-index-card { grid-template-columns: 1fr auto; gap: 18px; }
+ .solutions-editorial-list .solution-index-card > p { grid-row: 2; }
+ .solutions-editorial-list .solution-index-card > span { grid-column: 2; grid-row: 1 / 3; }
+}
+@media (max-width: 767px) {
+ .kadina-pattern::before { background-size: 760px 650px; opacity: .018; }
+ .pattern-quiet::before { opacity: .015; }
+ .kadina-brand-surface::before { width: 260px; height: 260px; inset-inline-end: -90px; top: -20px; opacity: .02; }
+ .page-hero.page-hero-editorial, .page-hero.page-hero-utility, .about-page .page-hero.about-hero, .services-page .page-hero.services-hero { min-height: 220px; padding-block: 24px 28px; }
+ .page-hero .page-hero-title, .about-page .page-hero.about-hero .page-hero-title, .services-page .page-hero.services-hero .page-hero-title { font-size: 34px; }
+ .page-hero .page-hero-description { font-size: 15px; line-height: 1.75; }
+ .page-hero .page-hero-eyebrow { margin-top: 16px; }
+ .about-page .about-statement { display: block; }
+ .about-page .about-story-copy { margin-top: 24px; font-size: 16px; }
+ .about-page .about-experience { grid-template-columns: 1fr; }
+ .about-page .about-clinic { height: 330px; margin-block: 0; }
+ .about-page .about-principles { margin-top: 36px; }
+ .services-listing-page .services-specialty-panel { display: flex; flex-direction: column; padding-block: 36px; }
+ .services-listing-page .services-specialty-header { margin-bottom: 16px; }
+ .services-listing-page .services-specialty-visual { order: 1; min-height: 290px; padding: 12px; margin-block: 8px 20px; }
+ .services-listing-page .services-specialty-visual img { height: 250px; }
+ .services-listing-page .services-specialty-main { order: 2; }
+ .services-listing-page .services-treatment-grid { grid-template-columns: 1fr; }
+ .technology-page .technology-results { grid-template-columns: 1fr; gap: 36px; padding-top: 28px; }
+ .technology-page .technology-result-image { aspect-ratio: 4 / 3; }
+ .technology-page .technology-result-image img { max-height: 240px; }
+ .solutions-editorial-list .solution-index-card { min-height: 0; grid-template-columns: 1fr; padding-block: 26px; gap: 12px; }
+ .solutions-editorial-list .solution-index-card > span { grid-column: 1; grid-row: 3; }
+ .solutions-editorial-list .solution-pain-title { font-size: 27px; }
+ .booking-form { padding: 24px 20px; }
+ #footer .footer-brand img { height: 110px; width: 138px; }
+}

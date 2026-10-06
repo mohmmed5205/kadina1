@@ -14,7 +14,7 @@
 }
 
 .services-page .ds-container {
-  max-width: 76rem;
+  max-width: var(--container-max);
 }
 
 .services-page h2,
@@ -79,7 +79,7 @@
 }
 
 .services-specialties-container {
-  max-width: 76rem !important;
+  max-width: var(--container-max) !important;
 }
 
 .services-specialties-stack {
@@ -104,9 +104,9 @@
   border: 1px solid rgba(214, 163, 91, 0.18);
   border-radius: clamp(1.25rem, 2vw, 2rem);
 
-  background: var(--color-dark-brown);
+  background: var(--color-surface-muted);
 
-  color: var(--color-cream);
+  color: var(--color-heading);
 }
 
 /* subtle inner glow using Kadina tones only */
@@ -178,7 +178,7 @@
 .services-specialty-header h2 {
   margin: 0;
 
-  color: var(--color-cream);
+  color: var(--color-heading);
 
   font-size: clamp(1.75rem, 3vw, 2.6rem);
   line-height: 1.25;
@@ -191,7 +191,7 @@
 
   margin-top: 0.55rem;
 
-  color: rgba(255, 250, 242, 0.72);
+  color: var(--color-text-muted);
 
   font-size: clamp(0.9rem, 1.1vw, 1rem);
   line-height: 1.75;
@@ -277,7 +277,7 @@
 .services-treatment-name {
   margin-top: 1rem;
 
-  color: var(--color-cream);
+  color: var(--color-heading);
 
   font-size: 0.875rem;
   line-height: 1.55;
@@ -323,7 +323,7 @@
 }
 
 .services-panel-cta:focus-visible {
-  outline: 2px solid var(--color-cream);
+  outline: 2px solid var(--color-heading);
   outline-offset: 4px;
 }
 
@@ -395,11 +395,11 @@
 
   margin-top: 1rem;
 
-  color: var(--color-cream);
+  color: var(--color-heading);
 }
 
 .services-specialty-visual-caption span {
-  color: rgba(255, 250, 242, 0.55);
+  color: var(--color-text-muted);
 
   font-size: 0.68rem;
 }
@@ -453,13 +453,13 @@
 }
 
 .services-specialty-placeholder strong {
-  color: var(--color-cream);
+  color: var(--color-heading);
 
   font-size: 1.1rem;
 }
 
 .services-specialty-placeholder > span:last-child {
-  color: rgba(255, 250, 242, 0.55);
+  color: var(--color-text-muted);
 
   font-size: 0.78rem;
 }
@@ -469,7 +469,7 @@
    ========================================================= */
 
 .services-contact {
-  background: var(--color-dark-brown);
+  background: var(--color-surface-muted);
 }
 
 .services-contact > section {
@@ -492,13 +492,13 @@
 
   margin-inline: auto;
 
-  color: var(--color-cream);
+  color: var(--color-heading);
 }
 
 .services-contact .cta-panel p {
   max-width: 42rem;
 
-  color: rgba(255, 250, 242, 0.72);
+  color: var(--color-text-muted);
 }
 
 /* =========================================================
@@ -1019,3 +1019,12 @@
 }
 .services-specialty-visual:has(img), .service-detail-page .services-device-visual, .service-detail-page .services-intro-visual { background: var(--surface-muted); color: var(--color-ink); }
 .services-specialty-visual:has(img) .services-specialty-visual-caption, .services-specialty-visual:has(img) .services-specialty-visual-caption span, .service-detail-page .services-intro-visual figcaption { color: var(--color-ink); }
+
+/* Editorial service rows share the site surface instead of nested cards. */
+.services-specialty-panel { background: transparent; color: var(--color-heading); border: 0; border-top: 1px solid var(--color-border-strong); border-radius: 0; padding-inline: 0; padding-block: 40px; }
+.services-specialty-panel::before { display: none; }
+.services-treatment-tile { border: 0; border-bottom: 1px solid var(--color-border); border-radius: 0; background: transparent; min-height: 88px; padding-inline: 0; }
+.services-specialty-number, .services-specialty-eyebrow, .services-treatment-number { color: var(--color-accent-strong); }
+.services-specialty-visual { border-radius: 14px; background: var(--color-surface-muted); }
+.services-page .services-hero { padding-block: 40px; }
+@media (max-width: 767px) { .services-treatment-grid { grid-template-columns: 1fr; } .services-treatment-tile { flex-direction: row; align-items: center; justify-content: flex-start; gap: 18px; min-height: 56px; } .services-treatment-name { margin: 0; font-size: 16px; } }

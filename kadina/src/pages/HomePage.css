@@ -1,0 +1,119 @@
+/* Campaign composition: one visual plane, with a separate mobile crop. */
+.kadina-home { background: var(--color-surface); }
+.kadina-home .home-section { padding-block: var(--section-space); }
+.kadina-home h2 { font-size: var(--text-heading); line-height: 1.25; font-weight: 700; }
+.home-heading { max-width: 44rem; margin-inline: auto; text-align: center; }
+.home-heading h2 { margin-top: 14px; }
+.home-heading > p:not(.section-title-eyebrow) { color: var(--color-text-muted); line-height: 1.9; }
+.home-hero { position: relative; isolation: isolate; overflow: hidden; min-height: 740px; padding-top: var(--nav-h); max-width: 1800px; margin-inline: auto; }
+.home-hero-image { position: absolute; inset-block: var(--nav-h) 0; inset-inline-end: 0; width: 80%; height: calc(100% - var(--nav-h)); object-fit: cover; object-position: 55% 52%; }
+.home-hero-shade { position: absolute; inset: var(--nav-h) 0 0; background: linear-gradient(90deg,#FAF7F2 4%,rgba(250,247,242,.98) 22%,rgba(250,247,242,.9) 34%,rgba(250,247,242,.24) 55%,transparent 75%),linear-gradient(0deg,#FAF7F2,rgba(250,247,242,.12) 24%,transparent 55%); }
+[dir="rtl"] .home-hero-shade { background: linear-gradient(270deg,#FAF7F2 4%,rgba(250,247,242,.98) 22%,rgba(250,247,242,.9) 34%,rgba(250,247,242,.24) 55%,transparent 75%),linear-gradient(0deg,#FAF7F2,rgba(250,247,242,.12) 24%,transparent 55%); }
+.home-hero-mark { position: absolute; width: 440px; height: 440px; inset-inline-start: -120px; bottom: -110px; background: url('/logo.webp') center/contain no-repeat; opacity: .025; pointer-events: none; }
+.home-hero-copy { position: relative; z-index: 1; padding-block: 130px 150px; }
+.home-hero-content { width: 56%; max-width: 660px; }
+.home-hero-copy .section-title-eyebrow { font-size: 11px; letter-spacing: .12em; font-weight: 500; }
+.home-hero-copy h1 { margin-top: 26px; font-size: clamp(56px,4.65vw,68px); line-height: 1.12; font-weight: 700; letter-spacing: -.04em; text-wrap: balance; }
+[dir="rtl"] .home-hero-copy h1 { line-height: 1.18; letter-spacing: 0; }
+.home-hero-content > p:not(.section-title-eyebrow) { max-width: 390px; margin-top: 24px; font-size: 17px; line-height: 1.8; color: var(--color-text-muted); }
+.home-hero-copy .ds-button { margin-top: 30px; padding-inline: 24px; gap: 32px; font-size: 14px; }
+.hero-cta-arrow { font-size: 21px; font-weight: 400; color: var(--color-warm-beige-strong); }
+.kadina-home .home-numbers { margin-top: -38px; padding-top: 24px; padding-bottom: 78px; }
+.home-numbers .home-heading { display: grid; grid-template-columns: 1fr 2fr; align-items: baseline; max-width: none; text-align: start; gap: 24px; }
+.kadina-home .home-numbers h2 { font-size: 28px; max-width: 27em; margin: 0; }
+.home-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); margin-top: 40px; border-bottom: 1px solid var(--color-border); padding-bottom: 36px; }
+.home-metrics article { padding: 8px 24px; text-align: center; border-inline-end: 1px solid var(--color-border); }
+.home-metrics article:last-child { border: 0; }
+.home-metric-value { color: var(--color-accent-strong); font-size: 48px; font-weight: 500; line-height: 1.2; margin-bottom: 16px; }
+.home-metrics article > p:nth-child(2) { color: var(--color-text-muted); font-size: 15px; }
+.kadina-home .home-about { padding-top: 24px; padding-bottom: 0; position: relative; z-index: 1; }
+.home-about > .ds-container { display: grid; grid-template-columns: 1.45fr .85fr; gap: clamp(48px,6vw,96px); align-items: center; }
+.home-about .home-heading { order: 2; text-align: start; padding-bottom: 60px; }
+.kadina-home .home-about h2 { font-size: clamp(32px,3vw,44px); }
+.home-about-story { font-size: 17px; margin-block: 24px 26px; }
+.home-building { height: 520px; margin-bottom: -48px; overflow: hidden; border-radius: 2px; }
+.home-building img { width: 100%; height: 100%; object-fit: cover; object-position: 55% center; }
+.kadina-home .home-doctors { overflow: hidden; padding-top: 148px; background: linear-gradient(180deg,var(--color-warm-beige),#FAF7F2); }
+.home-doctors .home-heading { max-width: var(--container-max); display: flex; justify-content: space-between; align-items: end; gap: 40px; text-align: start; }
+.home-doctors .home-heading h2 { max-width: 640px; margin: 0; }
+.home-doctors .home-heading a { flex-shrink: 0; }
+.home-doctors .kadina-doctor-rail { --doctor-width: 288px; --doctor-gap: 28px; max-width: 1440px; margin: 44px auto 0; padding-inline: max(24px,calc((1440px - var(--container-max))/2 + 32px)); }
+.home-why-layout { display: grid; grid-template-columns: .8fr 1fr; gap: clamp(48px,8vw,128px); }
+.home-why h2 { margin-top: 18px; max-width: 10em; }
+.home-why-description { color: var(--color-text-muted); font-size: 17px; line-height: 1.9; margin-top: 24px; max-width: 360px; }
+.home-why-list { list-style: none; padding: 0; border-top: 1px solid var(--color-border); }
+.home-why-list li { display: flex; gap: 24px; padding-block: 26px; border-bottom: 1px solid var(--color-border); }
+.home-check { flex: 0 0 32px; padding-top: 4px; color: var(--color-accent-strong); font-size: 13px; font-weight: 500; }
+.home-why-list h3 { font-size: 21px; font-weight: 700; }
+.home-why-list p { font-size: 16px; color: var(--color-text-muted); line-height: 1.85; margin-top: 8px; }
+.home-help { padding-block: 24px 48px; }
+.home-help-panel { display: flex; align-items: center; gap: 24px; border-block: 1px solid var(--color-border); padding-block: 24px; }
+.home-help-panel h2 { font-size: 24px; }
+.home-help-panel p { color: var(--color-text-muted); margin-top: 6px; font-size: 15px; }
+.home-help-panel > a { margin-inline-start: auto; font-size: 26px; color: var(--color-heading); white-space: nowrap; min-height: 44px; }
+.home-help-icon { color: var(--color-accent-strong); }
+.home-booking { background: linear-gradient(135deg,var(--color-soft-sand),var(--color-cream) 80%); }
+.home-booking > .ds-container { display: grid; grid-template-columns: .75fr 1.1fr; gap: clamp(40px,8vw,112px); align-items: center; }
+.home-booking .home-heading { text-align: start; }
+.home-booking .home-heading > p:not(.section-title-eyebrow) { margin-top: 24px; font-size: 17px; max-width: 330px; }
+.kadina-home #before-after { background: var(--color-warm-beige); padding-block: 80px; }
+.kadina-home #before-after .swiper { padding: 60px 0 0; overflow: hidden; }
+.kadina-home #before-after .swiper-button-prev, .kadina-home #before-after .swiper-button-next { display: flex; top: 22px; width: 44px; height: 44px; border: 1px solid var(--color-border); border-radius: 50%; }
+.kadina-home #before-after .swiper-button-prev { left: 0; right: auto; }
+.kadina-home #before-after .swiper-button-next { left: 56px; right: auto; }
+.kadina-home #before-after .swiper-button-prev svg, .kadina-home #before-after .swiper-button-next svg { width: 16px; height: 16px; }
+.kadina-home #before-after .swiper-slide { opacity: 1; transform: none; }
+.kadina-home #before-after .swiper-slide article > div:first-child { border-radius: 8px; background: var(--color-soft-sand); }
+.home-location iframe { height: 420px; }
+@media (min-width: 1800px) {
+ .home-hero-copy { padding-block: 145px 160px; }
+ .home-hero-image { object-position: 55% 25%; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+ .home-hero { min-height: 640px; }
+ .home-hero-copy { padding-block: 104px 124px; }
+ .home-hero-content { width: 65%; }
+ .home-hero-copy h1 { font-size: 54px; }
+ .home-about > .ds-container { gap: 32px; grid-template-columns: 1.1fr 1fr; }
+ .home-building { height: 460px; }
+ .home-why-layout, .home-booking > .ds-container { gap: 36px; }
+}
+@media (max-width: 767px) {
+ .home-hero { min-height: 0; padding-top: var(--nav-h); }
+ .home-hero-image { position: relative; inset: auto; width: 100%; height: 340px; object-position: 52% 50%; }
+ .home-hero-shade, [dir="rtl"] .home-hero-shade { inset: calc(var(--nav-h) + 215px) 0 auto; height: 126px; background: linear-gradient(0deg,#FAF7F2,rgba(250,247,242,.35) 55%,transparent); }
+ .home-hero-copy { margin-top: -24px; padding: 0 24px 42px; }
+ .home-hero-content { width: 100%; max-width: 540px; }
+ .home-hero-copy h1 { font-size: 40px; line-height: 1.16; margin-top: 20px; max-width: 11em; }
+ .home-hero-copy .section-title-eyebrow { font-size: 10px; }
+ .home-hero-content > p:not(.section-title-eyebrow) { font-size: 16px; margin-top: 18px; max-width: 320px; }
+ .home-hero-copy .ds-button { margin-top: 24px; width: 100%; }
+ .home-hero-mark { width: 280px; height: 280px; inset-inline-start: auto; inset-inline-end: -80px; bottom: -80px; opacity: .02; }
+ .kadina-home .home-numbers { margin-top: 0; padding-block: 28px 46px; }
+ .home-numbers .home-heading { display: block; text-align: start; }
+ .kadina-home .home-numbers h2 { font-size: 25px; margin-top: 12px; max-width: 14em; }
+ .home-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); row-gap: 28px; margin-top: 28px; padding-bottom: 28px; }
+ .home-metrics article { padding: 4px 12px; }
+ .home-metrics article:nth-child(2) { border: 0; }
+ .home-metric-value { font-size: 36px; margin-bottom: 10px; }
+ .home-metrics article > p:nth-child(2) { font-size: 14px; }
+ .home-about > .ds-container { display: flex; flex-direction: column; align-items: stretch; gap: 30px; }
+ .home-building { height: 330px; margin: 0 calc(-1 * var(--page-gutter)); order: -1; }
+ .home-about .home-heading { padding-bottom: 52px; }
+ .kadina-home .home-about h2 { font-size: 32px; }
+ .home-about-story { font-size: 16px; }
+ .kadina-home .home-doctors { padding-block: 56px; }
+ .home-doctors .home-heading { display: block; }
+ .home-doctors .home-heading h2 { max-width: 11em; }
+ .home-doctors .home-heading a { margin-top: 18px; }
+ .home-doctors .kadina-doctor-rail { --doctor-width: 252px; --doctor-gap: 18px; padding-inline: 24px; margin-top: 30px; }
+ .home-why-layout, .home-booking > .ds-container { grid-template-columns: 1fr; gap: 32px; }
+ .home-why h2 { max-width: 12em; }
+ .home-why-description { font-size: 16px; }
+ .home-help-panel { flex-wrap: wrap; gap: 16px; }
+ .home-help-panel > a { margin-inline-start: 0; }
+ .home-help-icon { display: none; }
+ .home-booking .home-heading > p:not(.section-title-eyebrow) { font-size: 16px; }
+ .kadina-home #before-after { padding-block: 56px; }
+ .home-location iframe { height: 340px; }
+}

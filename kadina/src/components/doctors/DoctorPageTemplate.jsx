@@ -1,3 +1,4 @@
+import { PageHeroSurface } from "../common/PageHero";
 import { motion } from "framer-motion";
 import { useLocation, useOutletContext } from "react-router-dom";
 import Link from "../routing/LocalizedLink";
@@ -42,14 +43,14 @@ function EditorialLinks({ items, en }) {
           variants={cardItem}
         >
           <Link
-            className="group flex min-h-14 items-center justify-between gap-5 py-3.5 text-sm font-black leading-6 text-[var(--color-heading)] transition-colors hover:text-[var(--color-gold)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-gold)]"
+            className="group flex min-h-14 items-center justify-between gap-5 py-3.5 text-sm font-black leading-6 text-[var(--color-heading)] transition-colors hover:text-[var(--color-accent-strong)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-gold)]"
             to={item.to}
           >
             <span>{item.title}</span>
 
             <span
               aria-hidden="true"
-              className="shrink-0 text-[var(--color-gold)] transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
+              className="shrink-0 text-[var(--color-accent-strong)] transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
             >
               {en ? "→" : "←"}
             </span>
@@ -181,8 +182,8 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
       />
 
       {/* Doctor profile */}
-      <section className="relative overflow-hidden bg-[var(--color-dark-brown)] py-8 sm:py-10 lg:py-14">
-        <div className="ds-container !max-w-[72rem]">
+      <PageHeroSurface className="doctor-profile-hero">
+        <div className="ds-container">
           <Breadcrumbs
             items={[
               {
@@ -201,7 +202,7 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
           >
             {/* Portrait */}
             <motion.div
-              className="mx-auto aspect-[4/5] w-full max-w-[20rem] overflow-hidden rounded-[1.4rem] border border-[var(--color-border-on-dark)] bg-[var(--color-surface-raised)] md:mx-0 lg:max-w-[22rem]"
+              className="mx-auto aspect-[4/5] w-full max-w-[20rem] overflow-hidden rounded-[1rem] border border-[var(--color-border-on-dark)] bg-[var(--color-surface-raised)] md:mx-0 lg:max-w-[22rem]"
               variants={fadeUp}
             >
               {doctor.image ? (
@@ -224,7 +225,7 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
                   className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_50%_30%,rgba(214,163,91,.16),transparent_42%)] p-6 text-center"
                   role="img"
                 >
-                  <span className="text-2xl font-black leading-relaxed text-[var(--color-gold)] sm:text-3xl">
+                  <span className="text-2xl font-black leading-relaxed text-[var(--color-accent-strong)] sm:text-3xl">
                     {doctor.name}
                   </span>
                 </div>
@@ -233,15 +234,15 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
 
             {/* Information */}
             <motion.div variants={fadeUp}>
-              <p className="text-xs font-black tracking-[.12em] text-[var(--color-gold)]">
+              <p className="text-xs font-black tracking-[.12em] text-[var(--color-accent-strong)]">
                 {doctor.title}
               </p>
 
-              <h1 className="mt-3 max-w-3xl text-[clamp(1.75rem,3vw,2.625rem)] font-black leading-[1.15] tracking-[-.035em] text-[var(--color-cream)]">
+              <h1 className="page-hero-title mt-3 max-w-3xl text-[clamp(1.75rem,3vw,2.625rem)] font-black leading-[1.15] tracking-[-.035em] text-[var(--color-heading)]">
                 {doctor.name}
               </h1>
 
-              <p className="mt-4 max-w-2xl text-base font-black leading-7 text-[var(--color-gold)] sm:text-lg">
+              <p className="mt-4 max-w-2xl text-base font-black leading-7 text-[var(--color-accent-strong)] sm:text-lg">
                 {doctor.specialty}
               </p>
 
@@ -254,7 +255,7 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
               {/* Experience */}
               {doctor.yearsOfExperience !== null && (
                 <div className="mt-6 flex max-w-xl items-end gap-4 border-y border-[var(--color-border-on-dark)] py-4">
-                  <strong className="text-[clamp(2rem,4vw,3.25rem)] font-black leading-none text-[var(--color-cream)]">
+                  <strong className="text-[clamp(2rem,4vw,3.25rem)] font-black leading-none text-[var(--color-heading)]">
                     {doctor.yearsOfExperience}
                   </strong>
 
@@ -269,7 +270,7 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
               {/* Expertise */}
               {focusAreas.length > 0 && (
                 <div className="mt-6">
-                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-gold)]">
+                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-accent-strong)]">
                     {en
                       ? "AREAS OF EXPERTISE"
                       : "مجالات التميز"}
@@ -318,14 +319,14 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
             </motion.div>
           </motion.div>
         </div>
-      </section>
+      </PageHeroSurface>
 
       {/* Related content */}
       {(doctor.services.length > 0 ||
         doctor.devices.length > 0 ||
         doctor.solutions.length > 0) && (
         <section className="bg-[var(--color-surface)] py-12 sm:py-16 lg:py-20">
-          <div className="ds-container !max-w-[72rem]">
+          <div className="ds-container">
             <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-12">
               {doctor.services.length > 0 && (
                 <motion.div
@@ -334,7 +335,7 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
                   viewport={viewportOnce}
                   whileInView="visible"
                 >
-                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-gold)]">
+                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-accent-strong)]">
                     {en ? "SPECIALTY" : "التخصص"}
                   </p>
 
@@ -358,7 +359,7 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
                   viewport={viewportOnce}
                   whileInView="visible"
                 >
-                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-gold)]">
+                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-accent-strong)]">
                     {en ? "TECHNOLOGY" : "التقنيات"}
                   </p>
 
@@ -382,7 +383,7 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
                   viewport={viewportOnce}
                   whileInView="visible"
                 >
-                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-gold)]">
+                  <p className="text-xs font-black tracking-[.1em] text-[var(--color-accent-strong)]">
                     {en ? "CONCERNS" : "المشكلات"}
                   </p>
 
@@ -412,10 +413,10 @@ export default function DoctorPageTemplate({ doctor: rawDoctor }) {
           viewport={viewportOnce}
           whileInView="visible"
         >
-          <div className="ds-container !max-w-[72rem] py-10 sm:py-12">
+          <div className="ds-container py-10 sm:py-12">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs font-black tracking-[.1em] text-[var(--color-gold)]">
+                <p className="text-xs font-black tracking-[.1em] text-[var(--color-accent-strong)]">
                   {en ? "SOCIAL" : "التواصل"}
                 </p>
 
